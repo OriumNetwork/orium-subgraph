@@ -1,0 +1,86 @@
+specVersion: 0.0.4
+features: 
+   - fullTextSearch
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: FancyBirds
+    network: matic
+    source:
+      address: "0xad59ecb77033391e847cc96829b08beb83151088"
+      abi: FancyBirds
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: FancyBirds
+          file: ./abis/Transfer.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleFancyBirdsTransfer
+      file: ./src/orium-handler.ts
+  - kind: ethereum
+    name: FancyBabyBirds
+    network: matic
+    source:
+      address: "0xdc5ffeb686f3cc6a3fb68848ab9f4b3a9ffa6736"
+      abi: FancyBabyBirds
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: FancyBabyBirds
+          file: ./abis/Transfer.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleFancyBabyBirdsTransfer
+      file: ./src/orium-handler.ts
+  - kind: ethereum
+    name: Pega
+    network: matic
+    source:
+      address: "0xd50d167dd35d256e19e2fb76d6b9bf9f4c571a3e"
+      abi: Pega
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: Pega
+          file: ./abis/Transfer.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handlePegaTransfer
+      file: ./src/orium-handler.ts
+  - kind: ethereum
+    name: Aavegotchi
+    network: matic
+    source:
+      address: "0x86935f11c86623dec8a25696e1c19a8659cbf95d"
+      abi: Aavegotchi
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: Aavegotchi
+          file: ./abis/Transfer.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleAavegotchiTransfer
+      file: ./src/orium-handler.ts

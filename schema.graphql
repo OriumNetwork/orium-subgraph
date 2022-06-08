@@ -1,0 +1,14 @@
+type _Schema_
+  @fulltext(
+    name: "nftSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "NftEntity", fields: [{ name: "currentOwner" }] }]
+  )
+
+type NftEntity @entity(immutable: false) {
+  id: String!
+  tokenId: BigInt!
+  platform: String!
+  currentOwner: String!
+}
