@@ -106,3 +106,5 @@ dist
 generated/
 
 build/
+
+test.js

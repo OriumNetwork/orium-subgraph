@@ -12,3 +12,10 @@ type NftEntity @entity(immutable: false) {
   platform: String!
   currentOwner: String!
 }
+
+type Address @entity(immutable: false) {
+  id: String!
+  nftsOwned: [NftEntity!]!
+  nftsLent: [NftEntity!]!
+  nftsBorrowed: [NftEntity!]!
+}

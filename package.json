@@ -3,11 +3,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "codegen-matic": "graph codegen subgraph-matic.yaml",
-    "codegen-bsc": "graph codegen subgraph-bsc.yaml",
-    "build-matic": "graph build subgraph-matic.yaml",
-    "build-bsc": "graph build subgraph-bsc.yaml",
-    "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ danielnovy/Gamespolygon",
-    "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ danielnovy/Gamesbsc"
+    "codegen-bsc"  : "graph codegen subgraph-bsc.yaml",
+    "build-matic"  : "graph build subgraph-matic.yaml",
+    "build-bsc"    : "graph build subgraph-bsc.yaml",
+    "deploy-matic" : "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
+    "deploy-bsc"   : "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-bsc subgraph-bsc.yaml"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.30.4",
