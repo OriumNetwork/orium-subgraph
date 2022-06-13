@@ -19,7 +19,7 @@ dataSources:
         - Transfer
       abis:
         - name: FancyBirds
-          file: ./abis/Transfer.json
+          file: ./abis/FancyBirds.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleFancyBirdsTransfer
@@ -39,7 +39,7 @@ dataSources:
         - Transfer
       abis:
         - name: FancyBabyBirds
-          file: ./abis/Transfer.json
+          file: ./abis/FancyBabyBirds.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleFancyBabyBirdsTransfer
@@ -59,7 +59,7 @@ dataSources:
         - Transfer
       abis:
         - name: Pega
-          file: ./abis/Transfer.json
+          file: ./abis/Pega.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handlePegaTransfer
@@ -77,10 +77,15 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Transfer
+        - GotchiLendingExecute
       abis:
         - name: Aavegotchi
-          file: ./abis/Transfer.json
+          file: ./abis/Aavegotchi.json
       eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleAavegotchiTransfer
+        - event:   Transfer(indexed address,indexed address,indexed uint256)
+          handler:  handleAavegotchiTransfer
+        - event:   GotchiLendingExecute(indexed uint32)
+          handler:  handleGotchiLendingExecute
+        - event:   GotchiLendingEnd(indexed uint32)
+          handler:  handleGotchiLendingEnd
       file: ./src/orium-handler.ts

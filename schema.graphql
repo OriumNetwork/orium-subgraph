@@ -11,6 +11,7 @@ type NftEntity @entity(immutable: false) {
   tokenId: BigInt!
   platform: String!
   currentOwner: String!
+  previousOwner: String!
 }
 
 type Address @entity(immutable: false) {
@@ -18,4 +19,9 @@ type Address @entity(immutable: false) {
   nftsOwned: [NftEntity!]!
   nftsLent: [NftEntity!]!
   nftsBorrowed: [NftEntity!]!
+}
+
+type Control @entity {
+  id: String!
+  lastNftTransferred: NftEntity!
 }
