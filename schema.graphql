@@ -1,27 +1,26 @@
-type _Schema_
-  @fulltext(
-    name: "nftSearch"
-    language: en
-    algorithm: rank
-    include: [{ entity: "NftEntity", fields: [{ name: "currentOwner" }] }]
-  )
-
 type NftEntity @entity(immutable: false) {
-  id: String!
+  id: ID!
   tokenId: BigInt!
   platform: String!
-  currentOwner: String!
-  previousOwner: String!
+  currentOwner: Address!
+  previousOwner: Address!
+}
+
+type Rental @entity(immutable: false) {
+  id: ID!
+  nftEntity: NftEntity!
+  borrower: Address!
+  lender: Address!
 }
 
 type Address @entity(immutable: false) {
-  id: String!
-  nftsOwned: [NftEntity!]!
-  nftsLent: [NftEntity!]!
-  nftsBorrowed: [NftEntity!]!
+  id: ID!
+  nfts: [NftEntity!]! @derivedFrom(field: "currentOwner")
+  borrowings: [Rental!]! @derivedFrom(field: "borrower")
+  lendings: [Rental!]! @derivedFrom(field: "lender")
 }
 
 type Control @entity {
-  id: String!
+  id: ID!
   lastNftTransferred: NftEntity!
 }

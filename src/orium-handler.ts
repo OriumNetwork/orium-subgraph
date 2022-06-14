@@ -4,7 +4,7 @@ import {
   GotchiLendingExecute,
   GotchiLendingEnd
 } from "../generated/Aavegotchi/Aavegotchi"
-import { NftEntity, Address, Control } from "../generated/schema"
+import { NftEntity, Rental, Address, Control } from "../generated/schema"
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
   handleTransfer(event, "FancyBirds")
@@ -26,117 +26,58 @@ export function handleThetanArenaTransfer(event: Transfer): void {
   handleTransfer(event, "ThetanArena")
 }
 
-function addNftOwned(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  entity.nftsOwned.push(nftEntityId)
-  entity.save()
-}
+function loadAndSaveNftEntity(id: string, event: Transfer, platform: string): void {
 
-function addNftLent(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  entity.nftsLent.push(nftEntityId)
-  entity.save()
-}
-
-function addNftBorrowed(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  entity.nftsBorrowed.push(nftEntityId)
-  entity.save()
-}
-
-function removeNftOwned(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  for (let i = 0; i < entity.nftsOwned.length; i++) {
-    if (entity.nftsOwned[i] === nftEntityId) {
-      entity.nftsOwned.splice(i, i+1)
-      break
-    }
-  }
-  entity.save()
-}
-
-function removeNftLent(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  for (let i = 0; i < entity.nftsLent.length; i++) {
-    if (entity.nftsLent[i] === nftEntityId) {
-      entity.nftsLent.splice(i, i+1)
-      break
-    }
-  }
-  entity.save()
-}
-
-function removeNftBorrowed(nftEntityId: string, addressId: string): void {
-  let entity = Address.load(addressId)
-  if (!entity) {
-    entity = new Address(addressId)
-    entity.nftsOwned = []
-    entity.nftsLent = []
-    entity.nftsBorrowed = []
-  }
-  for (let i = 0; i < entity.nftsBorrowed.length; i++) {
-    if (entity.nftsBorrowed[i] === nftEntityId) {
-      entity.nftsBorrowed.splice(i, i+1)
-      break
-    }
-  }
-  entity.save()
-}
-
-function handleTransfer(event: Transfer, platform: string): void {
-  let id = platform + "-" + event.params.tokenId.toString()
   let entity = NftEntity.load(id)
   if (!entity) {
     entity = new NftEntity(id)
   }
-  if (entity.currentOwner !== event.params.to.toHex()) {
-    entity.currentOwner = event.params.to.toHex()
-    entity.previousOwner = event.params.from.toHex()
-    entity.platform = platform
-    entity.tokenId = event.params.tokenId
-    entity.save()
 
-    addNftOwned(entity.id, event.params.to.toHex())
-    removeNftOwned(entity.id, event.params.from.toHex())
-  } else {
-    // This is probably a GotchiLendingEnd and ownership of tokenId
-    // is already at the "to" address.
+  let toAddress = Address.load(event.params.to.toHex())
+  if (!toAddress) {
+    toAddress = new Address(event.params.to.toHex())
+    toAddress.save()
   }
 
+  let fromAddress = Address.load(event.params.from.toHex())
+  if (!fromAddress) {
+    fromAddress = new Address(event.params.from.toHex())
+    fromAddress.save()
+  }
+
+  entity.currentOwner = toAddress.id
+  entity.previousOwner = fromAddress.id
+  entity.platform = platform
+  entity.tokenId = event.params.tokenId
+  entity.save()
+}
+
+function loadAndSaveRental(nftEntity: NftEntity, listingId: BigInt): void {
+  let id = nftEntity.id + "-" + listingId.toString()
+  let entity = Rental.load(id)
+  if (!entity) {
+    entity = new Rental(id)
+  }
+  entity.nftEntity = nftEntity.id
+  entity.lender   = nftEntity.previousOwner
+  entity.borrower = nftEntity.currentOwner
+  entity.save()
+}
+
+function loadControl(id: String): Control {
   let control = Control.load('orium-control')
   if (!control) {
     control = new Control('orium-control')
   }
+  return control
+}
+
+function handleTransfer(event: Transfer, platform: string): void {
+
+  let id = platform + "-" + event.params.tokenId.toString()
+  loadAndSaveNftEntity(id, event, platform)
+
+  let control = loadControl('orium-control')
   control.lastNftTransferred = id
   control.save()
 }
@@ -152,30 +93,25 @@ function restoreCurrentOwner(nftEntityId: string): void {
 }
 
 export function handleGotchiLendingExecute(event: GotchiLendingExecute): void {
-  let control = Control.load('orium-control')
-  if (!control) {
-    control = new Control('orium-control')
-  }
+  let control = loadControl('orium-control')
   let nftEntity = NftEntity.load(control.lastNftTransferred)
   if (nftEntity) {
-    addNftLent(nftEntity.id, nftEntity.previousOwner)
-    addNftBorrowed(nftEntity.id, nftEntity.currentOwner)
-    removeNftOwned(nftEntity.id, nftEntity.currentOwner)
-    addNftOwned(nftEntity.id, nftEntity.previousOwner)
+    loadAndSaveRental(nftEntity, event.params.listingId)
     restoreCurrentOwner(nftEntity.id)
   }
 
 }
 
 export function handleGotchiLendingEnd(event: GotchiLendingEnd): void {
-  let control = Control.load('orium-control')
-  if (!control) {
-    return
-  }
+  let control = loadControl('orium-control')
   let nftEntity = NftEntity.load(control.lastNftTransferred)
   if (!nftEntity) {
     return
   }
-  removeNftLent(control.lastNftTransferred, nftEntity.currentOwner)
-  removeNftBorrowed(nftEntity.id, nftEntity.previousOwner)
+  let lentEntity = Rental.load(nftEntity.id + "-" + event.params.listingId.toString())
+  if (lentEntity) {
+    lentEntity.borrower = "0x0000000000000000000000000000000000000000"
+    lentEntity.lender   = "0x0000000000000000000000000000000000000000"
+    lentEntity.save()
+  }
 }
