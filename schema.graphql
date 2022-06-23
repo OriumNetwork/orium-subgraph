@@ -6,21 +6,52 @@ type NftEntity @entity(immutable: false) {
   previousOwner: Address!
 }
 
+type Address @entity(immutable: false) {
+  id: ID!
+  nfts:       [NftEntity!]! @derivedFrom(field: "currentOwner")
+  borrowings: [Rental!]!    @derivedFrom(field: "borrower")
+  lendings:   [Rental!]!    @derivedFrom(field: "lender")
+}
+
+type RentalListing @entity(immutable: false) {
+  id: ID!
+}
+
 type Rental @entity(immutable: false) {
   id: ID!
+
   nftEntity: NftEntity!
   borrower: Address!
   lender: Address!
+  thirdParty: Address
+
+  period: BigInt!
+  timeCreated: BigInt!
+  timeAgreed: BigInt
+  timeEnded: BigInt
+
+  upfrontCost: BigInt!
+  revenueSplit: [Int!]!
+
+  cancelled: Boolean!
+  completed: Boolean!
+  lastClaimed: BigInt
+
+  claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
+
+  reverted: Boolean!
+
 }
 
-type Address @entity(immutable: false) {
+type ClaimedToken @entity {
   id: ID!
-  nfts: [NftEntity!]! @derivedFrom(field: "currentOwner")
-  borrowings: [Rental!]! @derivedFrom(field: "borrower")
-  lendings: [Rental!]! @derivedFrom(field: "lender")
+  rental: Rental!
+  token: Bytes!
+  amount: BigInt!
 }
 
 type Control @entity {
   id: ID!
   lastNftTransferred: NftEntity!
 }
+
