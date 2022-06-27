@@ -112,7 +112,6 @@ function getOrCreateClaimedToken(tokenAddress: Bytes, rental: Rental): ClaimedTo
   let token = ClaimedToken.load(id);
   if(token == null) {
     token = new ClaimedToken(id);
-    token.amount = BigInt.fromI32(0)
     token.rental = rental.id;
     token.token = tokenAddress;
   }
@@ -157,7 +156,7 @@ export function handleGotchiLendingExecute(event: GotchiLendingExecute): void {
   rental.save()
 }
 
-export function handleGotchiLendingCancel(event: GotchiLendingExecute): void {
+export function handleGotchiLendingCancel(event: GotchiLendingCancel): void {
   let rental = getOrCreateRental(event.params.listingId)
   let contract = AavegotchiDiamond.bind(event.address)
   let response = contract.try_getGotchiLendingListingInfo(event.params.listingId)
@@ -176,7 +175,7 @@ export function handleGotchiLendingClaim(event: GotchiLendingClaim): void {
   rental.reverted = response.reverted ? true : false
   if (!response.reverted) {
     rental.lastClaimed = event.block.timestamp
-    for(let i=0;i<event.params.tokenAddresses.length; i++) {
+    for(let i=0; i < event.params.tokenAddresses.length; i++) {
       let token = getOrCreateClaimedToken(event.params.tokenAddresses[i], rental);
       token.amount = token.amount.plus(event.params.amounts[i]);
       token.save();

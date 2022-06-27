@@ -3,14 +3,18 @@
   "license": "UNLICENSED",
   "scripts": {
     "codegen-matic": "graph codegen subgraph-matic.yaml",
-    "codegen-bsc"  : "graph codegen subgraph-bsc.yaml",
-    "build-matic"  : "graph build subgraph-matic.yaml",
-    "build-bsc"    : "graph build subgraph-bsc.yaml",
-    "deploy-matic" : "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
-    "deploy-bsc"   : "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-bsc subgraph-bsc.yaml"
+    "codegen-bsc": "graph codegen subgraph-bsc.yaml",
+    "build-matic": "graph build subgraph-matic.yaml",
+    "build-bsc": "graph build subgraph-bsc.yaml",
+    "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
+    "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-bsc subgraph-bsc.yaml",
+    "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.30.4",
-    "@graphprotocol/graph-ts": "0.27.0"
+    "@graphprotocol/graph-cli": "0.24.1",
+    "@graphprotocol/graph-ts": "0.24.1"
+  },
+  "devDependencies": {
+    "matchstick-as": "^0.2.3"
   }
 }

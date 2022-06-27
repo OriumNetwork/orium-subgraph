@@ -13,15 +13,11 @@ type Address @entity(immutable: false) {
   lendings:   [Rental!]!    @derivedFrom(field: "lender")
 }
 
-type RentalListing @entity(immutable: false) {
-  id: ID!
-}
-
 type Rental @entity(immutable: false) {
   id: ID!
 
   nftEntity: NftEntity!
-  borrower: Address!
+  borrower: Address
   lender: Address!
   thirdParty: Address
 
