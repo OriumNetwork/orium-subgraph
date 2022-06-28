@@ -7,6 +7,7 @@
     "build-matic": "graph build subgraph-matic.yaml",
     "build-bsc": "graph build subgraph-bsc.yaml",
     "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
+    "deploy-temp": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/temporary-subgraph subgraph-matic.yaml",
     "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-bsc subgraph-bsc.yaml",
     "test": "graph test"
   },

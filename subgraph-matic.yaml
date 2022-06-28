@@ -38,4 +38,8 @@ dataSources:
           handler:  handleGotchiLendingCancel
         - event:   GotchiLendingEnd(indexed uint32)
           handler:  handleGotchiLendingEnd
+        - event:   PortalOpened(indexed uint256)
+          handler:  handlePortalOpened
+        - event:   ClaimAavegotchi(indexed uint256)
+          handler:  handleClaimAavegotchi
       file: ./src/orium-handler.ts

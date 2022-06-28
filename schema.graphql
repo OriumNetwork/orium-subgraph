@@ -1,5 +1,10 @@
+enum AavegotchiState {
+  PORTAL, PORTAL_OPENED, AAVEGOTCHI
+}
+
 type NftEntity @entity(immutable: false) {
   id: ID!
+  state: AavegotchiState!
   tokenId: BigInt!
   platform: String!
   currentOwner: Address!
