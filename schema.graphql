@@ -7,11 +7,11 @@ type NftEntity @entity(immutable: false) {
   state: AavegotchiState!
   tokenId: BigInt!
   platform: String!
-  currentOwner: Address!
-  previousOwner: Address!
+  currentOwner: Holder!
+  previousOwner: Holder!
 }
 
-type Address @entity(immutable: false) {
+type Holder @entity(immutable: false) {
   id: ID!
   nfts:       [NftEntity!]! @derivedFrom(field: "currentOwner")
   borrowings: [Rental!]!    @derivedFrom(field: "borrower")
@@ -22,9 +22,9 @@ type Rental @entity(immutable: false) {
   id: ID!
 
   nftEntity: NftEntity!
-  borrower: Address
-  lender: Address!
-  thirdParty: Address
+  borrower: Holder
+  lender: Holder!
+  thirdParty: Holder
 
   period: BigInt!
   timeCreated: BigInt!
@@ -47,7 +47,7 @@ type Rental @entity(immutable: false) {
 type ClaimedToken @entity {
   id: ID!
   rental: Rental!
-  token: Bytes!
+  token: String!
   amount: BigInt!
 }
 

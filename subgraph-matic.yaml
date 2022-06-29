@@ -35,7 +35,7 @@ dataSources:
         - event:   GotchiLendingCancel(indexed uint32,uint256)
           handler:  handleGotchiLendingCancel
         - event:   GotchiLendingClaim(indexed uint32,address[],uint256[])
-          handler:  handleGotchiLendingCancel
+          handler:  handleGotchiLendingClaim
         - event:   GotchiLendingEnd(indexed uint32)
           handler:  handleGotchiLendingEnd
         - event:   PortalOpened(indexed uint256)
