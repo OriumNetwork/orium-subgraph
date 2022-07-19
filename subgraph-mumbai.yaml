@@ -1,0 +1,45 @@
+specVersion: 0.0.4
+features: 
+   - fullTextSearch
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: AavegotchiDiamond
+    network: mumbai
+    source:
+      address: "0xC3688369C695D878d2632b20dFe5efFD18256339"
+      abi: AavegotchiDiamond
+      startBlock: 11003744
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - GotchiLendingAdd
+        - GotchiLendingExecute
+        - GotchiLendingCancel
+        - GotchiLendingClaim
+        - GotchiLendingEnd
+      abis:
+        - name: AavegotchiDiamond
+          file: ./abis/AavegotchiDiamond.json
+      eventHandlers:
+        - event:   Transfer(indexed address,indexed address,indexed uint256)
+          handler:  handleAavegotchiTransfer
+        - event:   GotchiLendingAdd(indexed uint32)
+          handler:  handleGotchiLendingAdd
+        - event:   GotchiLendingExecute(indexed uint32)
+          handler:  handleGotchiLendingExecute
+        - event:   GotchiLendingCancel(indexed uint32,uint256)
+          handler:  handleGotchiLendingCancel
+        - event:   GotchiLendingClaim(indexed uint32,address[],uint256[])
+          handler:  handleGotchiLendingClaim
+        - event:   GotchiLendingEnd(indexed uint32)
+          handler:  handleGotchiLendingEnd
+        - event:   PortalOpened(indexed uint256)
+          handler:  handlePortalOpened
+        - event:   ClaimAavegotchi(indexed uint256)
+          handler:  handleClaimAavegotchi
+      file: ./src/orium-handler.ts

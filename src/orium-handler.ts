@@ -124,6 +124,7 @@ function getOrCreateClaimedToken(tokenAddress: Bytes, rental: Rental): ClaimedTo
 
 export function handleGotchiLendingAdd(event: GotchiLendingAdd): void {
   let rental = getOrCreateRental(event.params.listingId)
+  /*
   let contract = AavegotchiDiamond.bind(event.address)
   let response = contract.try_getGotchiLendingListingInfo(event.params.listingId)
   rental.reverted = response.reverted ? true : false
@@ -139,6 +140,7 @@ export function handleGotchiLendingAdd(event: GotchiLendingAdd): void {
     rental.upfrontCost = listing.initialCost
     rental.revenueSplit = listing.revenueSplit
   }
+  */
   rental.save()
 }
 
