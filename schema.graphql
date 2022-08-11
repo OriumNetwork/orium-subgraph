@@ -1,10 +1,15 @@
-enum AavegotchiState {
-  PORTAL, PORTAL_OPENED, AAVEGOTCHI
+enum NftState {
+  PORTAL, PORTAL_OPENED, AAVEGOTCHI, REALM, BIRD, EGG
+}
+
+enum NftType {
+  AAVEGOTCHI, REALM, FANCYBIRD, FANCYBABYBIRD
 }
 
 type NftEntity @entity(immutable: false) {
   id: ID!
-  state: AavegotchiState!
+  state: NftState!
+  type: NftType!
   tokenId: BigInt!
   platform: String!
   currentOwner: Holder!
@@ -26,17 +31,19 @@ type Rental @entity(immutable: false) {
   lender: Holder!
   thirdParty: Holder
 
+  tokenId: BigInt!
   period: BigInt!
-  timeCreated: BigInt!
+  timeCreated: BigInt
+  timeCanceled: BigInt
   timeAgreed: BigInt
+  timeClaimed: BigInt
   timeEnded: BigInt
 
-  upfrontCost: BigInt!
+  initialCost: BigInt!
   revenueSplit: [Int!]!
 
   cancelled: Boolean!
   completed: Boolean!
-  lastClaimed: BigInt
 
   claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
 

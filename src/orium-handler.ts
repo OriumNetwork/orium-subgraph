@@ -2,43 +2,62 @@ import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   AavegotchiDiamond,
   Transfer,
-  GotchiLendingAdd,
-  GotchiLendingExecute,
-  GotchiLendingCancel,
-  GotchiLendingClaim,
-  GotchiLendingEnd,
+  GotchiLendingAdded,
+  GotchiLendingExecuted,
+  GotchiLendingCanceled,
+  GotchiLendingClaimed,
+  GotchiLendingEnded,
   PortalOpened,
   ClaimAavegotchi
 } from "../generated/AavegotchiDiamond/AavegotchiDiamond"
+import {
+  Hatched
+} from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService"
 
 import { NftEntity, Rental, Holder, ClaimedToken, Control } from "../generated/schema"
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, "FancyBirds")
+  handleTransfer(event, "FancyBirds", "FANCYBIRD", "BIRD")
 }
 
 export function handleFancyBabyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, "FancyBabyBirds")
+  handleTransfer(event, "FancyBirds", "FANCYBABYBIRD", "EGG")
 }
 
+export function handleFancyBabyBirdsHatched(event: Hatched): void {
+  let id = "FANCYBABYBIRD" + "-" + event.params.tokenId.toString()
+  let entity = NftEntity.load(id)
+  if (entity) {
+    entity.state = "BIRD"
+    entity.save()
+  }
+}
+
+/*
 export function handlePegaTransfer(event: Transfer): void {
-  handleTransfer(event, "Pega")
-}
-
-export function handleAavegotchiTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi")
+  handleTransfer(event, "Pega", "Pega")
 }
 
 export function handleThetanArenaTransfer(event: Transfer): void {
-  handleTransfer(event, "ThetanArena")
+  handleTransfer(event, "ThetanArena", "ThetanArena")
+}
+*/
+
+export function handleAavegotchiTransfer(event: Transfer): void {
+  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI", "PORTAL")
 }
 
-function loadAndSaveNftEntity(id: string, event: Transfer, platform: string): void {
+export function handleRealmTransfer(event: Transfer): void {
+  handleTransfer(event, "Aavegotchi", "REALM", "REALM")
+}
+
+function loadAndSaveNftEntity(id: string, event: Transfer, platform: string, type: string, state: string): void {
 
   let entity = NftEntity.load(id)
   if (!entity) {
     entity = new NftEntity(id)
-    entity.state = "PORTAL"
+    entity.type = type
+    entity.state = state
   }
 
   let toHolder = Holder.load(event.params._to.toHex())
@@ -80,10 +99,10 @@ function loadControl(id: String): Control {
   return control
 }
 
-function handleTransfer(event: Transfer, platform: string): void {
+function handleTransfer(event: Transfer, platform: string, type: string, state: string): void {
 
-  let id = platform + "-" + event.params._tokenId.toString()
-  loadAndSaveNftEntity(id, event, platform)
+  let id = type + "-" + event.params._tokenId.toString()
+  loadAndSaveNftEntity(id, event, platform, type, state)
 
   let control = loadControl('orium-control')
   control.lastNftTransferred = id
@@ -100,10 +119,26 @@ function restoreCurrentOwner(nftEntityId: string): void {
   }
 }
 
-function getOrCreateRental(listingId: BigInt): Rental {
+function getOrCreateRental(
+  listingId: BigInt,
+  lender: string,
+  borrower: string | null,
+  thirdParty: string,
+  tokenId: BigInt,
+  initialCost: BigInt,
+  period: BigInt,
+  revenueSplit: i32[]
+): Rental {
   let rental = Rental.load(listingId.toString())
   if (!rental) {
     rental = new Rental(listingId.toString())
+    rental.lender = lender
+    rental.borrower = borrower
+    rental.thirdParty = thirdParty
+    rental.tokenId = tokenId
+    rental.initialCost = initialCost
+    rental.period = period
+    rental.revenueSplit = revenueSplit
     rental.cancelled = false
     rental.completed = false
   }
@@ -122,64 +157,93 @@ function getOrCreateClaimedToken(tokenAddress: Bytes, rental: Rental): ClaimedTo
   return token;
 }
 
-export function handleGotchiLendingAdd(event: GotchiLendingAdd): void {
-  let rental = getOrCreateRental(event.params.listingId)
-  /*
-  let contract = AavegotchiDiamond.bind(event.address)
-  let response = contract.try_getGotchiLendingListingInfo(event.params.listingId)
-  rental.reverted = response.reverted ? true : false
-  if (!response.reverted) {
-    let listing = response.value.value0
-    rental.nftEntity = "Aavegotchi-" + listing.erc721TokenId.toString()
-    rental.lender = listing.lender.toHex()
-    rental.thirdParty = listing.thirdParty.toHex()
-
-    rental.period = listing.period
-    rental.timeCreated = listing.timeCreated
-
-    rental.upfrontCost = listing.initialCost
-    rental.revenueSplit = listing.revenueSplit
-  }
-  */
+export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
+  let rental = getOrCreateRental(
+    event.params.listingId,
+    event.params.lender.toHex(),
+    null,
+    event.params.thirdParty.toHex(),
+    event.params.tokenId,
+    event.params.initialCost,
+    event.params.period,
+    event.params.revenueSplit
+  )
+  rental.timeCreated = event.params.timeCreated
   rental.save()
 }
 
-export function handleGotchiLendingExecute(event: GotchiLendingExecute): void {
-  let rental = getOrCreateRental(event.params.listingId)
+export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void {
+  let rental = getOrCreateRental(
+    event.params.listingId,
+    event.params.lender.toHex(),
+    event.params.borrower.toHex(),
+    event.params.thirdParty.toHex(),
+    event.params.tokenId,
+    event.params.initialCost,
+    event.params.period,
+    event.params.revenueSplit
+  )
+  rental.timeAgreed = event.params.timeAgreed
 
   let control = loadControl('orium-control')
   let nftEntity = NftEntity.load(control.lastNftTransferred)
 
   if (nftEntity) {
-    rental.borrower = nftEntity.currentOwner
-    rental.timeAgreed = event.block.timestamp
     restoreCurrentOwner(nftEntity.id)
   }
 
   rental.save()
 }
 
-export function handleGotchiLendingCancel(event: GotchiLendingCancel): void {
-  let rental = getOrCreateRental(event.params.listingId)
+export function handleGotchiLendingCanceled(event: GotchiLendingCanceled): void {
+  let rental = getOrCreateRental(
+    event.params.listingId,
+    event.params.lender.toHex(),
+    null,
+    event.params.thirdParty.toHex(),
+    event.params.tokenId,
+    event.params.initialCost,
+    event.params.period,
+    event.params.revenueSplit
+  )
   rental.cancelled = true
-  rental.timeEnded = event.block.timestamp
+  rental.timeCanceled = event.params.timeCanceled
   rental.save()
 }
 
-export function handleGotchiLendingClaim(event: GotchiLendingClaim): void {
-  let rental = getOrCreateRental(event.params.listingId)
-  rental.lastClaimed = event.block.timestamp
-  for(let i=0; i < event.params.tokenAddresses.length; i++) {
-    let token = getOrCreateClaimedToken(event.params.tokenAddresses[i], rental);
+export function handleGotchiLendingClaimed(event: GotchiLendingClaimed): void {
+  let rental = getOrCreateRental(
+    event.params.listingId,
+    event.params.lender.toHex(),
+    event.params.borrower.toHex(),
+    event.params.thirdParty.toHex(),
+    event.params.tokenId,
+    event.params.initialCost,
+    event.params.period,
+    event.params.revenueSplit
+  )
+  rental.timeClaimed = event.params.timeClaimed
+
+  for(let i=0; i < event.params.revenueTokens.length; i++) {
+    let token = getOrCreateClaimedToken(event.params.revenueTokens[i], rental);
     token.amount = token.amount.plus(event.params.amounts[i]);
     token.save();
   }
   rental.save()
 }
 
-export function handleGotchiLendingEnd(event: GotchiLendingEnd): void {
-  let rental = getOrCreateRental(event.params.listingId)
-  rental.timeEnded = event.block.timestamp
+export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
+  let rental = getOrCreateRental(
+    event.params.listingId,
+    event.params.lender.toHex(),
+    event.params.borrower.toHex(),
+    event.params.thirdParty.toHex(),
+    event.params.tokenId,
+    event.params.initialCost,
+    event.params.period,
+    event.params.revenueSplit
+  )
+  rental.timeEnded = event.params.timeEnded
   rental.completed = true
   rental.save()
 }
