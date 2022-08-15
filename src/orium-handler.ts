@@ -101,7 +101,7 @@ function loadControl(id: String): Control {
 
 function handleTransfer(event: Transfer, platform: string, type: string, state: string): void {
 
-  let id = type + "-" + event.params._tokenId.toString()
+  let id = platform + "-" + event.params._tokenId.toString()
   loadAndSaveNftEntity(id, event, platform, type, state)
 
   let control = loadControl('orium-control')
