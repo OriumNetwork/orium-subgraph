@@ -14,7 +14,7 @@ import {
   Hatched
 } from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService"
 
-import { NftEntity, Rental, Holder, ClaimedToken, Control } from "../generated/schema"
+import { NftEntity, Rental, Holder, ClaimedToken, } from "../generated/schema"
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
   handleTransfer(event, "FancyBirds", "FANCYBIRD", "BIRD")
@@ -58,6 +58,8 @@ function loadAndSaveNftEntity(id: string, event: Transfer, platform: string, typ
     entity = new NftEntity(id)
     entity.type = type
     entity.state = state
+    entity.platform = platform
+    entity.tokenId = event.params._tokenId
   }
 
   let toHolder = Holder.load(event.params._to.toHex())
@@ -74,8 +76,6 @@ function loadAndSaveNftEntity(id: string, event: Transfer, platform: string, typ
 
   entity.currentOwner = toHolder.id
   entity.previousOwner = fromHolder.id
-  entity.platform = platform
-  entity.tokenId = event.params._tokenId
   entity.save()
 }
 
@@ -91,32 +91,9 @@ function loadAndSaveRental(nftEntity: NftEntity, listingId: BigInt): void {
   entity.save()
 }
 
-function loadControl(id: String): Control {
-  let control = Control.load('orium-control')
-  if (!control) {
-    control = new Control('orium-control')
-  }
-  return control
-}
-
 function handleTransfer(event: Transfer, platform: string, type: string, state: string): void {
-
-  let id = platform + "-" + event.params._tokenId.toString()
+  let id = type + "-" + event.params._tokenId.toString()
   loadAndSaveNftEntity(id, event, platform, type, state)
-
-  let control = loadControl('orium-control')
-  control.lastNftTransferred = id
-  control.save()
-}
-
-function restoreCurrentOwner(nftEntityId: string): void {
-  let entity = NftEntity.load(nftEntityId)
-  if (entity) {
-    let currentOwner = entity.currentOwner
-    entity.currentOwner = entity.previousOwner
-    entity.previousOwner = currentOwner
-    entity.save()
-  }
 }
 
 function getOrCreateRental(
@@ -132,6 +109,7 @@ function getOrCreateRental(
   let rental = Rental.load(listingId.toString())
   if (!rental) {
     rental = new Rental(listingId.toString())
+    rental.nftEntity = "AAVEGOTCHI-" + tokenId.toString()
     rental.lender = lender
     rental.borrower = borrower
     rental.thirdParty = thirdParty
@@ -139,7 +117,7 @@ function getOrCreateRental(
     rental.initialCost = initialCost
     rental.period = period
     rental.revenueSplit = revenueSplit
-    rental.cancelled = false
+    rental.canceled = false
     rental.completed = false
   }
   return rental
@@ -184,14 +162,6 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
     event.params.revenueSplit
   )
   rental.timeAgreed = event.params.timeAgreed
-
-  let control = loadControl('orium-control')
-  let nftEntity = NftEntity.load(control.lastNftTransferred)
-
-  if (nftEntity) {
-    restoreCurrentOwner(nftEntity.id)
-  }
-
   rental.save()
 }
 
@@ -206,7 +176,7 @@ export function handleGotchiLendingCanceled(event: GotchiLendingCanceled): void 
     event.params.period,
     event.params.revenueSplit
   )
-  rental.cancelled = true
+  rental.canceled = true
   rental.timeCanceled = event.params.timeCanceled
   rental.save()
 }
@@ -249,7 +219,7 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 }
 
 export function handlePortalOpened(event: PortalOpened) : void {
-  let id = "Aavegotchi-" + event.params.tokenId.toString()
+  let id = "AAVEGOTCHI-" + event.params.tokenId.toString()
   let entity = NftEntity.load(id)
   if (entity) {
     entity.state = "PORTAL_OPENED"
@@ -258,7 +228,7 @@ export function handlePortalOpened(event: PortalOpened) : void {
 }
 
 export function handleClaimAavegotchi(event: ClaimAavegotchi) : void {
-  let id = "Aavegotchi-" + event.params._tokenId.toString()
+  let id = "AAVEGOTCHI-" + event.params._tokenId.toString()
   let entity = NftEntity.load(id)
   if (entity) {
     entity.state = "AAVEGOTCHI"

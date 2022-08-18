@@ -42,12 +42,10 @@ type Rental @entity(immutable: false) {
   initialCost: BigInt!
   revenueSplit: [Int!]!
 
-  cancelled: Boolean!
+  canceled: Boolean!
   completed: Boolean!
 
   claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
-
-  reverted: Boolean!
 
 }
 
@@ -56,10 +54,5 @@ type ClaimedToken @entity {
   rental: Rental!
   token: String!
   amount: BigInt!
-}
-
-type Control @entity {
-  id: ID!
-  lastNftTransferred: NftEntity!
 }
 

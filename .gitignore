@@ -108,3 +108,5 @@ generated/
 build/
 
 test.js
+
+tests/.*
