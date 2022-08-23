@@ -27,5 +27,9 @@ jobs:
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
+      - name: Generate schema
+        run: yarn codegen-matic
+      - name: Compile to webassembly
+        run: yarn build-matic
       - name: Run Unit Tests
         run: yarn test
