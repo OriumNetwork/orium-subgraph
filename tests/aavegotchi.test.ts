@@ -31,6 +31,7 @@ beforeAll(() => {
   let entity = new NftEntity("AAVEGOTCHI-123")
   entity.currentOwner =  "0x1111111111111111111111111111111111111111"
   entity.previousOwner = "0x0000000000000000000000000000000000000000"
+  entity.originalOwner =  "0x1111111111111111111111111111111111111111"
   entity.platform = "Aavegotchi"
   entity.state = "PORTAL"
   entity.type = "AAVEGOTCHI"
@@ -56,6 +57,7 @@ describe("Transfer events", () => {
 
     assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner", "0x2222222222222222222222222222222222222222")
     assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner","0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "originalOwner","0x2222222222222222222222222222222222222222")
     assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state","PORTAL")
     assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "type","AAVEGOTCHI")
     assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "tokenId","123")
@@ -385,6 +387,68 @@ describe("Lending events", () => {
     assert.fieldEquals("Rental", "100", "timeCanceled", "22222")
     assert.fieldEquals("Rental", "100", "canceled", "true")
     assert.fieldEquals("Rental", "100", "completed", "false")
+  })
+
+  test("Testing setting of 'originalOwner' field", () => {
+
+    let event2 = changetype<Transfer>(newMockEvent());
+    event2.parameters = new Array<ethereum.EventParam>();
+
+    event2.parameters.push(new ethereum.EventParam("_from", 
+      ethereum.Value.fromAddress(Address.fromString("0x1111111111111111111111111111111111111111"))));
+    event2.parameters.push(new ethereum.EventParam("_to", 
+      ethereum.Value.fromAddress(Address.fromString("0x2222222222222222222222222222222222222222"))));
+    event2.parameters.push(new ethereum.EventParam("_tokenId", 
+      ethereum.Value.fromI32(123)));
+
+    handleAavegotchiTransfer(event2)
+
+    let event = changetype<GotchiLendingExecuted>(newMockEvent());
+    event.parameters = new Array<ethereum.EventParam>();
+
+    const revenueSplitArray = [
+      BigInt.fromI32(40),
+      BigInt.fromI32(50),
+      BigInt.fromI32(10),
+    ]
+
+    const revenueTokens = [
+      Address.fromString("0x4444444444444444444444444444444444444444"),
+      Address.fromString("0x5555555555555555555555555555555555555555"),
+      Address.fromString("0x6666666666666666666666666666666666666666")
+    ]
+
+    event.parameters.push(new ethereum.EventParam("listingId", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(100))));
+    event.parameters.push(new ethereum.EventParam("lender", 
+      ethereum.Value.fromAddress(Address.fromString("0x1111111111111111111111111111111111111111"))))
+    event.parameters.push(new ethereum.EventParam("borrower", 
+      ethereum.Value.fromAddress(Address.fromString("0x2222222222222222222222222222222222222222"))))
+
+    event.parameters.push(new ethereum.EventParam("tokenId", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(123))));
+    event.parameters.push(new ethereum.EventParam("initialCost", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(10000))));
+    event.parameters.push(new ethereum.EventParam("period", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(16))));
+    event.parameters.push(new ethereum.EventParam("revenueSplit", 
+      ethereum.Value.fromUnsignedBigIntArray(revenueSplitArray)));
+    event.parameters.push(new ethereum.EventParam("originalOwner", 
+      ethereum.Value.fromAddress(Address.fromString("0x3333333333333333333333333333333333333333"))))
+    event.parameters.push(new ethereum.EventParam("thirdParty", 
+      ethereum.Value.fromAddress(Address.fromString("0x4444444444444444444444444444444444444444"))))
+    event.parameters.push(new ethereum.EventParam("whiteListId", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(555))));
+    event.parameters.push(new ethereum.EventParam("revenueTokens", 
+      ethereum.Value.fromAddressArray(revenueTokens)))
+    event.parameters.push(new ethereum.EventParam("timeAgreed", 
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(33333))));
+
+    handleGotchiLendingExecuted(event)
+
+    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "originalOwner", "0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner", "0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner",  "0x2222222222222222222222222222222222222222")
   })
 
   test("Testing handleGotchiLendingExecuted", () => {
