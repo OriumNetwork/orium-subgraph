@@ -34,6 +34,6 @@ jobs:
       - name: Run Unit Tests
         run: yarn test
       - name: Subgraph Auth
-        run: graph auth --product hosted-service https://api.thegraph.com/deploy/ ${{ secrets.THEGRAPH_API_KEY }}
+        run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
       - name: Deploy subgraph
         run: yarn deploy-temp

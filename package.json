@@ -2,6 +2,7 @@
   "name": "OriumSubgraph",
   "license": "UNLICENSED",
   "scripts": {
+    "graph-auth": "graph auth --product hosted-service",
     "codegen-matic": "graph codegen subgraph-matic.yaml",
     "codegen-bsc": "graph codegen subgraph-bsc.yaml",
     "codegen-mumbai": "graph codegen subgraph-mumbai.yaml",
