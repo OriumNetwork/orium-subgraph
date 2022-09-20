@@ -175,10 +175,10 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   rental.timeAgreed = event.params.timeAgreed
   rental.save()
 
-  let control = loadControl('orium-control')
-  let nftEntity = NftEntity.load(control.lastNftTransferred)
+  let nftEntity = NftEntity.load(rental.nftEntity)
   if (nftEntity) {
-    nftEntity.originalOwner = nftEntity.previousOwner
+    nftEntity.originalOwner = event.params.lender.toHex()
+    nftEntity.currentOwner = event.params.borrower.toHex()
     nftEntity.save()
   }
 }
