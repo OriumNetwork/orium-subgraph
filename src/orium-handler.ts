@@ -127,6 +127,10 @@ function getOrCreateRental(
     rental.canceled = false
     rental.completed = false
   }
+  if (borrower != null && rental.borrower == null) {
+    rental.borrower = borrower
+  }
+
   return rental
 }
 
