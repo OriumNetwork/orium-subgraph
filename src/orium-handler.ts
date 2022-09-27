@@ -97,10 +97,6 @@ function handleTransfer(event: Transfer, platform: string, type: string, state: 
   let id = type + "-" + event.params._tokenId.toString()
   loadAndSaveNftEntity(id, event, platform, type, state)
 
-  let control = loadControl('orium-control')
-  control.lastNftTransferred = id
-  control.save()
-
 }
 
 function getOrCreateRental(
@@ -254,10 +250,3 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi) : void {
   }
 }
 
-function loadControl(id: String): Control {
-  let control = Control.load('orium-control')
-  if (!control) {
-    control = new Control('orium-control')
-  }
-  return control
-}
