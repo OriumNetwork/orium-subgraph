@@ -192,6 +192,8 @@ export function handleGotchiLendingCanceled(event: GotchiLendingCanceled): void 
   )
   rental.canceled = true
   rental.timeCanceled = event.params.timeCanceled
+  rental.lender = null
+  rental.borrower = null
   rental.save()
 }
 
@@ -229,6 +231,8 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
   )
   rental.timeEnded = event.params.timeEnded
   rental.completed = true
+  rental.lender = null
+  rental.borrower = null
   rental.save()
 }
 

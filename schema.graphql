@@ -29,7 +29,7 @@ type Rental @entity(immutable: false) {
 
   nftEntity: NftEntity!
   borrower: Holder
-  lender: Holder!
+  lender: Holder
   thirdParty: Holder
 
   tokenId: BigInt!
