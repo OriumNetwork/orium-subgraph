@@ -19,7 +19,7 @@ type NftEntity @entity(immutable: false) {
 
 type Holder @entity(immutable: false) {
   id: ID!
-  nfts:       [NftEntity!]! @derivedFrom(field: "currentOwner")
+  nfts:       [NftEntity!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]!    @derivedFrom(field: "borrower")
   lendings:   [Rental!]!    @derivedFrom(field: "lender")
 }
