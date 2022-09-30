@@ -14,7 +14,7 @@ import {
   Hatched
 } from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService"
 
-import { NftEntity, Rental, Holder, ClaimedToken, } from "../generated/schema"
+import { NftEntity, Rental, Holder, ClaimedToken, Control } from "../generated/schema"
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
   handleTransfer(event, "FancyBirds", "FANCYBIRD", "BIRD")
@@ -76,6 +76,7 @@ function loadAndSaveNftEntity(id: string, event: Transfer, platform: string, typ
 
   entity.currentOwner = toHolder.id
   entity.previousOwner = fromHolder.id
+  entity.originalOwner = toHolder.id
   entity.save()
 }
 
@@ -92,8 +93,10 @@ function loadAndSaveRental(nftEntity: NftEntity, listingId: BigInt): void {
 }
 
 function handleTransfer(event: Transfer, platform: string, type: string, state: string): void {
+
   let id = type + "-" + event.params._tokenId.toString()
   loadAndSaveNftEntity(id, event, platform, type, state)
+
 }
 
 function getOrCreateRental(
@@ -120,6 +123,10 @@ function getOrCreateRental(
     rental.canceled = false
     rental.completed = false
   }
+  if (borrower != null && rental.borrower == null) {
+    rental.borrower = borrower
+  }
+
   return rental
 }
 
@@ -163,6 +170,13 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   )
   rental.timeAgreed = event.params.timeAgreed
   rental.save()
+
+  let nftEntity = NftEntity.load(rental.nftEntity)
+  if (nftEntity) {
+    nftEntity.originalOwner = event.params.lender.toHex()
+    nftEntity.currentOwner = event.params.borrower.toHex()
+    nftEntity.save()
+  }
 }
 
 export function handleGotchiLendingCanceled(event: GotchiLendingCanceled): void {
@@ -235,3 +249,4 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi) : void {
     entity.save()
   }
 }
+

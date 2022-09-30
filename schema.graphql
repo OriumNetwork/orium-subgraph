@@ -14,11 +14,12 @@ type NftEntity @entity(immutable: false) {
   platform: String!
   currentOwner: Holder!
   previousOwner: Holder!
+  originalOwner: Holder!
 }
 
 type Holder @entity(immutable: false) {
   id: ID!
-  nfts:       [NftEntity!]! @derivedFrom(field: "currentOwner")
+  nfts:       [NftEntity!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]!    @derivedFrom(field: "borrower")
   lendings:   [Rental!]!    @derivedFrom(field: "lender")
 }
@@ -28,7 +29,7 @@ type Rental @entity(immutable: false) {
 
   nftEntity: NftEntity!
   borrower: Holder
-  lender: Holder!
+  lender: Holder
   thirdParty: Holder
 
   tokenId: BigInt!
@@ -54,5 +55,10 @@ type ClaimedToken @entity {
   rental: Rental!
   token: String!
   amount: BigInt!
+}
+
+type Control @entity {
+  id: ID!
+  lastNftTransferred: NftEntity!
 }
 
