@@ -110,3 +110,6 @@ build/
 test.js
 
 tests/.*
+
+# graphql
+generated/

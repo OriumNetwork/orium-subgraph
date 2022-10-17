@@ -14,7 +14,7 @@ import {
   Hatched
 } from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService"
 
-import { NftEntity, Rental, Holder, ClaimedToken, Control } from "../generated/schema"
+import { Nft, Rental, Account, ClaimedToken, Control } from "../generated/schema"
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
   handleTransfer(event, "FancyBirds", "FANCYBIRD", "BIRD")
@@ -26,7 +26,7 @@ export function handleFancyBabyBirdsTransfer(event: Transfer): void {
 
 export function handleFancyBabyBirdsHatched(event: Hatched): void {
   let id = "FANCYBABYBIRD" + "-" + event.params.tokenId.toString()
-  let entity = NftEntity.load(id)
+  let entity = Nft.load(id)
   if (entity) {
     entity.state = "BIRD"
     entity.save()
@@ -51,36 +51,36 @@ export function handleRealmTransfer(event: Transfer): void {
   handleTransfer(event, "Aavegotchi", "REALM", "REALM")
 }
 
-function loadAndSaveNftEntity(id: string, event: Transfer, platform: string, type: string, state: string): void {
+function loadAndSaveNft(id: string, event: Transfer, platform: string, type: string, state: string): void {
 
-  let entity = NftEntity.load(id)
+  let entity = Nft.load(id)
   if (!entity) {
-    entity = new NftEntity(id)
+    entity = new Nft(id)
     entity.type = type
     entity.state = state
     entity.platform = platform
     entity.tokenId = event.params._tokenId
   }
 
-  let toHolder = Holder.load(event.params._to.toHex())
-  if (!toHolder) {
-    toHolder = new Holder(event.params._to.toHex())
-    toHolder.save()
+  let toAccount = Account.load(event.params._to.toHex())
+  if (!toAccount) {
+    toAccount = new Account(event.params._to.toHex())
+    toAccount.save()
   }
 
-  let fromHolder = Holder.load(event.params._from.toHex())
-  if (!fromHolder) {
-    fromHolder = new Holder(event.params._from.toHex())
-    fromHolder.save()
+  let fromAccount = Account.load(event.params._from.toHex())
+  if (!fromAccount) {
+    fromAccount = new Account(event.params._from.toHex())
+    fromAccount.save()
   }
 
-  entity.currentOwner = toHolder.id
-  entity.previousOwner = fromHolder.id
-  entity.originalOwner = toHolder.id
+  entity.currentOwner = toAccount.id
+  entity.previousOwner = fromAccount.id
+  entity.originalOwner = toAccount.id
   entity.save()
 }
 
-function loadAndSaveRental(nftEntity: NftEntity, listingId: BigInt): void {
+function loadAndSaveRental(nftEntity: Nft, listingId: BigInt): void {
   let id = nftEntity.id + "-" + listingId.toString()
   let entity = Rental.load(id)
   if (!entity) {
@@ -95,7 +95,7 @@ function loadAndSaveRental(nftEntity: NftEntity, listingId: BigInt): void {
 function handleTransfer(event: Transfer, platform: string, type: string, state: string): void {
 
   let id = type + "-" + event.params._tokenId.toString()
-  loadAndSaveNftEntity(id, event, platform, type, state)
+  loadAndSaveNft(id, event, platform, type, state)
 
 }
 
@@ -171,7 +171,7 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   rental.timeAgreed = event.params.timeAgreed
   rental.save()
 
-  let nftEntity = NftEntity.load(rental.nftEntity)
+  let nftEntity = Nft.load(rental.nftEntity)
   if (nftEntity) {
     nftEntity.originalOwner = event.params.lender.toHex()
     nftEntity.currentOwner = event.params.borrower.toHex()
@@ -234,7 +234,7 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 
 export function handlePortalOpened(event: PortalOpened) : void {
   let id = "AAVEGOTCHI-" + event.params.tokenId.toString()
-  let entity = NftEntity.load(id)
+  let entity = Nft.load(id)
   if (entity) {
     entity.state = "PORTAL_OPENED"
     entity.save()
@@ -243,7 +243,7 @@ export function handlePortalOpened(event: PortalOpened) : void {
 
 export function handleClaimAavegotchi(event: ClaimAavegotchi) : void {
   let id = "AAVEGOTCHI-" + event.params._tokenId.toString()
-  let entity = NftEntity.load(id)
+  let entity = Nft.load(id)
   if (entity) {
     entity.state = "AAVEGOTCHI"
     entity.save()

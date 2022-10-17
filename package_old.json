@@ -1,0 +1,27 @@
+{
+  "name": "OriumSubgraph",
+  "license": "UNLICENSED",
+  "main": "index.js",
+  "scripts": {
+    "graph-auth": "graph auth --product hosted-service",
+    "codegen-matic": "graph codegen subgraph-matic.yaml",
+    "codegen-bsc": "graph codegen subgraph-bsc.yaml",
+    "codegen-mumbai": "graph codegen subgraph-mumbai.yaml",
+    "build-matic": "graph build subgraph-matic.yaml",
+    "build-bsc": "graph build subgraph-bsc.yaml",
+    "build-mumbai": "graph build subgraph-mumbai.yaml",
+    "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
+    "deploy-temp": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/temporary-subgraph subgraph-matic.yaml",
+    "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-bsc subgraph-bsc.yaml",
+    "deploy-mumbai": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-mumbai subgraph-mumbai.yaml",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.33.0",
+    "gluegun": "^5.1.2"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-ts": "^0.27.0",
+    "matchstick-as": "^0.5.0"
+  }
+}
