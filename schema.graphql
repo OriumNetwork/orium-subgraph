@@ -6,20 +6,20 @@ enum NftType {
   AAVEGOTCHI, REALM, FANCYBIRD, FANCYBABYBIRD
 }
 
-type NftEntity @entity(immutable: false) {
+type Nft @entity(immutable: false) {
   id: ID!
   state: NftState!
   type: NftType!
   tokenId: BigInt!
   platform: String!
-  currentOwner: Holder!
-  previousOwner: Holder!
-  originalOwner: Holder!
+  currentOwner: Account!
+  previousOwner: Account!
+  originalOwner: Account!
 }
 
-type Holder @entity(immutable: false) {
+type Account @entity(immutable: false) {
   id: ID!
-  nfts:       [NftEntity!]! @derivedFrom(field: "originalOwner")
+  nfts:       [Nft!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]!    @derivedFrom(field: "borrower")
   lendings:   [Rental!]!    @derivedFrom(field: "lender")
 }
@@ -27,10 +27,10 @@ type Holder @entity(immutable: false) {
 type Rental @entity(immutable: false) {
   id: ID!
 
-  nftEntity: NftEntity!
-  borrower: Holder
-  lender: Holder
-  thirdParty: Holder
+  nftEntity: Nft!
+  borrower: Account
+  lender: Account
+  thirdParty: Account
 
   tokenId: BigInt!
   period: BigInt!
@@ -59,6 +59,6 @@ type ClaimedToken @entity {
 
 type Control @entity {
   id: ID!
-  lastNftTransferred: NftEntity!
+  lastNftTransferred: Nft!
 }
 
