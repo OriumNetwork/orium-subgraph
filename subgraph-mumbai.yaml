@@ -1,6 +1,6 @@
 specVersion: 0.0.4
-features: 
-   - fullTextSearch
+features:
+  - fullTextSearch
 schema:
   file: ./schema.graphql
 dataSources:
@@ -26,22 +26,22 @@ dataSources:
         - name: AavegotchiDiamond
           file: ./abis/AavegotchiDiamond.json
       eventHandlers:
-        - event:   Transfer(indexed address,indexed address,indexed uint256)
-          handler:  handleAavegotchiTransfer
-        - event:   GotchiLendingAdd(indexed uint32)
-          handler:  handleGotchiLendingAdd
-        - event:   GotchiLendingExecute(indexed uint32)
-          handler:  handleGotchiLendingExecute
-        - event:   GotchiLendingCancel(indexed uint32,uint256)
-          handler:  handleGotchiLendingCancel
-        - event:   GotchiLendingClaim(indexed uint32,address[],uint256[])
-          handler:  handleGotchiLendingClaim
-        - event:   GotchiLendingEnd(indexed uint32)
-          handler:  handleGotchiLendingEnd
-        - event:   PortalOpened(indexed uint256)
-          handler:  handlePortalOpened
-        - event:   ClaimAavegotchi(indexed uint256)
-          handler:  handleClaimAavegotchi
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleAavegotchiTransfer
+        - event: GotchiLendingAdd(indexed uint32)
+          handler: handleGotchiLendingAdd
+        - event: GotchiLendingExecute(indexed uint32)
+          handler: handleGotchiLendingExecute
+        - event: GotchiLendingCancel(indexed uint32,uint256)
+          handler: handleGotchiLendingCancel
+        - event: GotchiLendingClaim(indexed uint32,address[],uint256[])
+          handler: handleGotchiLendingClaim
+        - event: GotchiLendingEnd(indexed uint32)
+          handler: handleGotchiLendingEnd
+        - event: PortalOpened(indexed uint256)
+          handler: handlePortalOpened
+        - event: ClaimAavegotchi(indexed uint256)
+          handler: handleClaimAavegotchi
       file: ./src/orium-handler.ts
   - kind: ethereum
     name: Realm
@@ -60,6 +60,90 @@ dataSources:
         - name: AavegotchiDiamond
           file: ./abis/AavegotchiDiamond.json
       eventHandlers:
-        - event:   Transfer(indexed address,indexed address,indexed uint256)
-          handler:  handleRealmTransfer
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleRealmTransfer
       file: ./src/orium-handler.ts
+  # (NovaCreed) Avatar
+  - kind: ethereum
+    name: NovaAvatarBase
+    network: mumbai
+    source:
+      address: "0x8A514A40eD06fc44B6E0C9875cDd58e20063d10e"
+      abi: NovaAvatarBase
+      startBlock: 26930227
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: NovaAvatarBase
+          file: ./abis/NovaAvatarBase.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/novacreed/avatar/handler.ts
+  # (NovaCreed) WAvatar
+  - kind: ethereum
+    name: WNovaAvatarBase
+    network: mumbai
+    source:
+      address: "0x4dea1760f6b02e41a7f1b1ca1cce463661c8e446"
+      abi: WNovaAvatarBase
+      startBlock: 26930227
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: WNovaAvatarBase
+          file: ./abis/WNovaAvatarBase.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/novacreed/wavatar/handler.ts
+  # (NovaCreed) Spaceships
+  - kind: ethereum
+    name: Novaships
+    network: mumbai
+    source:
+      address: "0xccEb710D7BE276b17Ec65d5693C0eBDEa92E111B"
+      abi: Novaships
+      startBlock: 26930227
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: Novaships
+          file: ./abis/Novaships.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/novacreed/spaceships/handler.ts
+  # (NovaCreed) WSpaceships
+  - kind: ethereum
+    name: WNovaships
+    network: mumbai
+    source:
+      address: "0xdf09a60ff1ebc901d81b1d8a1aeffb95a2c47594"
+      abi: WNovaships
+      startBlock: 26930227
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: WNovaships
+          file: ./abis/WNovaships.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/novacreed/spaceships/handler.ts

@@ -1,5 +1,5 @@
 import { test, describe, beforeAll, assert, clearStore, newMockEvent, createMockedFunction } from "matchstick-as/assembly/index";
-import { NftEntity, ClaimedToken } from "../generated/schema";
+import { Nft, ClaimedToken } from "../generated/schema";
 import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 
 import { 
@@ -28,7 +28,7 @@ import {
 } from "../src/orium-handler"
 
 beforeAll(() => {
-  let entity = new NftEntity("AAVEGOTCHI-123")
+  let entity = new Nft("AAVEGOTCHI-123")
   entity.currentOwner =  "0x1111111111111111111111111111111111111111"
   entity.previousOwner = "0x0000000000000000000000000000000000000000"
   entity.originalOwner =  "0x1111111111111111111111111111111111111111"
@@ -55,13 +55,13 @@ describe("Transfer events", () => {
 
     handleAavegotchiTransfer(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner", "0x2222222222222222222222222222222222222222")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner","0x1111111111111111111111111111111111111111")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "originalOwner","0x2222222222222222222222222222222222222222")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state","PORTAL")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "type","AAVEGOTCHI")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "tokenId","123")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "platform","Aavegotchi")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "currentOwner", "0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "previousOwner","0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "originalOwner","0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state","PORTAL")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "type","AAVEGOTCHI")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "tokenId","123")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "platform","Aavegotchi")
 
   })
 
@@ -79,8 +79,8 @@ describe("Transfer events", () => {
 
     handleAavegotchiTransfer(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-333", "currentOwner", "0x2222222222222222222222222222222222222222")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-333", "previousOwner","0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-333", "currentOwner", "0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-333", "previousOwner","0x1111111111111111111111111111111111111111")
 
   })
 
@@ -118,8 +118,8 @@ describe("Transfer events", () => {
 
     handleAavegotchiTransfer(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-333", "currentOwner", "0x4444444444444444444444444444444444444444")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-333", "previousOwner","0x3333333333333333333333333333333333333333")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-333", "currentOwner", "0x4444444444444444444444444444444444444444")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-333", "previousOwner","0x3333333333333333333333333333333333333333")
 
   })
 
@@ -140,8 +140,8 @@ describe("Transfer events", () => {
     }
 
     for (let i = 0; i < 30; i++) {
-      assert.fieldEquals("NftEntity", "AAVEGOTCHI-" + (100 + i).toString(), "currentOwner", "0x3333333333333333333333333333333333333333")
-      assert.fieldEquals("NftEntity", "AAVEGOTCHI-" + (100 + i).toString(), "previousOwner","0x2222222222222222222222222222222222222222")
+      assert.fieldEquals("Nft", "AAVEGOTCHI-" + (100 + i).toString(), "currentOwner", "0x3333333333333333333333333333333333333333")
+      assert.fieldEquals("Nft", "AAVEGOTCHI-" + (100 + i).toString(), "previousOwner","0x2222222222222222222222222222222222222222")
     }
 
   })
@@ -208,24 +208,24 @@ describe("Transfer events", () => {
     handleRealmTransfer(event)
 
     for (let i = 0; i < 30; i++) {
-      assert.fieldEquals("NftEntity", "AAVEGOTCHI-" + (100 + i).toString(), "currentOwner", "0x3333333333333333333333333333333333333333")
-      assert.fieldEquals("NftEntity", "AAVEGOTCHI-" + (100 + i).toString(), "previousOwner","0x2222222222222222222222222222222222222222")
+      assert.fieldEquals("Nft", "AAVEGOTCHI-" + (100 + i).toString(), "currentOwner", "0x3333333333333333333333333333333333333333")
+      assert.fieldEquals("Nft", "AAVEGOTCHI-" + (100 + i).toString(), "previousOwner","0x2222222222222222222222222222222222222222")
     }
 
-    assert.fieldEquals("NftEntity", "FANCYBIRD-110", "currentOwner", "0x1111111111111111111111111111111111111111")
-    assert.fieldEquals("NftEntity", "FANCYBIRD-110", "previousOwner","0x0000000000000000000000000000000000000000")
+    assert.fieldEquals("Nft", "FANCYBIRD-110", "currentOwner", "0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "FANCYBIRD-110", "previousOwner","0x0000000000000000000000000000000000000000")
 
-    assert.fieldEquals("NftEntity", "FANCYBIRD-120", "currentOwner", "0x4444444444444444444444444444444444444444")
-    assert.fieldEquals("NftEntity", "FANCYBIRD-120", "previousOwner","0x0000000000000000000000000000000000000000")
+    assert.fieldEquals("Nft", "FANCYBIRD-120", "currentOwner", "0x4444444444444444444444444444444444444444")
+    assert.fieldEquals("Nft", "FANCYBIRD-120", "previousOwner","0x0000000000000000000000000000000000000000")
 
-    assert.fieldEquals("NftEntity", "FANCYBABYBIRD-115", "currentOwner", "0x5555555555555555555555555555555555555555")
-    assert.fieldEquals("NftEntity", "FANCYBABYBIRD-115", "previousOwner","0x0000000000000000000000000000000000000000")
+    assert.fieldEquals("Nft", "FANCYBABYBIRD-115", "currentOwner", "0x5555555555555555555555555555555555555555")
+    assert.fieldEquals("Nft", "FANCYBABYBIRD-115", "previousOwner","0x0000000000000000000000000000000000000000")
 
-    assert.fieldEquals("NftEntity", "REALM-115", "currentOwner", "0x6666666666666666666666666666666666666666")
-    assert.fieldEquals("NftEntity", "REALM-115", "previousOwner","0x0000000000000000000000000000000000000000")
+    assert.fieldEquals("Nft", "REALM-115", "currentOwner", "0x6666666666666666666666666666666666666666")
+    assert.fieldEquals("Nft", "REALM-115", "previousOwner","0x0000000000000000000000000000000000000000")
 
-    assert.fieldEquals("NftEntity", "REALM-120", "currentOwner", "0x7777777777777777777777777777777777777777")
-    assert.fieldEquals("NftEntity", "REALM-120", "previousOwner","0x0000000000000000000000000000000000000000")
+    assert.fieldEquals("Nft", "REALM-120", "currentOwner", "0x7777777777777777777777777777777777777777")
+    assert.fieldEquals("Nft", "REALM-120", "previousOwner","0x0000000000000000000000000000000000000000")
   })
 
 })
@@ -237,9 +237,9 @@ describe("Change Aavegotchi STATE events", () => {
     event.parameters = new Array<ethereum.EventParam>();
     event.parameters.push(new ethereum.EventParam("tokenId", 
       ethereum.Value.fromI32(123)));
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state", "PORTAL")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "PORTAL")
     handlePortalOpened(event)
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state", "PORTAL_OPENED")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "PORTAL_OPENED")
   })
 
   test("Testing transfer after PortalOpened", () => {
@@ -255,8 +255,8 @@ describe("Change Aavegotchi STATE events", () => {
 
     handleAavegotchiTransfer(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner", "0x2222222222222222222222222222222222222222")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner","0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "currentOwner", "0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "previousOwner","0x1111111111111111111111111111111111111111")
   })
 
   test("Testing ClaimAavegotchi", () => {
@@ -264,9 +264,9 @@ describe("Change Aavegotchi STATE events", () => {
     event.parameters = new Array<ethereum.EventParam>();
     event.parameters.push(new ethereum.EventParam("_tokenId", 
       ethereum.Value.fromI32(123)));
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state", "PORTAL_OPENED")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "PORTAL_OPENED")
     handleClaimAavegotchi(event)
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "state", "AAVEGOTCHI")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "AAVEGOTCHI")
   })
 
   test("Testing transfer after ClaimAavegotchi", () => {
@@ -282,8 +282,8 @@ describe("Change Aavegotchi STATE events", () => {
 
     handleAavegotchiTransfer(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner", "0x3333333333333333333333333333333333333333")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner","0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "currentOwner", "0x3333333333333333333333333333333333333333")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "previousOwner","0x2222222222222222222222222222222222222222")
   })
 
 })
@@ -446,9 +446,9 @@ describe("Lending events", () => {
 
     handleGotchiLendingExecuted(event)
 
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "originalOwner", "0x1111111111111111111111111111111111111111")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "previousOwner", "0x1111111111111111111111111111111111111111")
-    assert.fieldEquals("NftEntity", "AAVEGOTCHI-123", "currentOwner",  "0x2222222222222222222222222222222222222222")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "originalOwner", "0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "previousOwner", "0x1111111111111111111111111111111111111111")
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "currentOwner",  "0x2222222222222222222222222222222222222222")
   })
 
   test("Testing handleGotchiLendingExecuted", () => {
