@@ -89,9 +89,9 @@ dataSources:
     name: WNovaAvatarBase
     network: mumbai
     source:
-      address: "0x4dea1760f6b02e41a7f1b1ca1cce463661c8e446"
+      address: "0xEA24f3DD1Df2b93a40A6163641CA9fF9E566115E"
       abi: WNovaAvatarBase
-      startBlock: 26930227
+      startBlock: 28740823
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -115,7 +115,7 @@ dataSources:
       startBlock: 25714025
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6kc
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Transfer
@@ -131,9 +131,9 @@ dataSources:
     name: WNovaships
     network: mumbai
     source:
-      address: "0xdf09a60ff1ebc901d81b1d8a1aeffb95a2c47594"
+      address: "0xAd9BE936B90E0a95f56a2Cf9B6F45adE029a924c"
       abi: WNovaships
-      startBlock: 26930227
+      startBlock: 28740835
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
