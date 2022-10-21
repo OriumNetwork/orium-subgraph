@@ -32,7 +32,7 @@ jobs:
       - name: Compile to webassembly
         run: npm run build-mumbai
       - name: Run Unit Tests
-        run: npm test
+        run: npm run test-mumbai
       - name: Subgraph Auth
         run: npm run graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
       - name: Deploy subgraph
