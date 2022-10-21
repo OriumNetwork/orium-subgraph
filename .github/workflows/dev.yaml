@@ -36,4 +36,4 @@ jobs:
       - name: Subgraph Auth
         run: npm run graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
       - name: Deploy subgraph
-        run: npm run deploy-temp
+        run: npm run deploy-mumbai
