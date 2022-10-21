@@ -1,5 +1,5 @@
 import { Transfer } from "../../../generated/WNovaships/WNovaships";
-import { NovaCreedNft } from "../utils/novacreednft";
+import { NftHandle } from "../../utils/nfthandle";
 
 const TYPE = "WNOVASHIPS";
 const PLATFORM = "WNovaships";
@@ -10,7 +10,7 @@ export function handleTransfer(event: Transfer): void {
   const to = event.params.to.toHex();
   const tokenId = event.params.tokenId;
 
-  new NovaCreedNft(TYPE, STATE, PLATFORM).handle(
+  new NftHandle(TYPE, STATE, PLATFORM).handle(
     from,
     to,
     tokenId,

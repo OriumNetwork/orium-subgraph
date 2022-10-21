@@ -42,7 +42,7 @@ dataSources:
           handler: handlePortalOpened
         - event: ClaimAavegotchi(indexed uint256)
           handler: handleClaimAavegotchi
-      file: ./src/orium-handler.ts
+      file: ./src/avegotchi/orium-handler.ts
   - kind: ethereum
     name: Realm
     network: mumbai
@@ -62,7 +62,7 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
-      file: ./src/orium-handler.ts
+      file: ./src/avegotchi/orium-handler.ts
   # (NovaCreed) Avatar
   - kind: ethereum
     name: NovaAvatarBase

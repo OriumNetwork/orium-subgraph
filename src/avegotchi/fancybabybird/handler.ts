@@ -1,11 +1,11 @@
-import { Transfer } from "../../../generated/NovaAvatarBase/NovaAvatarBase";
+import { Transfer } from "../../../generated/FancyBabyBirds/FancyBabyBirds";
 import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "NOVAAVATARBASE";
-const PLATFORM = "NovaAvatarBase";
-const STATE = "NC";
+const TYPE = "FANCYBABYBIRD";
+const PLATFORM = "FancyBabyBirds";
+const STATE = "FBB";
 
-export function handleTransfer(event: Transfer): void {
+export function handleFancyBirdsTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
   const to = event.params.to.toHex();
   const tokenId = event.params.tokenId;

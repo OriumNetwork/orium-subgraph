@@ -3,13 +3,13 @@ import {
   ApprovalForAll as ApprovalForAllEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   ContractTransfer as ContractTransferEvent
-} from "../generated/Contract/Contract"
+} from "../../generated/Contract/Contract"
 import {
   Approval,
   ApprovalForAll,
   OwnershipTransferred,
   ContractTransfer
-} from "../generated/schema"
+} from "../../generated/schema"
 
 export function handleApproval(event: ApprovalEvent): void {
   let entity = new Approval(

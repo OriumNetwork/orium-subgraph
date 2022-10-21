@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { Account, Nft } from "../../../generated/schema";
+import { Account, Nft } from "../../generated/schema";
 
-export class NovaCreedNft {
+export class NftHandle {
   type: string;
   state: string;
   platform: string;

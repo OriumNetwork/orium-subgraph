@@ -8,11 +8,8 @@ import {
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 
-import {
-  handleTransfer,
-  generateId,
-} from "../../src/novacreed/spaceships/handler";
-import { Transfer } from "../../generated/Novaships/Novaships";
+import { handleTransfer, generateId } from "../../../src/novacreed/avatar/handler";
+import { Transfer } from "../../../generated/NovaAvatarBase/NovaAvatarBase";
 
 export function createNewEvent(from: string, to: string): Transfer {
   let event = changetype<Transfer>(newMockEvent());
@@ -35,7 +32,7 @@ export function createNewEvent(from: string, to: string): Transfer {
   return event;
 }
 
-describe("Novaships", () => {
+describe("NovaCreedAvatar", () => {
   afterAll(() => {
     clearStore();
   });
@@ -61,8 +58,8 @@ describe("Novaships", () => {
       "0x2222222222222222222222222222222222222222"
     );
     assert.fieldEquals("Nft", _id, "state", "NC");
-    assert.fieldEquals("Nft", _id, "type", "NOVASHIPS");
+    assert.fieldEquals("Nft", _id, "type", "NOVAAVATARBASE");
     assert.fieldEquals("Nft", _id, "tokenId", "1");
-    assert.fieldEquals("Nft", _id, "platform", "Novaships");
+    assert.fieldEquals("Nft", _id, "platform", "NovaAvatarBase");
   });
 });
