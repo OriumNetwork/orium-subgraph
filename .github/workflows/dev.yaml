@@ -28,12 +28,12 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
       - name: Generate schema
-        run: npm codegen-mumbai
+        run: npm run codegen-mumbai
       - name: Compile to webassembly
-        run: npm build-mumbai
+        run: npm run build-mumbai
       - name: Run Unit Tests
         run: npm test
       - name: Subgraph Auth
-        run: npm graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
+        run: npm run graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
       - name: Deploy subgraph
-        run: npm deploy-temp
+        run: npm run deploy-temp
