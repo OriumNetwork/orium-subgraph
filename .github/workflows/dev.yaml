@@ -1,17 +1,17 @@
+
 name: Build
 
 on:
   push:
-    branches: [ 'dev' ]
+    branches: ["dev"]
 
 jobs:
-
   build_test_deploy:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [ 18.x ]
+        node-version: [16.x]
 
     steps:
       - name: Checkout Repository
@@ -20,20 +20,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@oriumnetwork'
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@oriumnetwork"
       - name: Install Dependencies
-        run: yarn install
+        run: npm install
         env:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
       - name: Generate schema
-        run: yarn codegen-matic
+        run: npm run codegen-mumbai
       - name: Compile to webassembly
-        run: yarn build-matic
+        run: npm run build-mumbai
       - name: Run Unit Tests
-        run: yarn test
+        run: npm test
       - name: Subgraph Auth
-        run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
+        run: npm run graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
       - name: Deploy subgraph
-        run: yarn deploy-temp
+        run: npm run deploy-temp

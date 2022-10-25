@@ -1,16 +1,16 @@
 import { Transfer } from "../../../generated/NovaAvatarBase/NovaAvatarBase";
-import { NovaCreedNft } from "../utils/novacreednft";
+import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "NOVAAVATARBASE";
+const TYPE = "NOVAAVATAR";
 const PLATFORM = "NovaAvatarBase";
-const STATE = "NC";
+const STATE = "AVATAR";
 
 export function handleTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
   const to = event.params.to.toHex();
   const tokenId = event.params.tokenId;
 
-  new NovaCreedNft(TYPE, STATE, PLATFORM).handle(
+  new NftHandle(TYPE, STATE, PLATFORM).handle(
     from,
     to,
     tokenId,

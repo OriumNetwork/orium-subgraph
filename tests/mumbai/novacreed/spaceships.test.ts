@@ -8,8 +8,11 @@ import {
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 
-import { handleTransfer, generateId } from "../../src/novacreed/avatar/handler";
-import { Transfer } from "../../generated/NovaAvatarBase/NovaAvatarBase";
+import {
+  handleTransfer,
+  generateId,
+} from "../../../src/novacreed/spaceships/handler";
+import { Transfer } from "../../../generated/Novaships/Novaships";
 
 export function createNewEvent(from: string, to: string): Transfer {
   let event = changetype<Transfer>(newMockEvent());
@@ -32,7 +35,7 @@ export function createNewEvent(from: string, to: string): Transfer {
   return event;
 }
 
-describe("NovaCreedAvatar", () => {
+describe("Novaships", () => {
   afterAll(() => {
     clearStore();
   });
@@ -57,9 +60,9 @@ describe("NovaCreedAvatar", () => {
       "currentOwner",
       "0x2222222222222222222222222222222222222222"
     );
-    assert.fieldEquals("Nft", _id, "state", "NC");
-    assert.fieldEquals("Nft", _id, "type", "NOVAAVATARBASE");
+    assert.fieldEquals("Nft", _id, "state", "SPACESHIP");
+    assert.fieldEquals("Nft", _id, "type", "NOVASPACESHIP");
     assert.fieldEquals("Nft", _id, "tokenId", "1");
-    assert.fieldEquals("Nft", _id, "platform", "NovaAvatarBase");
+    assert.fieldEquals("Nft", _id, "platform", "Novaships");
   });
 });
