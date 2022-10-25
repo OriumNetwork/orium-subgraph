@@ -60,8 +60,8 @@ import {
         "currentOwner",
         "0x2222222222222222222222222222222222222222"
       );
-      assert.fieldEquals("Nft", _id, "state", "NC");
-      assert.fieldEquals("Nft", _id, "type", "WNOVASHIPS");
+      assert.fieldEquals("Nft", _id, "state", "WSPACESHIP");
+      assert.fieldEquals("Nft", _id, "type", "WNOVASPACESHIP");
       assert.fieldEquals("Nft", _id, "tokenId", "1");
       assert.fieldEquals("Nft", _id, "platform", "WNovaships");
     });

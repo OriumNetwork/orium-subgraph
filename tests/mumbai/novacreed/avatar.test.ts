@@ -57,8 +57,8 @@ describe("NovaCreedAvatar", () => {
       "currentOwner",
       "0x2222222222222222222222222222222222222222"
     );
-    assert.fieldEquals("Nft", _id, "state", "NC");
-    assert.fieldEquals("Nft", _id, "type", "NOVAAVATARBASE");
+    assert.fieldEquals("Nft", _id, "state", "AVATAR");
+    assert.fieldEquals("Nft", _id, "type", "NOVAAVATAR");
     assert.fieldEquals("Nft", _id, "tokenId", "1");
     assert.fieldEquals("Nft", _id, "platform", "NovaAvatarBase");
   });
