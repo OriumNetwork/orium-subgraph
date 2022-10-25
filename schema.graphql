@@ -1,9 +1,25 @@
 enum NftState {
-  PORTAL, PORTAL_OPENED, AAVEGOTCHI, REALM, BIRD, EGG
+  PORTAL
+  PORTAL_OPENED
+  AAVEGOTCHI
+  REALM
+  BIRD
+  EGG
+  AVATAR
+  WAVATAR
+  SPACESHIP
+  WSPACESHIP
 }
 
 enum NftType {
-  AAVEGOTCHI, REALM, FANCYBIRD, FANCYBABYBIRD
+  AAVEGOTCHI
+  REALM
+  FANCYBIRD
+  FANCYBABYBIRD
+  NOVAAVATAR
+  WNOVAAVATAR
+  NOVASPACESHIP
+  WNOVASPACESHIP
 }
 
 type Nft @entity(immutable: false) {
@@ -19,9 +35,9 @@ type Nft @entity(immutable: false) {
 
 type Account @entity(immutable: false) {
   id: ID!
-  nfts:       [Nft!]! @derivedFrom(field: "originalOwner")
-  borrowings: [Rental!]!    @derivedFrom(field: "borrower")
-  lendings:   [Rental!]!    @derivedFrom(field: "lender")
+  nfts: [Nft!]! @derivedFrom(field: "originalOwner")
+  borrowings: [Rental!]! @derivedFrom(field: "borrower")
+  lendings: [Rental!]! @derivedFrom(field: "lender")
 }
 
 type Rental @entity(immutable: false) {
@@ -47,7 +63,6 @@ type Rental @entity(immutable: false) {
   completed: Boolean!
 
   claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
-
 }
 
 type ClaimedToken @entity {

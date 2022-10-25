@@ -1,9 +1,9 @@
 import { Transfer } from "../../../generated/Novaships/Novaships";
 import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "NOVASHIPS";
+const TYPE = "NOVASPACESHIP";
 const PLATFORM = "Novaships";
-const STATE = "NC";
+const STATE = "SPACESHIP";
 
 export function handleTransfer(event: Transfer): void {
   const from = event.params.from.toHex();

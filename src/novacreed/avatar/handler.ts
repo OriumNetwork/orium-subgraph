@@ -1,9 +1,9 @@
 import { Transfer } from "../../../generated/NovaAvatarBase/NovaAvatarBase";
 import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "NOVAAVATARBASE";
+const TYPE = "NOVAAVATAR";
 const PLATFORM = "NovaAvatarBase";
-const STATE = "NC";
+const STATE = "AVATAR";
 
 export function handleTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
