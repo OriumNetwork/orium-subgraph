@@ -31,9 +31,9 @@ import {
   handleGotchiLendingExecuted,
   handleGotchiLendingClaimed,
   handleGotchiLendingEnded,
-} from "../../../src/avegotchi/orium-handler";
+} from "../../../src/aavegotchi/orium-handler";
 
-import { handleFancyBirdsTransfer } from "../../../src/avegotchi/fancybabybird/handler";
+import { handleFancyBirdsTransfer } from "../../../src/fancybabybird/handler";
 
 beforeAll(() => {
   let entity = new Nft("AAVEGOTCHI-123");

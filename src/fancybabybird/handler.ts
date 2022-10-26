@@ -1,5 +1,5 @@
-import { Transfer } from "../../../generated/FancyBabyBirds/FancyBabyBirds";
-import { NftHandle } from "../../utils/nfthandle";
+import { Transfer } from "../../generated/FancyBabyBirds/FancyBabyBirds";
+import { NftHandle } from "../utils/nfthandle";
 
 const TYPE = "FANCYBABYBIRD";
 const PLATFORM = "FancyBabyBirds";
