@@ -1,6 +1,4 @@
 specVersion: 0.0.4
-features:
-  - fullTextSearch
 schema:
   file: ./schema.graphql
 dataSources:
@@ -11,20 +9,27 @@ dataSources:
     source:
       address: "0xC3688369C695D878d2632b20dFe5efFD18256339"
       abi: AavegotchiDiamond
-      startBlock: 11003744
+      startBlock: 11516320
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Transfer
+        - PortalOpened
+        - ClaimAavegotchi
       abis:
         - name: AavegotchiDiamond
           file: ./abis/AavegotchiDiamond.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/aavegotchi/diamond/diamond-handler.ts
+          handler: handleAavegotchiTransfer
+        - event: PortalOpened(indexed uint256)
+          handler: handlePortalOpened
+        - event: ClaimAavegotchi(indexed uint256)
+          handler: handleClaimAavegotchi
+      file: ./src/orium-handler.ts
+
   # (Aavegotchi) Realm
   - kind: ethereum
     name: Realm
@@ -32,7 +37,7 @@ dataSources:
     source:
       address: "0x726f201a9ab38cd56d60ee392165f1434c4f193d"
       abi: AavegotchiDiamond
-      startBlock: 26930227
+      startBlock: 20667840
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -44,8 +49,8 @@ dataSources:
           file: ./abis/AavegotchiDiamond.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/aavegotchi/realm/realm-handler.ts
+          handler: handleRealmTransfer
+      file: ./src/orium-handler.ts
   # (NovaCreed) Avatar
   - kind: ethereum
     name: NovaAvatarBase
