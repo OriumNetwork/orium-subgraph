@@ -27,7 +27,7 @@ export function handleAavegotchiTransfer(event: Transfer): void {
 }
 
 export function handleRealmTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi", "REALM", "REALM");
+  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI_LAND", "AAVEGOTCHI_LAND");
 }
 
 function loadAndSaveNft(

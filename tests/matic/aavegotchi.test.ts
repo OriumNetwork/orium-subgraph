@@ -425,26 +425,26 @@ describe("Transfer events", () => {
 
     assert.fieldEquals(
       "Nft",
-      "REALM-115",
+      "AAVEGOTCHI_LAND-115",
       "currentOwner",
       "0x6666666666666666666666666666666666666666"
     );
     assert.fieldEquals(
       "Nft",
-      "REALM-115",
+      "AAVEGOTCHI_LAND-115",
       "previousOwner",
       "0x0000000000000000000000000000000000000000"
     );
 
     assert.fieldEquals(
       "Nft",
-      "REALM-120",
+      "AAVEGOTCHI_LAND-120",
       "currentOwner",
       "0x7777777777777777777777777777777777777777"
     );
     assert.fieldEquals(
       "Nft",
-      "REALM-120",
+      "AAVEGOTCHI_LAND-120",
       "previousOwner",
       "0x0000000000000000000000000000000000000000"
     );
