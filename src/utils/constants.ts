@@ -1,30 +1,17 @@
-export enum Platform {
-  Aavegotchi = "Aavegotchi",
-  FancyBirds = "FancyBirds",
-}
+export const Aavegotchi = "Aavegotchi";
+export const FancyBirds = "FancyBirds";
 
-export enum AavegotchiTypes {
-  AAVEGOTCHI = "AAVEGOTCHI",
-  AAVEGOTCHI_LAND = "AAVEGOTCHI_LAND",
-}
+export const AAVEGOTCHI = "AAVEGOTCHI";
+export const AAVEGOTCHI_LAND = "AAVEGOTCHI_LAND";
 
-export enum AavegotchiState {
-  OPENED_PORTAL = "OPENED_PORTAL",
-  CLOSED_PORTAL = "CLOSED_PORTAL",
-  AAVEGOTCHI_LAND = "AAVEGOTCHI_LAND",
-  AAVEGOTCHI = "AAVEGOTCHI",
-}
+export const OPENED_PORTAL = "OPENED_PORTAL";
+export const CLOSED_PORTAL = "CLOSED_PORTAL";
 
 export const AAVEGOTCHI_PREFIX = "AAVEGOTCHI-";
 
-export enum FancyBirdsTypes {
-  FANCYBIRD = "FANCYBIRD",
-  FANCYBABYBIRD = "FANCYBABYBIRD",
-}
-
-export enum FancyBirdsState {
-  BIRD = "BIRD",
-  EGG = "EGG",
-}
+export const FANCYBIRD = "FANCYBIRD";
+export const FANCYBABYBIRD = "FANCYBABYBIRD";
+export const BIRD = "BIRD";
+export const EGG = "EGG";
 
 export const FANCYBABYBIRD_PREFIX = "FANCYBABYBIRD-";

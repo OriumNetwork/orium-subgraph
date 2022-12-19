@@ -28,7 +28,7 @@ dataSources:
           handler: handlePortalOpened
         - event: ClaimAavegotchi(indexed uint256)
           handler: handleClaimAavegotchi
-      file: ./src/orium-handler.ts
+      file: ./src/aavegotchi/orium-handler.ts
 
   # (Aavegotchi) Realm
   - kind: ethereum
@@ -50,7 +50,7 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
-      file: ./src/orium-handler.ts
+      file: ./src/aavegotchi/orium-handler.ts
   # (NovaCreed) Avatar
   - kind: ethereum
     name: NovaAvatarBase

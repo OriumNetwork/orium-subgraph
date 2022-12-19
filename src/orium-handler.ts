@@ -15,38 +15,33 @@ import {
   Control,
 } from "../generated/schema";
 import {
-  AavegotchiState,
-  AavegotchiTypes,
+  AAVEGOTCHI,
+  Aavegotchi,
+  AAVEGOTCHI_LAND,
   AAVEGOTCHI_PREFIX,
+  BIRD,
+  CLOSED_PORTAL,
+  EGG,
+  FANCYBABYBIRD,
   FANCYBABYBIRD_PREFIX,
-  FancyBirdsState,
-  FancyBirdsTypes,
-  Platform,
+  FANCYBIRD,
+  FancyBirds,
+  OPENED_PORTAL,
 } from "./utils/constants";
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
-  handleTransfer(
-    event,
-    Platform.FancyBirds,
-    FancyBirdsTypes.FANCYBIRD,
-    FancyBirdsState.BIRD
-  );
+  handleTransfer(event, FancyBirds, FANCYBIRD, BIRD);
 }
 
 export function handleFancyBabyBirdsTransfer(event: Transfer): void {
-  handleTransfer(
-    event,
-    Platform.FancyBirds,
-    FancyBirdsTypes.FANCYBABYBIRD,
-    FancyBirdsState.EGG
-  );
+  handleTransfer(event, FancyBirds, FANCYBABYBIRD, EGG);
 }
 
 export function handleFancyBabyBirdsHatched(event: Hatched): void {
   let id = FANCYBABYBIRD_PREFIX + event.params.tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = FancyBirdsState.BIRD;
+    entity.state = BIRD;
     entity.save();
   }
 }
@@ -62,21 +57,11 @@ export function handleThetanArenaTransfer(event: Transfer): void {
 */
 
 export function handleAavegotchiTransfer(event: Transfer): void {
-  handleTransfer(
-    event,
-    Platform.Aavegotchi,
-    AavegotchiTypes.AAVEGOTCHI,
-    AavegotchiState.CLOSED_PORTAL
-  );
+  handleTransfer(event, Aavegotchi, AAVEGOTCHI, CLOSED_PORTAL);
 }
 
 export function handleRealmTransfer(event: Transfer): void {
-  handleTransfer(
-    event,
-    Platform.Aavegotchi,
-    AavegotchiTypes.AAVEGOTCHI_LAND,
-    AavegotchiState.AAVEGOTCHI_LAND
-  );
+  handleTransfer(event, Aavegotchi, AAVEGOTCHI_LAND, AAVEGOTCHI_LAND);
 }
 
 function loadAndSaveNft(
@@ -194,7 +179,7 @@ export function handlePortalOpened(event: PortalOpened): void {
   let id = AAVEGOTCHI_PREFIX + event.params.tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = AavegotchiState.OPENED_PORTAL;
+    entity.state = OPENED_PORTAL;
     entity.save();
   }
 }
@@ -203,7 +188,7 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
   let id = AAVEGOTCHI_PREFIX + event.params._tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = AavegotchiState.AAVEGOTCHI;
+    entity.state = AAVEGOTCHI;
     entity.save();
   }
 }
