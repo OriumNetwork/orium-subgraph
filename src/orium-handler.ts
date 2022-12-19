@@ -14,20 +14,39 @@ import {
   ClaimedToken,
   Control,
 } from "../generated/schema";
+import {
+  AavegotchiState,
+  AavegotchiTypes,
+  AAVEGOTCHI_PREFIX,
+  FANCYBABYBIRD_PREFIX,
+  FancyBirdsState,
+  FancyBirdsTypes,
+  Platform,
+} from "./utils/constants";
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, "FancyBirds", "FANCYBIRD", "BIRD");
+  handleTransfer(
+    event,
+    Platform.FancyBirds,
+    FancyBirdsTypes.FANCYBIRD,
+    FancyBirdsState.BIRD
+  );
 }
 
 export function handleFancyBabyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, "FancyBirds", "FANCYBABYBIRD", "EGG");
+  handleTransfer(
+    event,
+    Platform.FancyBirds,
+    FancyBirdsTypes.FANCYBABYBIRD,
+    FancyBirdsState.EGG
+  );
 }
 
 export function handleFancyBabyBirdsHatched(event: Hatched): void {
-  let id = "FANCYBABYBIRD" + "-" + event.params.tokenId.toString();
+  let id = FANCYBABYBIRD_PREFIX + event.params.tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = "BIRD";
+    entity.state = FancyBirdsState.BIRD;
     entity.save();
   }
 }
@@ -43,11 +62,21 @@ export function handleThetanArenaTransfer(event: Transfer): void {
 */
 
 export function handleAavegotchiTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI", "OPENED_PORTAL");
+  handleTransfer(
+    event,
+    Platform.Aavegotchi,
+    AavegotchiTypes.AAVEGOTCHI,
+    AavegotchiState.CLOSED_PORTAL
+  );
 }
 
 export function handleRealmTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI_LAND", "AAVEGOTCHI_LAND");
+  handleTransfer(
+    event,
+    Platform.Aavegotchi,
+    AavegotchiTypes.AAVEGOTCHI_LAND,
+    AavegotchiState.AAVEGOTCHI_LAND
+  );
 }
 
 function loadAndSaveNft(
@@ -105,7 +134,14 @@ function handleTransfer(
   state: string
 ): void {
   let id = type + "-" + event.params._tokenId.toString();
-  loadAndSaveNft(id, event, platform, type, state, event.address.toHexString().toLowerCase());
+  loadAndSaveNft(
+    id,
+    event,
+    platform,
+    type,
+    state,
+    event.address.toHexString().toLowerCase()
+  );
 }
 
 function getOrCreateRental(
@@ -121,7 +157,7 @@ function getOrCreateRental(
   let rental = Rental.load(listingId.toString());
   if (!rental) {
     rental = new Rental(listingId.toString());
-    rental.nftEntity = "AAVEGOTCHI-" + tokenId.toString();
+    rental.nftEntity = AAVEGOTCHI_PREFIX + tokenId.toString();
     rental.lender = lender;
     rental.borrower = borrower;
     rental.thirdParty = thirdParty;
@@ -155,19 +191,19 @@ function getOrCreateClaimedToken(
 }
 
 export function handlePortalOpened(event: PortalOpened): void {
-  let id = "AAVEGOTCHI-" + event.params.tokenId.toString();
+  let id = AAVEGOTCHI_PREFIX + event.params.tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = "OPENED_PORTAL";
+    entity.state = AavegotchiState.OPENED_PORTAL;
     entity.save();
   }
 }
 
 export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
-  let id = "AAVEGOTCHI-" + event.params._tokenId.toString();
+  let id = AAVEGOTCHI_PREFIX + event.params._tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = "AAVEGOTCHI";
+    entity.state = AavegotchiState.AAVEGOTCHI;
     entity.save();
   }
 }
