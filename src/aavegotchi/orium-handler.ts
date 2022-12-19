@@ -11,6 +11,14 @@ import {
   ClaimAavegotchi,
 } from "../../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { Account, ClaimedToken, Nft, Rental } from "../../generated/schema";
+import {
+  AAVEGOTCHI,
+  Aavegotchi,
+  AAVEGOTCHI_PREFIX,
+  CLOSED_PORTAL,
+  AAVEGOTCHI_LAND,
+  OPENED_PORTAL,
+} from "../utils/constants";
 
 /*
 export function handlePegaTransfer(event: Transfer): void {
@@ -23,11 +31,11 @@ export function handleThetanArenaTransfer(event: Transfer): void {
 */
 
 export function handleAavegotchiTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI", "PORTAL");
+  handleTransfer(event, Aavegotchi, AAVEGOTCHI, CLOSED_PORTAL);
 }
 
 export function handleRealmTransfer(event: Transfer): void {
-  handleTransfer(event, "Aavegotchi", "AAVEGOTCHI_LAND", "AAVEGOTCHI_LAND");
+  handleTransfer(event, Aavegotchi, AAVEGOTCHI_LAND, AAVEGOTCHI_LAND);
 }
 
 function loadAndSaveNft(
@@ -99,7 +107,7 @@ function getOrCreateRental(
   let rental = Rental.load(listingId.toString());
   if (!rental) {
     rental = new Rental(listingId.toString());
-    rental.nftEntity = "AAVEGOTCHI-" + tokenId.toString();
+    rental.nftEntity = AAVEGOTCHI_PREFIX + tokenId.toString();
     rental.lender = lender;
     rental.borrower = borrower;
     rental.thirdParty = thirdParty;
@@ -227,19 +235,19 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 }
 
 export function handlePortalOpened(event: PortalOpened): void {
-  let id = "AAVEGOTCHI-" + event.params.tokenId.toString();
+  let id = AAVEGOTCHI_PREFIX + event.params.tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = "OPENED_PORTAL";
+    entity.state = OPENED_PORTAL;
     entity.save();
   }
 }
 
 export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
-  let id = "AAVEGOTCHI-" + event.params._tokenId.toString();
+  let id = AAVEGOTCHI_PREFIX + event.params._tokenId.toString();
   let entity = Nft.load(id);
   if (entity) {
-    entity.state = "AAVEGOTCHI";
+    entity.state = AAVEGOTCHI;
     entity.save();
   }
 }
