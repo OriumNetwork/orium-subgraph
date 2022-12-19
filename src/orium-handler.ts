@@ -55,12 +55,14 @@ function loadAndSaveNft(
   event: Transfer,
   platform: string,
   type: string,
-  state: string
+  state: string,
+  address: string
 ): void {
   let entity = Nft.load(id);
   if (!entity) {
     entity = new Nft(id);
     entity.type = type;
+    entity.address = address;
     entity.state = state;
     entity.platform = platform;
     entity.tokenId = event.params._tokenId;
@@ -103,7 +105,7 @@ function handleTransfer(
   state: string
 ): void {
   let id = type + "-" + event.params._tokenId.toString();
-  loadAndSaveNft(id, event, platform, type, state);
+  loadAndSaveNft(id, event, platform, type, state, event.address.toHexString().toLowerCase());
 }
 
 function getOrCreateRental(

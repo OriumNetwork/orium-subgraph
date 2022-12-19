@@ -14,6 +14,7 @@ export function handleTransfer(event: Transfer): void {
   const tokenId = event.params._tokenId;
 
   new NftHandle(TYPE, "CLOSED_PORTAL", PLATFORM).handle(
+    event,
     from,
     to,
     tokenId,

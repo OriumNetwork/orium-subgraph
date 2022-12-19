@@ -30,6 +30,8 @@ import {
   handleClaimAavegotchi,
 } from "../../src/orium-handler";
 
+const GOTCHI_ADDRESS = "0x86935F11C86623deC8a25696E1C19a8659CbF95d";
+
 beforeAll(() => {
   let entity = new Nft("AAVEGOTCHI-123");
   entity.currentOwner = "0x1111111111111111111111111111111111111111";
@@ -39,6 +41,7 @@ beforeAll(() => {
   entity.state = "PORTAL";
   entity.type = "AAVEGOTCHI";
   entity.tokenId = BigInt.fromI32(123);
+  entity.address = GOTCHI_ADDRESS.toLowerCase();
   entity.save();
 });
 

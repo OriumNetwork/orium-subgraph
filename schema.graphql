@@ -24,6 +24,7 @@ enum NftType {
 
 type Nft @entity(immutable: false) {
   id: ID!
+  address: String!
   state: NftState!
   type: NftType!
   tokenId: BigInt!

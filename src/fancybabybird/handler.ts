@@ -11,6 +11,7 @@ export function handleFancyBirdsTransfer(event: Transfer): void {
   const tokenId = event.params.tokenId;
 
   new NftHandle(TYPE, STATE, PLATFORM).handle(
+    event,
     from,
     to,
     tokenId,

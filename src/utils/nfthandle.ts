@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { Account, Nft } from "../../generated/schema";
 
 export class NftHandle {
@@ -12,7 +12,7 @@ export class NftHandle {
     this.platform = platform;
   }
 
-  public handle(from: string, to: string, tokenId: BigInt, id: string): void {
+  public handle(event: ethereum.Event, from: string, to: string, tokenId: BigInt, id: string): void {
     let entity = Nft.load(id);
     if (!entity) {
       entity = new Nft(id);
@@ -20,6 +20,7 @@ export class NftHandle {
       entity.state = this.state;
       entity.platform = this.platform;
       entity.tokenId = tokenId;
+      entity.address = event.address.toHexString().toLowerCase();
     }
 
     let toAccount = Account.load(to);
