@@ -46,16 +46,6 @@ export function handleFancyBabyBirdsHatched(event: Hatched): void {
   }
 }
 
-/*
-export function handlePegaTransfer(event: Transfer): void {
-  handleTransfer(event, "Pega", "Pega")
-}
-
-export function handleThetanArenaTransfer(event: Transfer): void {
-  handleTransfer(event, "ThetanArena", "ThetanArena")
-}
-*/
-
 export function handleAavegotchiTransfer(event: Transfer): void {
   handleTransfer(event, Aavegotchi, AAVEGOTCHI, CLOSED_PORTAL);
 }
