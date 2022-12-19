@@ -14,9 +14,9 @@
     "codegen-mumbai": "cp subgraph-mumbai.yaml subgraph.yaml && graph codegen subgraph-mumbai.yaml",
     "build-matic": "graph build subgraph-matic.yaml",
     "build-mumbai": "graph build subgraph-mumbai.yaml",
-    "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ orium-network/orium-polygon subgraph-matic.yaml",
-    "deploy-temp": "graph deploy --node https://api.thegraph.com/deploy/ orium-network/temporary-subgraph subgraph-matic.yaml",
-    "deploy-mumbai": "graph deploy --product hosted-service oriummgnt/orium-mumbai",
+    "deploy-matic": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-polygon subgraph-matic.yaml",
+    "deploy-temp": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/temporary-subgraph subgraph-matic.yaml",
+    "deploy-mumbai": "graph deploy --node https://api.thegraph.com/deploy/ oriummgnt/orium-mumbai",
     "test-mumbai": "cp subgraph-mumbai.yaml subgraph.yaml && graph test mumbai",
     "test-matic": "cp subgraph-matic.yaml subgraph.yaml && graph test matic"
   },
