@@ -20,8 +20,8 @@
     "deploy-temp": "graph deploy --node https://api.thegraph.com/deploy/ orium-network/temporary-subgraph subgraph-matic.yaml",
     "deploy-bsc": "graph deploy --node https://api.thegraph.com/deploy/ orium-network/orium-bsc subgraph-bsc.yaml",
     "deploy-mumbai": "graph deploy --product hosted-service oriummgnt/orium-mumbai",
-    "test-mumbai": "graph test mumbai",
-    "test-matic": "graph test matic"
+    "test-mumbai": "cp subgraph-mumbai.yaml subgraph.yaml && graph test mumbai",
+    "test-matic": "cp subgraph-matic.yaml subgraph.yaml && graph test matic"
   },
   "repository": {
     "type": "git",
