@@ -194,3 +194,24 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/novacreed/wspaceships/handler.ts
+  # (Chronos) Traveler
+  - kind: ethereum
+    name: Traveler
+    network: matic
+    source:
+      address: "0xa03c4e40d1fcaa826591007a17ca929ef8adbf1c"
+      abi: ChronosTraveler
+      startBlock: 36796276
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: ChronosTraveler
+          file: ./abis/ChronosTraveler.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/chronos/travaler/handler.ts
