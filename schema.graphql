@@ -9,6 +9,7 @@ enum NftState {
   WAVATAR
   SPACESHIP
   WSPACESHIP
+  TRAVELER
 }
 
 enum NftType {
@@ -20,6 +21,7 @@ enum NftType {
   WNOVAAVATAR
   NOVASPACESHIP
   WNOVASPACESHIP
+  TRAVELER
 }
 
 type Nft @entity(immutable: false) {

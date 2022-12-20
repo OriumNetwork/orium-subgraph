@@ -214,4 +214,4 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-      file: ./src/chronos/travaler/handler.ts
+      file: ./src/chronos/traveler/handler.ts

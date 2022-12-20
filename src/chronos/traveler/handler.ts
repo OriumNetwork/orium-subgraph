@@ -3,7 +3,7 @@ import { NftHandle } from "../../utils/nfthandle";
 
 const TYPE = "TRAVELER";
 const PLATFORM = "Chronos";
-const STATE = "";
+const STATE = "TRAVELER";
 
 export function handleTravelerTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
