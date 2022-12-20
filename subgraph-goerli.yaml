@@ -1,0 +1,25 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  # (Chronos) Traveler
+  - kind: ethereum
+    name: Traveler
+    network: goerli
+    source:
+      address: "0x450c91d1fe9f3d57b91218f6ff96f7994eec4d32"
+      abi: ChronosTraveler
+      startBlock: 8099655
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Nft
+      abis:
+        - name: ChronosTraveler
+          file: ./abis/ChronosTraveler.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTravelerTransfer
+      file: ./src/chronos/traveler/handler.ts

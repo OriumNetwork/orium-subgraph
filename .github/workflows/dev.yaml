@@ -17,11 +17,17 @@ jobs:
           node-version: 16
       - name: Install Dependencies
         run: npm ci
-      - name: Code Generator
+      - name: Code Generator Mumbai
         run: npm run codegen-mumbai
-      - name: Build
+      - name: Build Mumbai
         run: npm run build-mumbai
       - name: Subgraph Auth
         run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
-      - name: Subgraph Deploy
+      - name: Subgraph Deploy Mumbai
         run: npm run deploy-mumbai
+      - name: Code Generator Goerli
+        run: npm run codegen-goerli
+      - name: Build Goerli
+        run: npm run build-goerli
+      - name: Subgraph Deploy Goerli
+        run: npm run deploy-goerli
