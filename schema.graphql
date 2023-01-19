@@ -10,6 +10,7 @@ enum NftState {
   SPACESHIP
   WSPACESHIP
   TRAVELER
+  WTRAVELER
 }
 
 enum NftType {
@@ -22,6 +23,7 @@ enum NftType {
   NOVASPACESHIP
   WNOVASPACESHIP
   TRAVELER
+  WTRAVELER
 }
 
 type Nft @entity(immutable: false) {
@@ -34,6 +36,8 @@ type Nft @entity(immutable: false) {
   currentOwner: Account!
   previousOwner: Account!
   originalOwner: Account!
+  currentRental: Rental
+  rentalHistory: [Rental!]! @derivedFrom(field: "nftEntity")
 }
 
 type Account @entity(immutable: false) {

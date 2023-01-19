@@ -23,3 +23,26 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTravelerTransfer
       file: ./src/chronos/traveler/handler.ts
+  # (Chronos) Wrapped Traveler
+  - kind: ethereum
+    name: WTraveler
+    network: goerli
+    source:
+      address: "0xcc062BCDDdF43559bE5289289B94Ba6B3CB326A4"
+      abi: WChronosTraveler
+      startBlock: 8099655
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Nft
+      abis:
+        - name: WChronosTraveler
+          file: ./abis/WChronosTraveler.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTravelerTransfer
+        - event: UpdateUser(indexed uint256,indexed address,uint64)
+          handler: handlerUpdateUser
+      file: ./src/chronos/wtraveler/index.ts
