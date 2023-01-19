@@ -1,4 +1,3 @@
-import { BigInt } from "@graphprotocol/graph-ts";
 import { Rental } from "../../../generated/schema";
 import { UpdateUser } from "../../../generated/WTraveler/WChronosTraveler";
 import { generateNftId, loadNft } from "../../utils/misc";
@@ -6,7 +5,6 @@ import { log } from "@graphprotocol/graph-ts";
 
 const TYPE = "WTRAVELER";
 const PLATFORM = "Chronos";
-const STATE = "WTRAVELER";
 
 /**
  * @event UpdateUser(uint256 indexed tokenId, address indexed user, uint64 expires);

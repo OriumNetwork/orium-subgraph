@@ -115,3 +115,5 @@ tests/.*
 generated/
 
 subgraph.yaml
+
+tests/.latest.json

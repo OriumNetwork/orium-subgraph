@@ -3,21 +3,29 @@ import { Account, Nft } from "../../generated/schema";
 
 export class NftHandle {
   type: string;
-  state: string;
+  state: string | null;
   platform: string;
 
-  constructor(type: string, state: string, platform: string) {
+  constructor(type: string, state: string | null, platform: string) {
     this.type = type;
     this.state = state;
     this.platform = platform;
   }
 
-  public handle(event: ethereum.Event, from: string, to: string, tokenId: BigInt, id: string): void {
+  public handle(
+    event: ethereum.Event,
+    from: string,
+    to: string,
+    tokenId: BigInt,
+    id: string
+  ): void {
     let entity = Nft.load(id);
     if (!entity) {
       entity = new Nft(id);
       entity.type = this.type;
-      entity.state = this.state;
+      if (this.state) {
+        entity.state = this.state;
+      }
       entity.platform = this.platform;
       entity.tokenId = tokenId;
       entity.address = event.address.toHexString().toLowerCase();

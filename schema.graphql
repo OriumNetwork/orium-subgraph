@@ -9,8 +9,6 @@ enum NftState {
   WAVATAR
   SPACESHIP
   WSPACESHIP
-  TRAVELER
-  WTRAVELER
 }
 
 enum NftType {
@@ -29,7 +27,7 @@ enum NftType {
 type Nft @entity(immutable: false) {
   id: ID!
   address: String!
-  state: NftState!
+  state: NftState
   type: NftType!
   tokenId: BigInt!
   platform: String!
