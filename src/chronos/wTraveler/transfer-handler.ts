@@ -5,7 +5,7 @@ const TYPE = "WTRAVELER";
 const PLATFORM = "Chronos";
 const STATE = "WTRAVELER";
 
-export function handleTransfer(event: Transfer): void {
+export function handleWTravelerTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
   const to = event.params.to.toHex();
   const tokenId = event.params.tokenId;

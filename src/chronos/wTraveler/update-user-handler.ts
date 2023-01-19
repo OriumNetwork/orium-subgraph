@@ -20,9 +20,9 @@ export function handleUpdateUser(event: UpdateUser): void {
   const nft = loadNft(TYPE, tokenId);
 
   const rentalId =
-    TYPE +
-    "-" +
     PLATFORM +
+    "-" +
+    TYPE +
     "-" +
     event.transaction.hash.toHex() +
     "-" +
@@ -34,10 +34,6 @@ export function handleUpdateUser(event: UpdateUser): void {
   rental.lender = nft.currentOwner;
   rental.tokenId = tokenId;
   rental.period = expires;
-  rental.initialCost = BigInt.fromI32(0);
-  rental.revenueSplit = [];
-  rental.canceled = false;
-  rental.completed = false;
   rental.save();
 
   nft.currentRental = rentalId;

@@ -63,11 +63,11 @@ type Rental @entity(immutable: false) {
   timeClaimed: BigInt
   timeEnded: BigInt
 
-  initialCost: BigInt!
-  revenueSplit: [Int!]!
+  initialCost: BigInt
+  revenueSplit: [Int!]
 
-  canceled: Boolean!
-  completed: Boolean!
+  canceled: Boolean
+  completed: Boolean
 
   claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
 }
