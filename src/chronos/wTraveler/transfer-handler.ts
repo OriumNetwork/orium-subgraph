@@ -1,10 +1,11 @@
-import { Transfer } from "../../../generated/Traveler/ChronosTraveler";
+import { Transfer } from "../../../generated/WTraveler/WChronosTraveler";
+import { generateNftId } from "../../utils/misc";
 import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "TRAVELER";
+const TYPE = "WTRAVELER";
 const PLATFORM = "Chronos";
 
-export function handleTravelerTransfer(event: Transfer): void {
+export function handleWTravelerTransfer(event: Transfer): void {
   const from = event.params.from.toHex();
   const to = event.params.to.toHex();
   const tokenId = event.params.tokenId;
@@ -14,10 +15,6 @@ export function handleTravelerTransfer(event: Transfer): void {
     from,
     to,
     tokenId,
-    generateId(event)
+    generateNftId(TYPE, tokenId)
   );
-}
-
-export function generateId(event: Transfer): string {
-  return TYPE + "-" + event.params.tokenId.toString();
 }

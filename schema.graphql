@@ -9,7 +9,6 @@ enum NftState {
   WAVATAR
   SPACESHIP
   WSPACESHIP
-  TRAVELER
 }
 
 enum NftType {
@@ -22,18 +21,21 @@ enum NftType {
   NOVASPACESHIP
   WNOVASPACESHIP
   TRAVELER
+  WTRAVELER
 }
 
 type Nft @entity(immutable: false) {
   id: ID!
   address: String!
-  state: NftState!
+  state: NftState
   type: NftType!
   tokenId: BigInt!
   platform: String!
   currentOwner: Account!
   previousOwner: Account!
   originalOwner: Account!
+  currentRental: Rental
+  rentalHistory: [Rental!]! @derivedFrom(field: "nftEntity")
 }
 
 type Account @entity(immutable: false) {
@@ -59,11 +61,11 @@ type Rental @entity(immutable: false) {
   timeClaimed: BigInt
   timeEnded: BigInt
 
-  initialCost: BigInt!
-  revenueSplit: [Int!]!
+  initialCost: BigInt
+  revenueSplit: [Int!]
 
-  canceled: Boolean!
-  completed: Boolean!
+  canceled: Boolean
+  completed: Boolean
 
   claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
 }
