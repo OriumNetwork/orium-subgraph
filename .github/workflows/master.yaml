@@ -35,5 +35,5 @@ jobs:
         run: npm run codegen-matic
       - name: Build
         run: npm run build-matic
-       - name: Subgraph Deploy
+      - name: Subgraph Deploy
         run: npm run deploy-matic
