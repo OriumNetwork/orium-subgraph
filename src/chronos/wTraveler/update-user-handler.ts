@@ -49,8 +49,8 @@ export function handleUpdateUser(event: UpdateUser): void {
       rentalId,
       nft.id,
       rental.period.toString(),
-      rental.borrower,
-      rental.lender,
+      rental.borrower!,
+      rental.lender!,
       event.transaction.hash.toHex(),
     ]
   );
