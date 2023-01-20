@@ -45,4 +45,4 @@ dataSources:
           handler: handleWTravelerTransfer
         - event: UpdateUser(indexed uint256,indexed address,uint64)
           handler: handleUpdateUser
-      file: ./src/chronos/wtraveler/index.ts
+      file: ./src/chronos/wTraveler/index.ts
