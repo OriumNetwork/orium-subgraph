@@ -213,5 +213,5 @@ dataSources:
           file: ./abis/ChronosTraveler.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
+          handler: handleTravelerTransfer
       file: ./src/chronos/traveler/handler.ts
