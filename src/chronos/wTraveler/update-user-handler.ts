@@ -1,4 +1,4 @@
-import { Rental } from "../../../generated/schema";
+import { Account, Rental } from "../../../generated/schema";
 import { UpdateUser } from "../../../generated/WTraveler/WChronosTraveler";
 import { generateNftId, loadNft } from "../../utils/misc";
 import { log } from "@graphprotocol/graph-ts";
@@ -17,6 +17,13 @@ export function handleUpdateUser(event: UpdateUser): void {
 
   const nft = loadNft(TYPE, tokenId);
 
+  let userAccount = Account.load(user);
+
+  if (!userAccount) {
+    userAccount = new Account(user);
+    userAccount.save();
+  }
+
   const rentalId =
     PLATFORM +
     "-" +
@@ -28,7 +35,7 @@ export function handleUpdateUser(event: UpdateUser): void {
 
   const rental = new Rental(rentalId);
   rental.nftEntity = generateNftId(TYPE, tokenId);
-  rental.borrower = user;
+  rental.borrower = userAccount.id;
   rental.lender = nft.currentOwner;
   rental.tokenId = tokenId;
   rental.period = expires;
