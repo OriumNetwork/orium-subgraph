@@ -3,10 +3,10 @@ import { Account, Nft } from "../../generated/schema";
 
 export class NftHandle {
   type: string;
-  state: string | null;
+  state: string;
   platform: string;
 
-  constructor(type: string, state: string | null, platform: string) {
+  constructor(type: string, state: string, platform: string) {
     this.type = type;
     this.state = state;
     this.platform = platform;
@@ -23,9 +23,7 @@ export class NftHandle {
     if (!entity) {
       entity = new Nft(id);
       entity.type = this.type;
-      if (this.state) {
-        entity.state = this.state;
-      }
+      entity.state = this.state;
       entity.platform = this.platform;
       entity.tokenId = tokenId;
       entity.address = event.address.toHexString().toLowerCase();
