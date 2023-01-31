@@ -126,7 +126,7 @@ function getOrCreateRental(
   thirdParty: string,
   tokenId: BigInt,
   initialCost: BigInt,
-  period: BigInt,
+  expirationDate: BigInt,
   revenueSplit: i32[]
 ): Rental {
   let rental = Rental.load(listingId.toString());
@@ -138,7 +138,7 @@ function getOrCreateRental(
     rental.thirdParty = thirdParty;
     rental.tokenId = tokenId;
     rental.initialCost = initialCost;
-    rental.period = period;
+    rental.expirationDate = expirationDate;
     rental.revenueSplit = revenueSplit;
     rental.canceled = false;
     rental.completed = false;

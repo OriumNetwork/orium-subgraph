@@ -38,7 +38,7 @@ export function handleUpdateUser(event: UpdateUser): void {
   rental.borrower = userAccount.id;
   rental.lender = nft.currentOwner;
   rental.tokenId = tokenId;
-  rental.period = expires;
+  rental.expirationDate = expires;
   rental.save();
 
   nft.currentRental = rentalId;
@@ -49,7 +49,7 @@ export function handleUpdateUser(event: UpdateUser): void {
     [
       rentalId,
       nft.id,
-      rental.period.toString(),
+      rental.expirationDate.toString(),
       rental.borrower!,
       rental.lender!,
       event.transaction.hash.toHex(),

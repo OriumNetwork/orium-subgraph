@@ -55,7 +55,7 @@ type Rental @entity(immutable: false) {
   thirdParty: Account
 
   tokenId: BigInt!
-  period: BigInt!
+  expirationDate: BigInt!
   timeCreated: BigInt
   timeCanceled: BigInt
   timeAgreed: BigInt
