@@ -117,3 +117,5 @@ generated/
 subgraph.yaml
 
 tests/*.json
+
+.idea

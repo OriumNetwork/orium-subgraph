@@ -4,8 +4,6 @@ enum NftState {
   OPENED_PORTAL
   AAVEGOTCHI
   AAVEGOTCHI_LAND
-  BIRD
-  EGG
   AVATAR
   WAVATAR
   SPACESHIP
@@ -15,8 +13,6 @@ enum NftState {
 enum NftType {
   AAVEGOTCHI
   AAVEGOTCHI_LAND
-  FANCYBIRD
-  FANCYBABYBIRD
   NOVAAVATAR
   WNOVAAVATAR
   NOVASPACESHIP
@@ -55,7 +51,7 @@ type Rental @entity(immutable: false) {
   thirdParty: Account
 
   tokenId: BigInt!
-  period: BigInt!
+  expirationDate: BigInt!
   timeCreated: BigInt
   timeCanceled: BigInt
   timeAgreed: BigInt
