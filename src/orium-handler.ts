@@ -1,50 +1,24 @@
 import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
-  AavegotchiDiamond,
   Transfer,
   PortalOpened,
   ClaimAavegotchi,
 } from "../generated/AavegotchiDiamond/AavegotchiDiamond";
-import { Hatched } from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService";
 
 import {
   Nft,
   Rental,
   Account,
   ClaimedToken,
-  Control,
 } from "../generated/schema";
 import {
   AAVEGOTCHI,
   Aavegotchi,
   AAVEGOTCHI_LAND,
   AAVEGOTCHI_PREFIX,
-  BIRD,
   CLOSED_PORTAL,
-  EGG,
-  FANCYBABYBIRD,
-  FANCYBABYBIRD_PREFIX,
-  FANCYBIRD,
-  FancyBirds,
   OPENED_PORTAL,
 } from "./utils/constants";
-
-export function handleFancyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, FancyBirds, FANCYBIRD, BIRD);
-}
-
-export function handleFancyBabyBirdsTransfer(event: Transfer): void {
-  handleTransfer(event, FancyBirds, FANCYBABYBIRD, EGG);
-}
-
-export function handleFancyBabyBirdsHatched(event: Hatched): void {
-  let id = FANCYBABYBIRD_PREFIX + event.params.tokenId.toString();
-  let entity = Nft.load(id);
-  if (entity) {
-    entity.state = BIRD;
-    entity.save();
-  }
-}
 
 export function handleAavegotchiTransfer(event: Transfer): void {
   handleTransfer(event, Aavegotchi, AAVEGOTCHI, CLOSED_PORTAL);

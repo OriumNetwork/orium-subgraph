@@ -22,8 +22,6 @@ import {
 } from "../../generated/AavegotchiDiamond/AavegotchiDiamond";
 
 import {
-  handleFancyBirdsTransfer,
-  handleFancyBabyBirdsTransfer,
   handleRealmTransfer,
   handleAavegotchiTransfer,
   handlePortalOpened,
@@ -321,7 +319,6 @@ describe("Transfer events", () => {
     event.parameters.push(
       new ethereum.EventParam("_tokenId", ethereum.Value.fromI32(110))
     );
-    handleFancyBirdsTransfer(event);
 
     event.parameters = new Array<ethereum.EventParam>();
     event.parameters.push(
@@ -343,7 +340,6 @@ describe("Transfer events", () => {
     event.parameters.push(
       new ethereum.EventParam("_tokenId", ethereum.Value.fromI32(120))
     );
-    handleFancyBirdsTransfer(event);
 
     event.parameters = new Array<ethereum.EventParam>();
     event.parameters.push(
@@ -365,7 +361,6 @@ describe("Transfer events", () => {
     event.parameters.push(
       new ethereum.EventParam("_tokenId", ethereum.Value.fromI32(115))
     );
-    handleFancyBabyBirdsTransfer(event);
 
     event.parameters = new Array<ethereum.EventParam>();
     event.parameters.push(
