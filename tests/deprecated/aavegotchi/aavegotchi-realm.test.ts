@@ -8,11 +8,9 @@ import {
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 
-import {
-  handleTransfer,
-  generateId,
-} from "../../../src/aavegotchi/realm/realm-handler";
-import { Transfer } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
+import { handleRealmTransfer } from "../../../src/aavegotchi";
+import { Transfer } from "../../../generated/Realm/AavegotchiDiamond";
+import { generateNftId } from "../../../src/utils/misc";
 
 export function createNewEvent(from: string, to: string): Transfer {
   let event = changetype<Transfer>(newMockEvent());
@@ -45,11 +43,11 @@ describe("Aavegotchi Realm", () => {
       const from = "0x1111111111111111111111111111111111111111";
       const to = "0x2222222222222222222222222222222222222222";
       const event = createNewEvent(from, to);
-      const _id = generateId(event);
+      const _id = generateNftId("REALM", event.params._tokenId);
       const previousOwner = from;
       const currentOwner = to;
 
-      handleTransfer(event);
+      handleRealmTransfer(event);
 
       assert.fieldEquals("Nft", _id, "previousOwner", previousOwner);
       assert.fieldEquals("Nft", _id, "currentOwner", currentOwner);

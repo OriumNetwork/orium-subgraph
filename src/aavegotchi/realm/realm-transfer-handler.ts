@@ -1,11 +1,12 @@
 import { Transfer } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
+import { generateNftId } from "../../utils/misc";
 import { NftHandle } from "../../utils/nfthandle";
 
-const TYPE = "REALM";
+const TYPE = "AAVEGOTCHI_LAND";
 const PLATFORM = "Aavegotchi";
 const STATE = "REALM";
 
-export function handleTransfer(event: Transfer): void {
+export function handleRealmTransfer(event: Transfer): void {
   const from = event.params._from.toHex();
   const to = event.params._to.toHex();
   const tokenId = event.params._tokenId;
@@ -15,10 +16,6 @@ export function handleTransfer(event: Transfer): void {
     from,
     to,
     tokenId,
-    generateId(event)
+    generateNftId(TYPE, tokenId)
   );
-}
-
-export function generateId(event: Transfer): string {
-  return TYPE + "-" + event.params._tokenId.toString();
 }

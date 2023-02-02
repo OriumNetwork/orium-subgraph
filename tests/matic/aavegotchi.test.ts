@@ -1,46 +1,43 @@
 import {
   test,
   describe,
-  beforeAll,
   assert,
-  clearStore,
   newMockEvent,
-  createMockedFunction,
+  afterEach,
+  clearStore,
+  beforeEach,
 } from "matchstick-as/assembly/index";
-import { Nft, ClaimedToken } from "../../generated/schema";
-import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Nft } from "../../generated/schema";
+import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
 
 import {
   Transfer,
-  PortalOpened,
   ClaimAavegotchi,
-  GotchiLendingAdded,
-  GotchiLendingCanceled,
-  GotchiLendingExecuted,
-  GotchiLendingClaimed,
-  GotchiLendingEnded,
 } from "../../generated/AavegotchiDiamond/AavegotchiDiamond";
 
 import {
-  handleRealmTransfer,
   handleAavegotchiTransfer,
-  handlePortalOpened,
   handleClaimAavegotchi,
-} from "../../src/orium-handler";
+  handleRealmTransfer,
+} from "../../src/aavegotchi";
 
 const GOTCHI_ADDRESS = "0x86935F11C86623deC8a25696E1C19a8659CbF95d";
 
-beforeAll(() => {
+beforeEach(() => {
   let entity = new Nft("AAVEGOTCHI-123");
   entity.currentOwner = "0x1111111111111111111111111111111111111111";
   entity.previousOwner = "0x0000000000000000000000000000000000000000";
   entity.originalOwner = "0x1111111111111111111111111111111111111111";
   entity.platform = "Aavegotchi";
-  entity.state = "PORTAL";
+  entity.state = "CLOSED_PORTAL";
   entity.type = "AAVEGOTCHI";
   entity.tokenId = BigInt.fromI32(123);
   entity.address = GOTCHI_ADDRESS.toLowerCase();
   entity.save();
+});
+
+afterEach(() => {
+  clearStore();
 });
 
 describe("Transfer events", () => {
@@ -89,7 +86,7 @@ describe("Transfer events", () => {
       "originalOwner",
       "0x2222222222222222222222222222222222222222"
     );
-    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "PORTAL");
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "CLOSED_PORTAL");
     assert.fieldEquals("Nft", "AAVEGOTCHI-123", "type", "AAVEGOTCHI");
     assert.fieldEquals("Nft", "AAVEGOTCHI-123", "tokenId", "123");
     assert.fieldEquals("Nft", "AAVEGOTCHI-123", "platform", "Aavegotchi");
@@ -450,18 +447,6 @@ describe("Transfer events", () => {
 });
 
 describe("Change Aavegotchi STATE events", () => {
-  test("Testing PortalOpened", () => {
-    // @ts-ignore
-    let event = changetype<PortalOpened>(newMockEvent());
-    event.parameters = new Array<ethereum.EventParam>();
-    event.parameters.push(
-      new ethereum.EventParam("tokenId", ethereum.Value.fromI32(123))
-    );
-    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "PORTAL");
-    handlePortalOpened(event);
-    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "OPENED_PORTAL");
-  });
-
   test("Testing transfer after PortalOpened", () => {
     // @ts-ignore
     let event = changetype<Transfer>(newMockEvent());
@@ -510,7 +495,7 @@ describe("Change Aavegotchi STATE events", () => {
     event.parameters.push(
       new ethereum.EventParam("_tokenId", ethereum.Value.fromI32(123))
     );
-    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "OPENED_PORTAL");
+    assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "CLOSED_PORTAL");
     handleClaimAavegotchi(event);
     assert.fieldEquals("Nft", "AAVEGOTCHI-123", "state", "AAVEGOTCHI");
   });
