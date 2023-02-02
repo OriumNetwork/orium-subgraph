@@ -37,8 +37,11 @@ export function handleUpdateUser(event: UpdateUser): void {
     }
 
     const currentRental = loadRental(currentRentalId!);
-    currentRental.expiration_date = event.block.timestamp;
-    currentRental.save();
+
+    if (currentRental.expiration_date?.gt(event.block.timestamp)) {
+      currentRental.expiration_date = event.block.timestamp;
+      currentRental.save();
+    }
 
     nft.currentRental = null;
     nft.save();
