@@ -1,7 +1,7 @@
-import { Account, Rental } from "../../../generated/schema";
+import { Account, Nft, Rental } from "../../../generated/schema";
 import { UpdateUser } from "../../../generated/WTraveler/WChronosTraveler";
 import { generateNftId, loadNft, loadRental } from "../../utils/misc";
-import { log } from "@graphprotocol/graph-ts";
+import { BigInt, log } from "@graphprotocol/graph-ts";
 import { ZERO_ADDRESS } from "../../utils/constants";
 
 const TYPE = "WTRAVELER";
@@ -16,39 +16,18 @@ export function handleUpdateUser(event: UpdateUser): void {
   const user = event.params.user.toHexString();
   const expires = event.params.expires;
 
-  if (expires.lt(event.block.timestamp)) {
-    log.warning(
-      "[handleUpdateUser] Expiration date is in the past, ignoring event, tx: {}",
-      [event.transaction.hash.toHex()]
-    );
-    return;
-  }
-
   const nft = loadNft(TYPE, tokenId);
-  const currentRentalId = nft.currentRental;
 
-  if (user == ZERO_ADDRESS) {
-    if (!currentRentalId) {
-      log.warning(
-        "[handleUpdateUser] No current rental for NFT: {}, user: {}, tx: {}",
-        [nft.id, user, event.transaction.hash.toHex()]
-      );
-      return;
-    }
+  updatePreviousRental(nft, event.block.timestamp);
 
-    const currentRental = loadRental(currentRentalId!);
-
-    if (currentRental.expiration_date?.gt(event.block.timestamp)) {
-      currentRental.expiration_date = event.block.timestamp;
-      currentRental.save();
-    }
+  if (user == ZERO_ADDRESS || expires.lt(event.block.timestamp)) {
+    log.warning(
+      "[handleUpdateUser] User is zero address or rental is expired, removing rental for NFT: {}, tx: {}",
+      [nft.id, event.transaction.hash.toHex()]
+    );
 
     nft.currentRental = null;
     nft.save();
-    log.warning(
-      "[handleUpdateUser] User is address zero, setting current rental to null for NFT {}, rental {}, tx: {}",
-      [nft.id, currentRentalId!, event.transaction.hash.toHex()]
-    );
     return;
   }
 
@@ -76,13 +55,6 @@ export function handleUpdateUser(event: UpdateUser): void {
   rental.expiration_date = expires;
   rental.save();
 
-  if (currentRentalId) {
-    const currentRental = loadRental(currentRentalId);
-    if (currentRental.expiration_date?.gt(event.block.timestamp)) {
-      currentRental.expiration_date = event.block.timestamp;
-      currentRental.save();
-    }
-  }
   nft.currentRental = rentalId;
   nft.save();
 
@@ -97,4 +69,18 @@ export function handleUpdateUser(event: UpdateUser): void {
       event.transaction.hash.toHex(),
     ]
   );
+}
+
+function updatePreviousRental(nft: Nft, blockTimestamp: BigInt): void {
+  const previousRentalId = nft.currentRental;
+  if (!previousRentalId) {
+    return;
+  }
+
+  const rental = loadRental(previousRentalId);
+
+  if (rental.expiration_date?.gt(blockTimestamp)) {
+    rental.expiration_date = blockTimestamp;
+    rental.save();
+  }
 }
