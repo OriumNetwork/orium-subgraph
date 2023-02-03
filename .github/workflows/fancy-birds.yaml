@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - dev
+      - fancy-birds
 jobs:
   build_test_deploy:
     runs-on: ubuntu-latest
@@ -19,15 +19,9 @@ jobs:
         run: npm ci
       - name: Subgraph Auth
         run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
-      - name: Code Generator Mumbai
-        run: npm run codegen-mumbai
-      - name: Build Mumbai
-        run: npm run build-mumbai
-      - name: Subgraph Deploy Mumbai
-        run: npm run deploy-mumbai
-      - name: Code Generator Goerli
-        run: npm run codegen-goerli
-      - name: Build Goerli
-        run: npm run build-goerli
-      - name: Subgraph Deploy Goerli
-        run: npm run deploy-goerli
+      - name: Code Generator Matic
+        run: npm run codegen-matic
+      - name: Build Matic
+        run: npm run build-matic
+      - name: Subgraph Deploy Matic
+        run: npm run deploy-matic
