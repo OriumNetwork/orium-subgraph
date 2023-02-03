@@ -77,10 +77,14 @@ function updatePreviousRental(nft: Nft, blockTimestamp: BigInt): void {
     return;
   }
 
-  const rental = loadRental(previousRentalId);
+  const rental = loadRental(previousRentalId!);
 
-  if (rental.expiration_date?.gt(blockTimestamp)) {
-    rental.expiration_date = blockTimestamp;
-    rental.save();
+  if (rental.expiration_date) {
+    if (rental.expiration_date!.lt(blockTimestamp)) {
+      return;
+    }
   }
+
+  rental.expiration_date = blockTimestamp;
+  rental.save();
 }
