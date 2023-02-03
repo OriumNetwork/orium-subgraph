@@ -16,7 +16,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Transfer
-        - PortalOpened
         - ClaimAavegotchi
       abis:
         - name: AavegotchiDiamond
@@ -24,11 +23,9 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleAavegotchiTransfer
-        - event: PortalOpened(indexed uint256)
-          handler: handlePortalOpened
         - event: ClaimAavegotchi(indexed uint256)
           handler: handleClaimAavegotchi
-      file: ./src/orium-handler.ts
+      file: ./src/aavegotchi/index.ts
   # (Aavegotchi) Realm
   - kind: ethereum
     name: Realm
@@ -49,7 +46,7 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
-      file: ./src/orium-handler.ts
+      file: ./src/aavegotchi/index.ts
 
   # (NovaCreed) Avatar
   - kind: ethereum

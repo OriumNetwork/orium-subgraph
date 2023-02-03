@@ -32,7 +32,7 @@ type Nft @entity(immutable: false) {
   previousOwner: Account!
   originalOwner: Account!
   currentRental: Rental
-  rentalHistory: [Rental!]! @derivedFrom(field: "nftEntity")
+  rentalHistory: [Rental!]! @derivedFrom(field: "nft")
 }
 
 type Account @entity(immutable: false) {
@@ -45,26 +45,12 @@ type Account @entity(immutable: false) {
 type Rental @entity(immutable: false) {
   id: ID!
 
-  nftEntity: Nft!
-  borrower: Account
-  lender: Account
-  thirdParty: Account
+  nft: Nft!
+  borrower: Account!
+  lender: Account!
 
-  tokenId: BigInt!
-  expirationDate: BigInt!
-  timeCreated: BigInt
-  timeCanceled: BigInt
-  timeAgreed: BigInt
-  timeClaimed: BigInt
-  timeEnded: BigInt
-
-  initialCost: BigInt
-  revenueSplit: [Int!]
-
-  canceled: Boolean
-  completed: Boolean
-
-  claimed: [ClaimedToken!]! @derivedFrom(field: "rental")
+  start_date: BigInt!
+  expiration_date: BigInt # old `period`
 }
 
 type ClaimedToken @entity {

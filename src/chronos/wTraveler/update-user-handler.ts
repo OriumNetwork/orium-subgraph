@@ -1,7 +1,8 @@
-import { Account, Rental } from "../../../generated/schema";
+import { Account, Nft, Rental } from "../../../generated/schema";
 import { UpdateUser } from "../../../generated/WTraveler/WChronosTraveler";
-import { generateNftId, loadNft } from "../../utils/misc";
-import { log } from "@graphprotocol/graph-ts";
+import { generateNftId, loadNft, loadRental } from "../../utils/misc";
+import { BigInt, log } from "@graphprotocol/graph-ts";
+import { ZERO_ADDRESS } from "../../utils/constants";
 
 const TYPE = "WTRAVELER";
 const PLATFORM = "Chronos";
@@ -16,6 +17,19 @@ export function handleUpdateUser(event: UpdateUser): void {
   const expires = event.params.expires;
 
   const nft = loadNft(TYPE, tokenId);
+
+  updatePreviousRental(nft, event.block.timestamp);
+
+  if (user == ZERO_ADDRESS || expires.lt(event.block.timestamp)) {
+    log.warning(
+      "[handleUpdateUser] User is zero address or rental is expired, removing rental for NFT: {}, tx: {}",
+      [nft.id, event.transaction.hash.toHex()]
+    );
+
+    nft.currentRental = null;
+    nft.save();
+    return;
+  }
 
   let userAccount = Account.load(user);
 
@@ -34,11 +48,11 @@ export function handleUpdateUser(event: UpdateUser): void {
     event.logIndex.toString();
 
   const rental = new Rental(rentalId);
-  rental.nftEntity = generateNftId(TYPE, tokenId);
+  rental.nft = generateNftId(TYPE, tokenId);
   rental.borrower = userAccount.id;
   rental.lender = nft.currentOwner;
-  rental.tokenId = tokenId;
-  rental.expirationDate = expires;
+  rental.start_date = event.block.timestamp;
+  rental.expiration_date = expires;
   rental.save();
 
   nft.currentRental = rentalId;
@@ -49,10 +63,24 @@ export function handleUpdateUser(event: UpdateUser): void {
     [
       rentalId,
       nft.id,
-      rental.expirationDate.toString(),
-      rental.borrower!,
-      rental.lender!,
+      expires.toString(),
+      rental.borrower,
+      rental.lender,
       event.transaction.hash.toHex(),
     ]
   );
+}
+
+function updatePreviousRental(nft: Nft, blockTimestamp: BigInt): void {
+  const previousRentalId = nft.currentRental;
+  if (!previousRentalId) {
+    return;
+  }
+
+  const rental = loadRental(previousRentalId);
+
+  if (rental.expiration_date?.gt(blockTimestamp)) {
+    rental.expiration_date = blockTimestamp;
+    rental.save();
+  }
 }

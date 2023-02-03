@@ -8,15 +8,12 @@ import {
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { newMockEvent } from "matchstick-as";
 
-import {
-  handleTransfer,
-  generateId,
-  handlePortalOpened,
-} from "../../../src/aavegotchi/diamond/diamond-handler";
+import { handleAavegotchiTransfer } from "../../../src/aavegotchi/index";
 import {
   PortalOpened,
   Transfer,
 } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
+import { generateNftId } from "../../../src/utils/misc";
 
 export function createNewTransferEvent(from: string, to: string): Transfer {
   let event = changetype<Transfer>(newMockEvent());
@@ -58,32 +55,15 @@ describe("Aavegotchi Diamond", () => {
       const from = "0x1111111111111111111111111111111111111111";
       const to = "0x2222222222222222222222222222222222222222";
       const event = createNewTransferEvent(from, to);
-      const _id = generateId(event.params._tokenId.toString());
+      const _id = generateNftId("AAVEGOTCHI", event.params._tokenId);
       const previousOwner = from;
       const currentOwner = to;
 
-      handleTransfer(event);
+      handleAavegotchiTransfer(event);
 
       assert.fieldEquals("Nft", _id, "previousOwner", previousOwner);
       assert.fieldEquals("Nft", _id, "currentOwner", currentOwner);
       assert.fieldEquals("Nft", _id, "state", "CLOSED_PORTAL");
-      assert.fieldEquals("Nft", _id, "type", "AAVEGOTCHI");
-      assert.fieldEquals("Nft", _id, "tokenId", "1");
-      assert.fieldEquals("Nft", _id, "platform", "Aavegotchi");
-    });
-
-    test("Should handle OPENED_PORTAL  (PortalOpened)", () => {
-      const tokenId = 1;
-      const event = createNewPortalOpenedEvent(tokenId);
-      const _id = generateId(tokenId.toString());
-      const previousOwner = "0x1111111111111111111111111111111111111111";
-      const currentOwner = "0x2222222222222222222222222222222222222222";
-
-      handlePortalOpened(event);
-
-      assert.fieldEquals("Nft", _id, "previousOwner", previousOwner);
-      assert.fieldEquals("Nft", _id, "currentOwner", currentOwner);
-      assert.fieldEquals("Nft", _id, "state", "OPENED_PORTAL");
       assert.fieldEquals("Nft", _id, "type", "AAVEGOTCHI");
       assert.fieldEquals("Nft", _id, "tokenId", "1");
       assert.fieldEquals("Nft", _id, "platform", "Aavegotchi");
