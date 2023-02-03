@@ -1,32 +1,14 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
-import {
-  AavegotchiDiamond,
-  Transfer,
-  PortalOpened,
-  ClaimAavegotchi,
-} from "../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { Hatched } from "../generated/FancyBabyBirdsBreedingService/FancyBabyBirdsBreedingService";
+import { Transfer } from "../generated/FancyBirds/FancyBirds";
 
+import { Nft, Account } from "../generated/schema";
 import {
-  Nft,
-  Rental,
-  Account,
-  ClaimedToken,
-  Control,
-} from "../generated/schema";
-import {
-  AAVEGOTCHI,
-  Aavegotchi,
-  AAVEGOTCHI_LAND,
-  AAVEGOTCHI_PREFIX,
   BIRD,
-  CLOSED_PORTAL,
   EGG,
   FANCYBABYBIRD,
   FANCYBABYBIRD_PREFIX,
   FANCYBIRD,
   FancyBirds,
-  OPENED_PORTAL,
 } from "./utils/constants";
 
 export function handleFancyBirdsTransfer(event: Transfer): void {
@@ -46,14 +28,6 @@ export function handleFancyBabyBirdsHatched(event: Hatched): void {
   }
 }
 
-export function handleAavegotchiTransfer(event: Transfer): void {
-  handleTransfer(event, Aavegotchi, AAVEGOTCHI, CLOSED_PORTAL);
-}
-
-export function handleRealmTransfer(event: Transfer): void {
-  handleTransfer(event, Aavegotchi, AAVEGOTCHI_LAND, AAVEGOTCHI_LAND);
-}
-
 function loadAndSaveNft(
   id: string,
   event: Transfer,
@@ -69,18 +43,18 @@ function loadAndSaveNft(
     entity.address = address;
     entity.state = state;
     entity.platform = platform;
-    entity.tokenId = event.params._tokenId;
+    entity.tokenId = event.params.tokenId;
   }
 
-  let toAccount = Account.load(event.params._to.toHex());
+  let toAccount = Account.load(event.params.to.toHex());
   if (!toAccount) {
-    toAccount = new Account(event.params._to.toHex());
+    toAccount = new Account(event.params.to.toHex());
     toAccount.save();
   }
 
-  let fromAccount = Account.load(event.params._from.toHex());
+  let fromAccount = Account.load(event.params.from.toHex());
   if (!fromAccount) {
-    fromAccount = new Account(event.params._from.toHex());
+    fromAccount = new Account(event.params.from.toHex());
     fromAccount.save();
   }
 
@@ -90,25 +64,13 @@ function loadAndSaveNft(
   entity.save();
 }
 
-function loadAndSaveRental(nftEntity: Nft, listingId: BigInt): void {
-  let id = nftEntity.id + "-" + listingId.toString();
-  let entity = Rental.load(id);
-  if (!entity) {
-    entity = new Rental(id);
-  }
-  entity.nftEntity = nftEntity.id;
-  entity.lender = nftEntity.previousOwner;
-  entity.borrower = nftEntity.currentOwner;
-  entity.save();
-}
-
 function handleTransfer(
   event: Transfer,
   platform: string,
   type: string,
   state: string
 ): void {
-  let id = type + "-" + event.params._tokenId.toString();
+  let id = type + "-" + event.params.tokenId.toString();
   loadAndSaveNft(
     id,
     event,
@@ -117,68 +79,4 @@ function handleTransfer(
     state,
     event.address.toHexString().toLowerCase()
   );
-}
-
-function getOrCreateRental(
-  listingId: BigInt,
-  lender: string,
-  borrower: string | null,
-  thirdParty: string,
-  tokenId: BigInt,
-  initialCost: BigInt,
-  expirationDate: BigInt,
-  revenueSplit: i32[]
-): Rental {
-  let rental = Rental.load(listingId.toString());
-  if (!rental) {
-    rental = new Rental(listingId.toString());
-    rental.nftEntity = AAVEGOTCHI_PREFIX + tokenId.toString();
-    rental.lender = lender;
-    rental.borrower = borrower;
-    rental.thirdParty = thirdParty;
-    rental.tokenId = tokenId;
-    rental.initialCost = initialCost;
-    rental.expirationDate = expirationDate;
-    rental.revenueSplit = revenueSplit;
-    rental.canceled = false;
-    rental.completed = false;
-  }
-  if (borrower != null && rental.borrower == null) {
-    rental.borrower = borrower;
-  }
-
-  return rental;
-}
-
-function getOrCreateClaimedToken(
-  tokenAddress: Bytes,
-  rental: Rental
-): ClaimedToken {
-  let id = tokenAddress.toHexString() + "-" + rental.id;
-  let token = ClaimedToken.load(id);
-  if (token == null) {
-    token = new ClaimedToken(id);
-    token.rental = rental.id;
-    token.token = tokenAddress.toHex();
-    token.amount = BigInt.fromI32(0);
-  }
-  return token;
-}
-
-export function handlePortalOpened(event: PortalOpened): void {
-  let id = AAVEGOTCHI_PREFIX + event.params.tokenId.toString();
-  let entity = Nft.load(id);
-  if (entity) {
-    entity.state = OPENED_PORTAL;
-    entity.save();
-  }
-}
-
-export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
-  let id = AAVEGOTCHI_PREFIX + event.params._tokenId.toString();
-  let entity = Nft.load(id);
-  if (entity) {
-    entity.state = AAVEGOTCHI;
-    entity.save();
-  }
 }
