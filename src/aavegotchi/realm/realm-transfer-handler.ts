@@ -4,7 +4,7 @@ import { NftHandle } from "../../utils/nfthandle";
 
 const TYPE = "AAVEGOTCHI_LAND";
 const PLATFORM = "Aavegotchi";
-const STATE = "REALM";
+const STATE = "AAVEGOTCHI_LAND";
 
 export function handleRealmTransfer(event: Transfer): void {
   const from = event.params._from.toHex();
