@@ -17,9 +17,24 @@ jobs:
           node-version: 16
       - name: Install Dependencies
         run: npm ci
-      - name: Code Generator
+        # Goerli
+      - name: Goerli Code Generator
+        run: npm run codegen-goerli
+      - name: Goerli Build
+        run: npm run build-goerli
+#      - name: Goerli Test
+#        run: npm run test-goerli
+        # Mumbai
+      - name: Mumbai Code Generator
+        run: npm run codegen-mumbai
+      - name: Mumbai Build
+        run: npm run build-mumbai
+      - name: Mumbai Test
+        run: npm run test-mumbai
+        # Polygon
+      - name: Polygon Code Generator
         run: npm run codegen-matic
-      - name: Build
+      - name: Polygon Build
         run: npm run build-matic
-      - name: Test
+      - name: Polygon Test
         run: npm run test-matic

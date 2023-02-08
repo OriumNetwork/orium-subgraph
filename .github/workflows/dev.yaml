@@ -19,15 +19,21 @@ jobs:
         run: npm ci
       - name: Subgraph Auth
         run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
-      - name: Code Generator Mumbai
-        run: npm run codegen-mumbai
-      - name: Build Mumbai
-        run: npm run build-mumbai
-      - name: Subgraph Deploy Mumbai
-        run: npm run deploy-mumbai
+        # Goerli
       - name: Code Generator Goerli
         run: npm run codegen-goerli
       - name: Build Goerli
         run: npm run build-goerli
+#      - name: Goerli Test
+#        run: npm run test-goerli
       - name: Subgraph Deploy Goerli
         run: npm run deploy-goerli
+        # Mumbai
+      - name: Code Generator Mumbai
+        run: npm run codegen-mumbai
+      - name: Build Mumbai
+        run: npm run build-mumbai
+      - name: Mumbai Test
+        run: npm run test-mumbai
+      - name: Subgraph Deploy Mumbai
+        run: npm run deploy-mumbai
