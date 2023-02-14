@@ -44,6 +44,7 @@ type Account @entity(immutable: false) {
   nfts: [Nft!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]! @derivedFrom(field: "borrower")
   lendings: [Rental!]! @derivedFrom(field: "lender")
+  rentalOffers: [RentalOffer!]! @derivedFrom(field: "lender")
 }
 
 type Rental @entity(immutable: false) {
@@ -53,6 +54,10 @@ type Rental @entity(immutable: false) {
   lender: Account!
   start_date: BigInt!
   expiration_date: BigInt
+  executionTxHash: String
+  endedAt: BigInt
+  endTxHash: String
+  rentalOffer: RentalOffer
 }
 
 type RentalOffer @entity(immutable: false) {
@@ -60,13 +65,19 @@ type RentalOffer @entity(immutable: false) {
   nft: Nft!
   lender: Account!
   createdAt: BigInt!
+  executedAt: BigInt
+  canceledAt: BigInt
+  creationTxHash: String!
+  executionTxHash: String
+  cancelationTxHash: String
   duration: BigInt
   rental: Rental
-  priceAddress: String
-  priceAmount: BigInt
+  feeToken: String
+  feeAmount: BigInt
   expirationDate: BigInt
   profitShareTokens: [String!]
   profitShareSplit: [BigInt!]
+  rental: Rental @derivedFrom(field: "rentalOffer")
 }
 
 type ClaimedToken @entity {

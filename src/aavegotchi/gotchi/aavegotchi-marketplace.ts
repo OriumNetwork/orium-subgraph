@@ -36,9 +36,10 @@ export function handlerCreateAavegotchiRentalOffer(event: GotchiLendingAdded): v
   rentalOffer.nft = nftId;
   rentalOffer.lender = event.params.lender.toHexString().toLowerCase();
   rentalOffer.createdAt = event.params.timeCreated;
+  rentalOffer.creationTxHash = event.transaction.hash.toHex();
   rentalOffer.duration = event.params.period;
-  rentalOffer.priceAmount = event.params.initialCost;
-  rentalOffer.priceAddress = GHST_TOKEN_ADDRESS;
+  rentalOffer.feeAmount = event.params.initialCost;
+  rentalOffer.feeToken = GHST_TOKEN_ADDRESS;
 
   rentalOffer.profitShareTokens = event.params.revenueTokens.map<string>(t => t.toHex().toLowerCase());
   rentalOffer.profitShareSplit = event.params.revenueSplit.map<BigInt>(s => BigInt.fromI32(s).times(ONE_ETHER));
