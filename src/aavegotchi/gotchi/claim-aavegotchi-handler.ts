@@ -13,6 +13,12 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
     ownerAccount.save();
   }
 
+  let zeroAddressAccount = Account.load(ZERO_ADDRESS);
+  if (!zeroAddressAccount) {
+    zeroAddressAccount = new Account(ZERO_ADDRESS);
+    zeroAddressAccount.save();
+  }
+
   const tokenId = event.params._tokenId;
   let nftId = generateNftId(AAVEGOTCHI, tokenId);
   let entity = Nft.load(nftId);
