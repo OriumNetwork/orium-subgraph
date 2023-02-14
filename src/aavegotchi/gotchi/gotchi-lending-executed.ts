@@ -1,9 +1,8 @@
-import { BigInt, log } from "@graphprotocol/graph-ts";
+import { log } from "@graphprotocol/graph-ts";
 import { GotchiLendingExecuted } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
-import { Nft, RentalOffer, Rental } from "../../../generated/schema";
+import { Nft, Rental } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
-import { GHST_TOKEN_ADDRESS } from "../../utils/addresses";
-import { AAVEGOTCHI, ONE_ETHER } from "../../utils/constants";
+import { AAVEGOTCHI } from "../../utils/constants";
 
 /**
  * event GotchiLendingExecuted(
@@ -21,7 +20,7 @@ import { AAVEGOTCHI, ONE_ETHER } from "../../utils/constants";
  *        uint256 timeAgreed
  *  );
  */
-export function handlerCreateAavegotchiRentalOffer(
+export function handleGotchiLendingExecuted(
   event: GotchiLendingExecuted
 ): void {
   const nftId = generateNftId(AAVEGOTCHI, event.params.tokenId);
@@ -46,23 +45,6 @@ export function handlerCreateAavegotchiRentalOffer(
     );
   }
 
-  const currentRentalOffer = RentalOffer.load(currentRentalOfferId);
-
-  if (!currentRentalOffer) {
-    throw new Error(
-      "[handlerCreateAavegotchiRentalOffer] rental offer" +
-        currentRentalOfferId +
-        " not found in RentalOffer entity" +
-        ", tx: " +
-        event.transaction.hash.toHex()
-    );
-  }
-
-  // update rental offer
-  currentRentalOffer.executedAt = event.block.timestamp;
-  currentRentalOffer.executionTxHash = event.transaction.hash.toHex();
-  currentRentalOffer.save();
-
   const previoustRental = nft.currentRental;
   if (previoustRental) {
     throw new Error(
@@ -82,8 +64,12 @@ export function handlerCreateAavegotchiRentalOffer(
   currentRental.lender = event.params.lender.toHexString().toLowerCase();
   currentRental.borrower = event.params.borrower.toHexString().toLowerCase();
   currentRental.start_date = event.block.timestamp;
+  currentRental.startedTxHash = event.transaction.hash.toHex();
+  currentRental.rentalOffer = currentRentalOfferId;
+  currentRental.save();
+
   // remove current rental offer from nft, because it has been executed, and link rental to nft
   nft.currentRentalOffer = null;
-  nft.currentRental = currentRentalOffer.id;
+  nft.currentRental = currentRental.id;
   nft.save();
 }
