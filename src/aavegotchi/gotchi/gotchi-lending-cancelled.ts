@@ -1,14 +1,13 @@
 import { log } from "@graphprotocol/graph-ts";
-import { GotchiLendingExecuted } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
-import { Nft, Rental } from "../../../generated/schema";
+import { GotchiLendingCanceled } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
+import { Nft, RentalOffer } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
 import { AAVEGOTCHI } from "../../utils/constants";
 
 /**
- * event GotchiLendingExecuted(
+ * event GotchiLendingCancelled(
  *        uint32 indexed listingId,
  *        address indexed lender,
- *        address indexed borrower,
  *        uint32 tokenId,
  *        uint96 initialCost,
  *        uint32 period,
@@ -20,15 +19,15 @@ import { AAVEGOTCHI } from "../../utils/constants";
  *        uint256 timeAgreed
  *  );
  */
-export function handleGotchiLendingExecuted(
-  event: GotchiLendingExecuted
+export function handleGotchiLendingCancelled(
+  event: GotchiLendingCanceled
 ): void {
   const nftId = generateNftId(AAVEGOTCHI, event.params.tokenId);
 
   const nft = Nft.load(nftId);
   if (!nft) {
     log.debug(
-      "[handlerCreateAavegotchiRentalOffer] Aavegotchi {} does not exist, tx: {}",
+      "[handleGotchiLendingCancelled] Aavegotchi {} does not exist, tx: {}",
       [event.params.tokenId.toString(), event.transaction.hash.toHex()]
     );
     return;
@@ -38,38 +37,30 @@ export function handleGotchiLendingExecuted(
 
   if (!currentRentalOfferId) {
     throw new Error(
-      "[handlerCreateAavegotchiRentalOffer] NFT " +
+      "[handleGotchiLendingCancelled] NFT " +
         nftId +
         " returned null for currentRentalOffer attribute, tx: " +
         event.transaction.hash.toHex()
     );
   }
 
-  const previoustRental = nft.currentRental;
-  if (previoustRental) {
+  const currentRentalOffer = RentalOffer.load(currentRentalOfferId!);
+
+  if (!currentRentalOffer) {
     throw new Error(
-      "[handlerCreateAavegotchiRentalOffer] NFT " +
-        nftId +
-        " already has a rental " +
-        previoustRental +
-        ", tx: " +
+      "[handleGotchiLendingCancelled] RentalOffer " +
+        currentRentalOfferId! +
+        " does not exist, tx: " +
         event.transaction.hash.toHex()
     );
   }
 
-  const currentRental = new Rental(
-    `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`
-  );
-  currentRental.nft = nftId;
-  currentRental.lender = event.params.lender.toHexString().toLowerCase();
-  currentRental.borrower = event.params.borrower.toHexString().toLowerCase();
-  currentRental.start_date = event.block.timestamp;
-  currentRental.startedTxHash = event.transaction.hash.toHex();
-  currentRental.rentalOffer = currentRentalOfferId;
-  currentRental.save();
+  // update rental offer
+  currentRentalOffer.cancelledAt = event.block.timestamp;
+  currentRentalOffer.cancellationTxHash = event.transaction.hash.toHex();
+  currentRentalOffer.save();
 
   // remove current rental offer from nft, because it has been executed, and link rental to nft
   nft.currentRentalOffer = null;
-  nft.currentRental = currentRental.id;
   nft.save();
 }

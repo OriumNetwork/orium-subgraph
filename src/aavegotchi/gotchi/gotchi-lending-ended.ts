@@ -25,7 +25,7 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 
   const nft = Nft.load(nftId);
   if (!nft) {
-    log.warning(
+    log.debug(
       "[handleGotchiLendingEnded] Aavegotchi {} does not exist, tx: {}",
       [event.params.tokenId.toString(), event.transaction.hash.toHex()]
     );
