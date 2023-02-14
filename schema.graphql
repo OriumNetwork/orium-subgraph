@@ -51,8 +51,8 @@ type Rental @entity(immutable: false) {
   nft: Nft!
   borrower: Account!
   lender: Account!
-  startDate: BigInt!
-  expirationDate: BigInt
+  start_date: BigInt!
+  expiration_date: BigInt
 }
 
 type RentalOffer @entity(immutable: false) {
