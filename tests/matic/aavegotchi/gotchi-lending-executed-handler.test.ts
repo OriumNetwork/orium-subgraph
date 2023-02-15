@@ -35,7 +35,26 @@ const whitelistId = "1";
 const shouldFail = true;
 
 describe("Start a Aavegotchi Rental", () => {
-  describe("When entities does not exist", () => {});
+  describe("When entities does not exist", () => {
+    test("Should skip to create rental if NFT does not exist", () => {
+      const event = createGotchiLendingExecutedEvent(
+        tokenId,
+        listingId,
+        lender,
+        borrower,
+        thirdParty,
+        initialCost,
+        duration,
+        revenueSplit,
+        revenueTokens,
+        whitelistId,
+        unixTimestamp
+      );
+      assert.entityCount("Rental", 0);
+      handleGotchiLendingExecuted(event);
+      assert.entityCount("Rental", 0);
+    });
+  });
   describe("When entities exists", () => {
     beforeEach(() => {
       const gotchi = createMockGotchi(tokenId);
@@ -71,7 +90,6 @@ describe("Start a Aavegotchi Rental", () => {
       const rentalOfferId = gotchi.currentRentalOffer;
 
       handleGotchiLendingExecuted(event);
-      /* 
       const rentalId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
 
       assert.fieldEquals("Rental", rentalId, "nft", nftId);
@@ -88,13 +106,61 @@ describe("Start a Aavegotchi Rental", () => {
         "startedTxHash",
         event.block.hash.toHex()
       );
-      assert.fieldEquals("Rental", rentalId, "expiration_date", "null");
-      assert.fieldEquals("Rental", rentalId, "expiredTxHash", "null");
       assert.fieldEquals("Rental", rentalId, "rentalOffer", rentalOfferId!);
 
       assert.fieldEquals("Nft", nftId, "currentRental", rentalId);
-      assert.fieldEquals("Nft", nftId, "currentRentalOffer", "null"); */
+      assert.fieldEquals("Nft", nftId, "currentRentalOffer", "null");
     });
+    test(
+      "Should fail to create rental if currentRentalOffer is null in NFT",
+      () => {
+        const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
+        gotchi.currentRentalOffer = null;
+        gotchi.save();
+
+        const event = createGotchiLendingExecutedEvent(
+          tokenId,
+          listingId,
+          lender,
+          borrower,
+          thirdParty,
+          initialCost,
+          duration,
+          revenueSplit,
+          revenueTokens,
+          whitelistId,
+          unixTimestamp
+        );
+
+        handleGotchiLendingExecuted(event);
+      },
+      shouldFail
+    );
+    test(
+      "Should fail to create rental if currentRental is not null",
+      () => {
+        const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
+        gotchi.currentRental = "rental";
+        gotchi.save();
+
+        const event = createGotchiLendingExecutedEvent(
+          tokenId,
+          listingId,
+          lender,
+          borrower,
+          thirdParty,
+          initialCost,
+          duration,
+          revenueSplit,
+          revenueTokens,
+          whitelistId,
+          unixTimestamp
+        );
+
+        handleGotchiLendingExecuted(event);
+      },
+      shouldFail
+    );
   });
   afterEach(() => {
     clearStore();
