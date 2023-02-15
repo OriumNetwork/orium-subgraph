@@ -6,16 +6,10 @@ import {
   beforeEach,
   afterEach,
 } from "matchstick-as";
-import { BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { ZERO_ADDRESS, ONE_ETHER } from "../../../src/utils/constants";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { handleGotchiLendingCancelled } from "../../../src/aavegotchi";
+import { createMockGotchi } from "../../fixture";
 import {
-  handleGotchiLendingAdded,
-  handleGotchiLendingCancelled,
-} from "../../../src/aavegotchi";
-import { GHST_TOKEN_ADDRESS } from "../../../src/utils/addresses";
-import { arrayToString, createMockGotchi } from "../../fixture";
-import {
-  createGotchiLendingAddedEvent,
   createGotchiLendingCancelledEvent,
   createMockRentalOffer,
 } from "../../fixtures/aavegotchi-fixture";
