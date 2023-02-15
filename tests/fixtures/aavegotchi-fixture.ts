@@ -3,6 +3,8 @@ import { newMockEvent } from "matchstick-as";
 import {
   GotchiLendingAdded,
   GotchiLendingCanceled,
+  GotchiLendingExecute,
+  GotchiLendingExecuted,
 } from "../../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { RentalOffer } from "../../generated/schema";
 import {
@@ -98,4 +100,37 @@ export function createMockRentalOffer(
   rentalOffer.save();
 
   return rentalOffer;
+}
+
+export function createGotchiLendingExecutedEvent(
+  tokenId: string,
+  listingId: string,
+  lender: string,
+  borrower: string,
+  thirdParty: string,
+  initialCost: string,
+  duration: string,
+  revenueSplit: string[],
+  revenueTokens: string[],
+  whitelistId: string,
+  timeCreated: string
+): GotchiLendingExecuted {
+  const event = changetype<GotchiLendingExecuted>(newMockEvent());
+  event.parameters = new Array<ethereum.EventParam>();
+  event.parameters.push(buildEventParamUint("listingId", listingId));
+  event.parameters.push(buildEventParamAddress("lender", lender));
+  event.parameters.push(buildEventParamAddress("borrower", borrower));
+  event.parameters.push(buildEventParamUint("tokenId", tokenId));
+  event.parameters.push(buildEventParamUint("initialCost", initialCost));
+  event.parameters.push(buildEventParamUint("period", duration));
+  event.parameters.push(buildEventParamUintArray("revenueSplit", revenueSplit));
+  event.parameters.push(buildEventParamAddress("originalOwner", lender));
+  event.parameters.push(buildEventParamAddress("thirdParty", thirdParty));
+  event.parameters.push(buildEventParamUint("whitelistId", whitelistId));
+  event.parameters.push(
+    buildEventParamAddressArray("revenueTokens", revenueTokens)
+  );
+  event.parameters.push(buildEventParamUint("timeAgreed", timeCreated));
+
+  return event;
 }

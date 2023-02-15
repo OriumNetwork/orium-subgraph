@@ -28,7 +28,7 @@ export function handleGotchiLendingExecuted(
   const nft = Nft.load(nftId);
   if (!nft) {
     log.debug(
-      "[handlerCreateAavegotchiRentalOffer] Aavegotchi {} does not exist, tx: {}",
+      "[handleGotchiLendingExecuted] Aavegotchi {} does not exist, tx: {}",
       [event.params.tokenId.toString(), event.transaction.hash.toHex()]
     );
     return;
@@ -38,7 +38,7 @@ export function handleGotchiLendingExecuted(
 
   if (!currentRentalOfferId) {
     throw new Error(
-      "[handlerCreateAavegotchiRentalOffer] NFT " +
+      "[handleGotchiLendingExecuted] NFT " +
         nftId +
         " returned null for currentRentalOffer attribute, tx: " +
         event.transaction.hash.toHex()
@@ -48,7 +48,7 @@ export function handleGotchiLendingExecuted(
   const previoustRental = nft.currentRental;
   if (previoustRental) {
     throw new Error(
-      "[handlerCreateAavegotchiRentalOffer] NFT " +
+      "[handleGotchiLendingExecuted] NFT " +
         nftId +
         " already has a rental " +
         previoustRental +
