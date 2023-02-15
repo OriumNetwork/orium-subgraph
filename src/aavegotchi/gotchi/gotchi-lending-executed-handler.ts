@@ -75,6 +75,6 @@ export function handleGotchiLendingExecuted(
 
   log.warning(
     "[handleGotchiLendingExecuted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}",
-    [nftId, currentRental.id, currentRentalOfferId]
+    [nftId, currentRental.id, currentRentalOfferId!]
   );
 }
