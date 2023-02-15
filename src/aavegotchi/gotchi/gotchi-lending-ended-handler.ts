@@ -56,7 +56,7 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 
   // update rental
   currentRental.expiration_date = event.block.timestamp;
-  currentRental.endedTxHash = event.transaction.hash.toHex();
+  currentRental.expiredTxHash = event.transaction.hash.toHex();
   currentRental.save();
 
   // remove current rental from nft, because it ended

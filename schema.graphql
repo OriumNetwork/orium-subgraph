@@ -52,10 +52,10 @@ type Rental @entity(immutable: false) {
   nft: Nft!
   borrower: Account!
   lender: Account!
-  start_date: BigInt!
+  start_date: BigInt! #TODO: change to camel case
   startedTxHash: String!
-  expiration_date: BigInt
-  endedTxHash: String
+  expiration_date: BigInt #TODO: change to camel case
+  expiredTxHash: String
   rentalOffer: RentalOffer
 }
 

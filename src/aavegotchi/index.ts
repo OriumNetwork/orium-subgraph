@@ -1,7 +1,7 @@
 export { handleAavegotchiTransfer } from "./gotchi/aavegotchi-transfer-handler";
 export { handleRealmTransfer } from "./realm/realm-transfer-handler";
 export { handleClaimAavegotchi } from "./gotchi/claim-aavegotchi-handler";
-export { handlerCreateAavegotchiRentalOffer } from "./gotchi/aavegotchi-marketplace";
-export { handleGotchiLendingExecuted } from "./gotchi/gotchi-lending-executed";
-export { handleGotchiLendingEnded } from "./gotchi/gotchi-lending-ended";
-export { handleGotchiLendingCancelled } from "./gotchi/gotchi-lending-cancelled";
+export { handleGotchiLendingAdded } from "./gotchi/gotchi-lending-added-handler";
+export { handleGotchiLendingExecuted } from "./gotchi/gotchi-lending-executed-handler";
+export { handleGotchiLendingEnded } from "./gotchi/gotchi-lending-ended-handler";
+export { handleGotchiLendingCancelled } from "./gotchi/gotchi-lending-cancelled-handler";

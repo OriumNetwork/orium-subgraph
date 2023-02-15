@@ -20,9 +20,7 @@ import { ONE_ETHER } from "../../utils/constants";
  *         uint256 timeCreated
  *     );
  */
-export function handlerCreateAavegotchiRentalOffer(
-  event: GotchiLendingAdded
-): void {
+export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   const nftId = generateNftId("AAVEGOTCHI", event.params.tokenId);
   const nft = Nft.load(nftId);
   if (!nft) {
