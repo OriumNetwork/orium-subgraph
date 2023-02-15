@@ -72,4 +72,9 @@ export function handleGotchiLendingExecuted(
   nft.currentRentalOffer = null;
   nft.currentRental = currentRental.id;
   nft.save();
+
+  log.warning(
+    "[handleGotchiLendingExecuted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}",
+    [nftId, currentRental.id, currentRentalOfferId]
+  );
 }

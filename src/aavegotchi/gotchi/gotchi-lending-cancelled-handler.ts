@@ -63,4 +63,9 @@ export function handleGotchiLendingCancelled(
   // remove current rental offer from nft, because it has been executed, and link rental to nft
   nft.currentRentalOffer = null;
   nft.save();
+
+  log.warning(
+    "[handleGotchiLendingCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}",
+    [nftId, currentRentalOfferId!]
+  );
 }

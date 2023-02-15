@@ -62,4 +62,9 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
   // remove current rental from nft, because it ended
   nft.currentRental = null;
   nft.save();
+
+  log.warning("[handleGotchiLendingEnded] NFT {} rental {} ended", [
+    nftId,
+    currentRentalId!,
+  ]);
 }
