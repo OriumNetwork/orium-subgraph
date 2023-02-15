@@ -2,7 +2,6 @@ specVersion: 0.0.4
 schema:
   file: ./schema.graphql
 dataSources:
-
   # (Aavegotchi) Diamond
   - kind: ethereum
     name: AavegotchiDiamond
@@ -27,13 +26,13 @@ dataSources:
         - event: ClaimAavegotchi(indexed uint256)
           handler: handleClaimAavegotchi
         - event: GotchiLendingAdded(indexed uint32,indexed address,indexed uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
-          handler: handlerCreateAavegotchiRentalOffer
-#        - event: GotchiLendingCanceled(indexed uint32,indexed address,indexed uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
-#          handler: handleCancelAavegotchiRentalOffer # todo cancel listing
-#        - event: GotchiLendingExecuted(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
-#          handler: handleCreateAavegotchiRental # todo agree to gotchi lending
-#        - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
-#          handler: handleEndAavegotchiRental # todo end gotchi lending
+          handler: handleGotchiLendingAdded
+        - event: GotchiLendingCanceled(indexed uint32,indexed address,indexed uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
+          handler: handleGotchiLendingCanceled
+        - event: GotchiLendingExecuted(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
+          handler: handleGotchiLendingExecuted
+        - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
+          handler: handleGotchiLendingEnded
       file: ./src/aavegotchi/index.ts
 
   # (Aavegotchi) Realm

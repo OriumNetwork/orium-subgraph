@@ -50,19 +50,25 @@ describe("Aavegotchi Rentals", () => {
 
     handleGotchiLendingAdded(event);
 
-    const id = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
+    const rentalOfferId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
+    const nftId = "AAVEGOTCHI-" + tokenId;
+    assert.fieldEquals("Nft", nftId, "currentRentalOffer", rentalOfferId);
+    assert.fieldEquals("RentalOffer", rentalOfferId, "nft", nftId);
+    assert.fieldEquals("RentalOffer", rentalOfferId, "lender", lender);
     assert.fieldEquals(
-      "Nft",
-      "AAVEGOTCHI-" + tokenId,
-      "currentRentalOffer",
-      id
+      "RentalOffer",
+      rentalOfferId,
+      "createdAt",
+      unixTimestamp
     );
-    assert.fieldEquals("RentalOffer", id, "nft", "AAVEGOTCHI-" + tokenId);
-    assert.fieldEquals("RentalOffer", id, "lender", lender);
-    assert.fieldEquals("RentalOffer", id, "createdAt", unixTimestamp);
-    assert.fieldEquals("RentalOffer", id, "duration", duration);
-    assert.fieldEquals("RentalOffer", id, "feeAmount", initialCost);
-    assert.fieldEquals("RentalOffer", id, "feeToken", GHST_TOKEN_ADDRESS);
+    assert.fieldEquals("RentalOffer", rentalOfferId, "duration", duration);
+    assert.fieldEquals("RentalOffer", rentalOfferId, "feeAmount", initialCost);
+    assert.fieldEquals(
+      "RentalOffer",
+      rentalOfferId,
+      "feeToken",
+      GHST_TOKEN_ADDRESS
+    );
 
     const profitShareSplitEther = revenueSplit.map<string>((token) =>
       BigInt.fromString(token)
@@ -71,13 +77,13 @@ describe("Aavegotchi Rentals", () => {
     );
     assert.fieldEquals(
       "RentalOffer",
-      id,
+      rentalOfferId,
       "profitShareSplit",
       arrayToString(profitShareSplitEther)
     );
     assert.fieldEquals(
       "RentalOffer",
-      id,
+      rentalOfferId,
       "profitShareTokens",
       arrayToString(revenueTokens)
     );
