@@ -36,12 +36,12 @@ export function handleGotchiLendingCancelled(
   const currentRentalOfferId = nft.currentRentalOffer;
 
   if (!currentRentalOfferId) {
-    throw new Error(
-      "[handleGotchiLendingCancelled] NFT " +
-        nftId +
-        " returned null for currentRentalOffer attribute, tx: " +
-        event.transaction.hash.toHex()
+    //probably it is a legacy rental offer not tracked before rental upgrade
+    log.warning(
+      "[handleGotchiLendingCancelled] NFT {} has no rental offer, skipping...",
+      [nft.id]
     );
+    return;
   }
 
   const currentRentalOffer = RentalOffer.load(currentRentalOfferId!);

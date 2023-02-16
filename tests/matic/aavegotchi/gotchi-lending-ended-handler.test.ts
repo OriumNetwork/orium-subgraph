@@ -116,31 +116,29 @@ describe("End a Aavegotchi Rental", () => {
 
       assert.fieldEquals("Nft", nftId, "currentRental", "null");
     });
-    test(
-      "Should fail if currentRental is null",
-      () => {
-        const event = createGotchiLendingEndedEvent(
-          tokenId,
-          listingId,
-          lender,
-          borrower,
-          thirdParty,
-          initialCost,
-          duration,
-          revenueSplit,
-          revenueTokens,
-          whitelistId,
-          unixTimestamp
-        );
+    test("Should skip if currentRental is null", () => {
+      const event = createGotchiLendingEndedEvent(
+        tokenId,
+        listingId,
+        lender,
+        borrower,
+        thirdParty,
+        initialCost,
+        duration,
+        revenueSplit,
+        revenueTokens,
+        whitelistId,
+        unixTimestamp
+      );
 
-        const gotchi = Nft.load(nftId)!;
-        gotchi.currentRental = null;
-        gotchi.save();
+      const gotchi = Nft.load(nftId)!;
+      gotchi.currentRental = null;
+      gotchi.save();
 
-        handleGotchiLendingEnded(event);
-      },
-      shouldFail
-    );
+      assert.fieldEquals("Nft", nftId, "currentRental", "null");
+      handleGotchiLendingEnded(event);
+      assert.fieldEquals("Nft", nftId, "currentRental", "null");
+    });
   });
   afterEach(() => {
     clearStore();

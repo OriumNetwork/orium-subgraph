@@ -34,27 +34,23 @@ const shouldFail = true;
 
 describe("Cancel Aavegotchi Rental Offer", () => {
   describe("When entities does not exist", () => {
-    test(
-      "should fail to cancel rental offer if rental offer does not exist",
-      () => {
-        createMockGotchi(tokenId);
+    test("should skip if rental offer does not exist", () => {
+      createMockGotchi(tokenId);
 
-        const event = createGotchiLendingCancelledEvent(
-          tokenId,
-          lender,
-          thirdParty,
-          initialCost,
-          duration,
-          revenueSplit,
-          whitelistId,
-          revenueTokens,
-          unixTimestamp
-        );
+      const event = createGotchiLendingCancelledEvent(
+        tokenId,
+        lender,
+        thirdParty,
+        initialCost,
+        duration,
+        revenueSplit,
+        whitelistId,
+        revenueTokens,
+        unixTimestamp
+      );
 
-        handleGotchiLendingCancelled(event);
-      },
-      shouldFail
-    );
+      handleGotchiLendingCancelled(event);
+    });
     test("Should not fail if gotchi does not exist", () => {
       const event = createGotchiLendingCancelledEvent(
         tokenId,
@@ -128,29 +124,25 @@ describe("Cancel Aavegotchi Rental Offer", () => {
 
       assert.fieldEquals("Nft", nftId, "currentRentalOffer", "null");
     });
-    test(
-      "Should fail if gotchi and rental offer exist, but rental offer is not attached to gotchi",
-      () => {
-        const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
-        gotchi.currentRentalOffer = null;
-        gotchi.save();
+    test("Should skip if gotchi and rental offer exist, but rental offer is not attached to gotchi", () => {
+      const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
+      gotchi.currentRentalOffer = null;
+      gotchi.save();
 
-        const event = createGotchiLendingCancelledEvent(
-          tokenId,
-          lender,
-          thirdParty,
-          initialCost,
-          duration,
-          revenueSplit,
-          whitelistId,
-          revenueTokens,
-          unixTimestamp
-        );
+      const event = createGotchiLendingCancelledEvent(
+        tokenId,
+        lender,
+        thirdParty,
+        initialCost,
+        duration,
+        revenueSplit,
+        whitelistId,
+        revenueTokens,
+        unixTimestamp
+      );
 
-        handleGotchiLendingCancelled(event);
-      },
-      shouldFail
-    );
+      handleGotchiLendingCancelled(event);
+    });
   });
   afterEach(() => {
     clearStore();

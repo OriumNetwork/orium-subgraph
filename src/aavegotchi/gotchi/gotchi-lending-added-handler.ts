@@ -23,17 +23,18 @@ import { ONE_ETHER } from "../../utils/constants";
 export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   const nftId = generateNftId("AAVEGOTCHI", event.params.tokenId);
   const nft = Nft.load(nftId);
+
   if (!nft) {
-    log.debug("[GotchiLendingAdded]: Aavegotchi {} does not exist", [
-      event.params.tokenId.toString(),
-    ]);
+    log.debug(
+      "[GotchiLendingAdded]: Aavegotchi {} does not exist, skiping...",
+      [event.params.tokenId.toString()]
+    );
     return;
   }
 
   // create rental offer
-  const rentalOffer = new RentalOffer(
-    `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`
-  );
+  const rentalOfferId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
+  const rentalOffer = new RentalOffer(rentalOfferId);
   rentalOffer.nft = nftId;
   rentalOffer.lender = event.params.lender.toHexString().toLowerCase();
   rentalOffer.createdAt = event.params.timeCreated;
@@ -52,7 +53,7 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   rentalOffer.save();
 
   // link rental offer to nft
-  nft.currentRentalOffer = rentalOffer.id;
+  nft.currentRentalOffer = rentalOfferId;
   nft.save();
 
   log.warning("[GotchiLendingAdded]: Gotchi {} added to rental offer {}", [
