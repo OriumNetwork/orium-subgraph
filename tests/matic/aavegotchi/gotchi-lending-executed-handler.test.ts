@@ -111,31 +111,27 @@ describe("Start a Aavegotchi Rental", () => {
       assert.fieldEquals("Nft", nftId, "currentRental", rentalId);
       assert.fieldEquals("Nft", nftId, "currentRentalOffer", "null");
     });
-    test(
-      "Should fail to create rental if currentRentalOffer is null in NFT",
-      () => {
-        const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
-        gotchi.currentRentalOffer = null;
-        gotchi.save();
+    test("Should skip to create rental if currentRentalOffer is null in NFT", () => {
+      const gotchi = loadNft("AAVEGOTCHI", BigInt.fromString(tokenId));
+      gotchi.currentRentalOffer = null;
+      gotchi.save();
 
-        const event = createGotchiLendingExecutedEvent(
-          tokenId,
-          listingId,
-          lender,
-          borrower,
-          thirdParty,
-          initialCost,
-          duration,
-          revenueSplit,
-          revenueTokens,
-          whitelistId,
-          unixTimestamp
-        );
+      const event = createGotchiLendingExecutedEvent(
+        tokenId,
+        listingId,
+        lender,
+        borrower,
+        thirdParty,
+        initialCost,
+        duration,
+        revenueSplit,
+        revenueTokens,
+        whitelistId,
+        unixTimestamp
+      );
 
-        handleGotchiLendingExecuted(event);
-      },
-      shouldFail
-    );
+      handleGotchiLendingExecuted(event);
+    });
     test(
       "Should fail to create rental if currentRental is not null",
       () => {
