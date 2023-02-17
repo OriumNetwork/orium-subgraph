@@ -42,6 +42,7 @@ export function handleGotchiLendingExecuted(
       "[handleGotchiLendingExecuted] NFT {} has no rental offer, skipping...",
       [nft.id]
     );
+    return;
   }
 
   const previoustRental = nft.currentRental;
