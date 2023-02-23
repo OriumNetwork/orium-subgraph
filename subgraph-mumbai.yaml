@@ -28,7 +28,7 @@ dataSources:
         - event: GotchiLendingAdded(indexed uint32,indexed address,indexed uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
           handler: handleGotchiLendingAdded
         - event: GotchiLendingCanceled(indexed uint32,indexed address,indexed uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
-          handler: handleGotchiLendingCanceled
+          handler: handleGotchiLendingCancelled
         - event: GotchiLendingExecuted(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
           handler: handleGotchiLendingExecuted
         - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
