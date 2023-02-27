@@ -39,10 +39,10 @@ jobs:
         run: npm run deploy-mumbai
         # Polygon
       - name: Code Generator Polygon
-        run: npm run codegen-polygon
+        run: npm run codegen-matic
       - name: Build Polygon
-        run: npm run build-polygon
+        run: npm run build-matic
       - name: Polygon Test
-        run: npm run test-polygon
+        run: npm run test-matic
       - name: Subgraph Deploy Polygon
-        run: npm run deploy-polygon
+        run: npm run deploy-matic
