@@ -44,7 +44,6 @@ type Account @entity(immutable: false) {
   nfts: [Nft!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]! @derivedFrom(field: "borrower")
   lendings: [Rental!]! @derivedFrom(field: "lender")
-  rentalOffers: [RentalOffer!]! @derivedFrom(field: "lender")
 }
 
 type Rental @entity(immutable: false) {
