@@ -115,6 +115,7 @@ tests/.*
 generated/
 
 subgraph.yaml
+src/utils/addresses.ts
 
 tests/*.json
 

@@ -1,5 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { Nft, Rental } from "../../generated/schema";
+import { Nft, Rental, RentalOffer } from "../../generated/schema";
 
 export function generateNftId(type: string, tokenId: BigInt): string {
   return type + "-" + tokenId.toString();
@@ -22,4 +22,15 @@ export function loadRental(rentalId: string): Rental {
   }
 
   return rental;
+}
+
+export function loadRentalOffer(rentalOfferId: string): RentalOffer {
+  const rentalOffer = RentalOffer.load(rentalOfferId);
+  if (!rentalOffer) {
+    throw new Error(
+      "[loadRentalOffer] Rental offer not found: " + rentalOfferId
+    );
+  }
+
+  return rentalOffer;
 }

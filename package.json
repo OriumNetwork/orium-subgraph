@@ -10,8 +10,8 @@
   },
   "scripts": {
     "graph-auth": "graph auth --product hosted-service",
-    "codegen-matic": "cp subgraph-matic.yaml subgraph.yaml && graph codegen subgraph-matic.yaml",
-    "codegen-mumbai": "cp subgraph-mumbai.yaml subgraph.yaml && graph codegen subgraph-mumbai.yaml",
+    "codegen-matic": "cp addresses-matic.ts src/utils/addresses.ts && cp subgraph-matic.yaml subgraph.yaml && graph codegen subgraph-matic.yaml",
+    "codegen-mumbai": "cp addresses-mumbai.ts src/utils/addresses.ts && cp subgraph-mumbai.yaml subgraph.yaml && graph codegen subgraph-mumbai.yaml",
     "codegen-goerli": "cp subgraph-goerli.yaml subgraph.yaml && graph codegen subgraph-goerli.yaml",
     "build-matic": "graph build subgraph-matic.yaml",
     "build-mumbai": "graph build subgraph-mumbai.yaml",

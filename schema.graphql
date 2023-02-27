@@ -28,11 +28,15 @@ type Nft @entity(immutable: false) {
   type: NftType!
   tokenId: BigInt!
   platform: String!
+
   currentOwner: Account!
   previousOwner: Account!
   originalOwner: Account!
+
   currentRental: Rental
   rentalHistory: [Rental!]! @derivedFrom(field: "nft")
+  currentRentalOffer: RentalOffer
+  rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nft")
 }
 
 type Account @entity(immutable: false) {
@@ -44,13 +48,31 @@ type Account @entity(immutable: false) {
 
 type Rental @entity(immutable: false) {
   id: ID!
-
   nft: Nft!
   borrower: Account!
   lender: Account!
+  start_date: BigInt! #TODO: change to camel case
+  startedTxHash: String!
+  expiration_date: BigInt #TODO: change to camel case
+  expiredTxHash: String
+  rentalOffer: RentalOffer
+}
 
-  start_date: BigInt!
-  expiration_date: BigInt # old `period`
+type RentalOffer @entity(immutable: false) {
+  id: ID!
+  nft: Nft!
+  lender: Account!
+  createdAt: BigInt!
+  cancelledAt: BigInt
+  creationTxHash: String!
+  cancellationTxHash: String
+  duration: BigInt
+  rental: Rental @derivedFrom(field: "rentalOffer")
+  feeToken: String
+  feeAmount: BigInt
+  expirationDate: BigInt
+  profitShareTokens: [String!]
+  profitShareSplit: [BigInt!]
 }
 
 type ClaimedToken @entity {
