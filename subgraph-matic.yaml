@@ -162,3 +162,25 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTravelerTransfer
       file: ./src/chronos/traveler/handler.ts
+
+  # (Cometh) Spaceship
+  - kind: ethereum
+    name: Spaceship
+    network: matic
+    source:
+      address: "0x85BC2E8Aaad5dBc347db49Ea45D95486279eD918"
+      abi: ComethSpaceship
+      startBlock: 10512080
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Nft
+      abis:
+        - name: ComethSpaceship
+          file: ./abis/ComethSpaceship.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleSpaceshipTransfer
+      file: ./src/cometh/index.ts

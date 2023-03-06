@@ -19,6 +19,7 @@ enum NftType {
   WNOVASPACESHIP
   TRAVELER
   WTRAVELER
+  COMETHSPACESHIP
 }
 
 type Nft @entity(immutable: false) {
