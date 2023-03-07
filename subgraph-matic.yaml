@@ -165,7 +165,7 @@ dataSources:
 
   # (Cometh) Spaceship
   - kind: ethereum
-    name: Spaceship
+    name: ComethSpaceship
     network: matic
     source:
       address: "0x85BC2E8Aaad5dBc347db49Ea45D95486279eD918"
@@ -183,4 +183,26 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleSpaceshipTransfer
+      file: ./src/cometh/index.ts
+
+    # (Cometh) Rental Protocol
+  - kind: ethereum
+    name: ComethRentalProtocol
+    network: matic
+    source:
+      address: "0x5495BEC6703aDC6d395E50Bb2C6a93bb4d2AF56A"
+      abi: ComethRentalProtocol
+      startBlock: 30169340
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Nft
+      abis:
+        - name: ComethRentalProtocol
+          file: ./abis/ComethRentalProtocol.json
+      eventHandlers:
+        - event: RentalOfferCreated(indexed uint256,indexed address,address,(address,uint256,uint64,uint16)[],address,uint256,uint256)
+          handler: handleRentalOfferCreated
       file: ./src/cometh/index.ts
