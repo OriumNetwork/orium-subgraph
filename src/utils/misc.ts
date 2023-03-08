@@ -23,7 +23,7 @@ export function loadNfts(tokenIds: BigInt[], type: string): Nft[] {
     const nftId = generateNftId(type, tokenIds[i]);
     const nft = Nft.load(nftId);
     if (!nft) {
-      throw new Error("[loadNfts] NFT not found: " + nftId);
+      continue;
     }
     nfts.push(nft);
   }

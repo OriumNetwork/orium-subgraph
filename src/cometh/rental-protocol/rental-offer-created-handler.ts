@@ -3,6 +3,7 @@ import { RentalOffer } from "../../../generated/schema";
 import { COMETHSPACESHIP } from "../../utils/constants";
 import { RentalOfferCreated } from "../../../generated/ComethRentalProtocol/ComethRentalProtocol";
 import { loadNfts } from "../../utils/misc";
+import { log } from "@graphprotocol/graph-ts";
 /**
  *    event RentalOfferCreated(
  *       uint256 indexed nonce,
@@ -16,15 +17,16 @@ import { loadNfts } from "../../utils/misc";
  */
 export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // get nft
-  const nfts = loadNfts(
-    event.params.nfts.map<BigInt>((nft) => nft.tokenId),
-    COMETHSPACESHIP
-  );
+  const tokenIds = event.params.nfts.map<BigInt>((nft) => nft.tokenId);
+  const type = COMETHSPACESHIP;
+  const nfts = loadNfts(tokenIds, type);
 
   // create rental offer
   for (let i = 0; i < nfts.length; i++) {
     const nft = nfts[i];
-    const rentalOfferId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
+    const rentalOfferId = `${event.transaction.from.toHexString()}-${
+      event.params.nonce
+    }`;
     const rentalOffer = new RentalOffer(rentalOfferId);
     rentalOffer.nft = nft.id;
     rentalOffer.lender = event.params.maker.toHexString();
@@ -44,5 +46,9 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
     // link rental offer to nft
     nft.currentRentalOffer = rentalOfferId;
     nft.save();
+    log.warning(
+      "[handleRentalOfferCreated] RentalOffer {} created for NFT {}, tx: {}",
+      [rentalOfferId, nft.id, event.transaction.hash.toHex()]
+    );
   }
 }
