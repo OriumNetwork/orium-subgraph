@@ -46,16 +46,16 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
 
   if (!currentRentalOfferId) {
     log.warning(
-      "[handleGotchiLendingCancelled] NFT {} has no rental offer, skipping...",
-      [nft.id]
+      "[handleGotchiLendingCancelled] NFT {} has no rental offer, tx: {}, skipping...",
+      [nft.id, event.transaction.hash.toHex()]
     );
     return;
   }
 
   if (currentRentalOfferId !== rentalOffer.id) {
     log.warning(
-      "[handleGotchiLendingCancelled] NFT {} has a different rental offer, skipping...",
-      [nft.id]
+      "[handleGotchiLendingCancelled] NFT {} has a different rental offer, tx: {}, skipping...",
+      [nft.id, event.transaction.hash.toHex()]
     );
     return;
   }
@@ -65,7 +65,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
   nft.save();
 
   log.warning(
-    "[handleGotchiLendingCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}",
-    [nft.id, currentRentalOfferId!]
+    "[handleGotchiLendingCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}. Tx: {}",
+    [nft.id, currentRentalOfferId!, event.transaction.hash.toHex()]
   );
 }

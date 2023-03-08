@@ -20,9 +20,10 @@ import { SPACESHIP_ADDRESS } from "../../utils/addresses";
  */
 export function handleRentalStarted(event: RentalStarted): void {
   if (event.params.token.toHexString() != SPACESHIP_ADDRESS) {
-    log.debug("[handleRentalStarted] NFT {} is not a spaceship, skipping...", [
-      event.params.tokenId.toString(),
-    ]);
+    log.debug(
+      "[handleRentalStarted] NFT {} is not a spaceship, tx: {}, skipping...",
+      [event.params.tokenId.toString(), event.transaction.hash.toHex()]
+    );
     return;
   }
 
@@ -41,8 +42,8 @@ export function handleRentalStarted(event: RentalStarted): void {
 
   if (!currentRentalOfferId) {
     log.warning(
-      "[handleRentalStarted] NFT {} has no rental offer, skipping...",
-      [nft.id]
+      "[handleRentalStarted] NFT {} has no rental offer, tx: {}, skipping...",
+      [nft.id, event.transaction.hash.toHex()]
     );
     return;
   }
@@ -76,7 +77,12 @@ export function handleRentalStarted(event: RentalStarted): void {
   nft.save();
 
   log.warning(
-    "[handleGotchiLendingExecuted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}",
-    [nftId, currentRental.id, currentRentalOfferId!]
+    "[handleGotchiLendingExecuted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}, tx: {}",
+    [
+      nftId,
+      currentRental.id,
+      currentRentalOfferId!,
+      event.transaction.hash.toHex(),
+    ]
   );
 }
