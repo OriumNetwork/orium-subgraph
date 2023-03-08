@@ -1,1 +1,2 @@
 export const GHST_TOKEN_ADDRESS = "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7";
+export const SPACESHIP_ADDRESS = "0x85bc2e8aaad5dbc347db49ea45d95486279ed918";

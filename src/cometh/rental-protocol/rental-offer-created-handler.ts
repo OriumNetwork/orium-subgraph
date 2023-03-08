@@ -4,6 +4,7 @@ import { COMETHSPACESHIP } from "../../utils/constants";
 import { RentalOfferCreated } from "../../../generated/ComethRentalProtocol/ComethRentalProtocol";
 import { loadNfts } from "../../utils/misc";
 import { log } from "@graphprotocol/graph-ts";
+import { SPACESHIP_ADDRESS } from "../../utils/addresses";
 /**
  *    event RentalOfferCreated(
  *       uint256 indexed nonce,
@@ -17,9 +18,19 @@ import { log } from "@graphprotocol/graph-ts";
  */
 export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // get nft
-  const tokenIds = event.params.nfts.map<BigInt>((nft) => nft.tokenId);
+  const tokenIds = event.params.nfts.map<BigInt>((nft) => {
+    return nft.token.toHexString() == SPACESHIP_ADDRESS
+      ? nft.tokenId
+      : BigInt.fromI32(-1);
+  });
+
+  //filter out non spaceship nfts
+  const filteredTokenIds = tokenIds.filter(
+    (tokenId) => tokenId != BigInt.fromI32(-1)
+  );
+
   const type = COMETHSPACESHIP;
-  const nfts = loadNfts(tokenIds, type);
+  const nfts = loadNfts(filteredTokenIds, type);
 
   // create rental offer
   for (let i = 0; i < nfts.length; i++) {

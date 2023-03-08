@@ -207,4 +207,6 @@ dataSources:
           handler: handleRentalOfferCreated
         - event: RentalOfferCancelled(indexed uint256,indexed address)
           handler: handleRentalOfferCancelled
+        - event: RentalStarted(indexed uint256,indexed address,indexed address,address,uint256,uint64,uint16,uint256,uint256)
+          handler: handleRentalStarted
       file: ./src/cometh/index.ts
