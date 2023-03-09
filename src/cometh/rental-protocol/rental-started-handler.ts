@@ -77,7 +77,7 @@ export function handleRentalStarted(event: RentalStarted): void {
   nft.save();
 
   log.warning(
-    "[handleGotchiLendingExecuted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}, tx: {}",
+    "[handleRentalStarted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}, tx: {}",
     [
       nftId,
       currentRental.id,

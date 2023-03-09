@@ -1,7 +1,7 @@
 import { generateNftId } from "../src/utils/misc";
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { Nft } from "../generated/schema";
-import { ZERO_ADDRESS } from "../src/utils/constants";
+import { Nft, Rental, RentalOffer } from "../generated/schema";
+import { COMETHSPACESHIP, ZERO_ADDRESS } from "../src/utils/constants";
 
 export function arrayToString(stringArray: string[]): string {
   return "[" + stringArray.join(", ") + "]";
@@ -19,8 +19,26 @@ export function createMockGotchi(tokenId: string): Nft {
   aavegotchi.currentOwner = ZERO_ADDRESS;
   aavegotchi.previousOwner = ZERO_ADDRESS;
   aavegotchi.originalOwner = ZERO_ADDRESS;
+  aavegotchi.rentalOfferHistory = [];
   aavegotchi.save();
   return aavegotchi;
+}
+
+export function createMockSpaceship(tokenId: string): Nft {
+  const type = COMETHSPACESHIP;
+  const id = generateNftId(type, BigInt.fromString(tokenId));
+  const spaceship = new Nft(id);
+  spaceship.tokenId = BigInt.fromString(tokenId);
+  spaceship.address = ZERO_ADDRESS;
+  spaceship.type = type;
+  spaceship.state = "NONE";
+  spaceship.platform = "Aavegotchi";
+  spaceship.currentOwner = ZERO_ADDRESS;
+  spaceship.previousOwner = ZERO_ADDRESS;
+  spaceship.originalOwner = ZERO_ADDRESS;
+  spaceship.rentalOfferHistory = [];
+  spaceship.save();
+  return spaceship;
 }
 
 export function buildEventParamUintArray(
@@ -57,4 +75,59 @@ export function buildEventParamAddress(
 ): ethereum.EventParam {
   const ethAddress = ethereum.Value.fromAddress(Address.fromString(address));
   return new ethereum.EventParam(name, ethAddress);
+}
+
+export function createMockRentalOffer(
+  tokenId: string,
+  lender: string,
+  feeToken: string,
+  initialCost: string,
+  duration: string,
+  revenueSplit: string[],
+  revenueTokens: string[],
+  timeCreated: string,
+  creationTxHash: string = "0x0000000"
+): RentalOffer {
+  const rentalOffer = new RentalOffer(tokenId);
+  rentalOffer.nfts = [tokenId];
+  rentalOffer.lender = lender;
+  rentalOffer.feeToken = feeToken;
+  rentalOffer.feeAmount = BigInt.fromString(initialCost);
+  rentalOffer.duration = [BigInt.fromString(duration)];
+  rentalOffer.profitShareSplit = revenueSplit.map<BigInt>((split) =>
+    BigInt.fromString(split)
+  );
+  rentalOffer.profitShareTokens = revenueTokens;
+  rentalOffer.createdAt = BigInt.fromString(timeCreated);
+  rentalOffer.creationTxHash = creationTxHash;
+  rentalOffer.save();
+
+  return rentalOffer;
+}
+
+export function createMockRental(
+  id: string,
+  nft: string,
+  borrower: string,
+  lender: string,
+  start_date: string,
+  startedTxHash: string,
+  expiration_date: string | null = null,
+  expiredTxHash: string | null = null,
+  rentalOffer: string | null = null
+): Rental {
+  const rental = new Rental(id);
+  rental.nft = nft;
+  rental.borrower = borrower;
+  rental.lender = lender;
+  rental.start_date = BigInt.fromString(start_date);
+  rental.startedTxHash = startedTxHash;
+  rental.expiration_date = expiration_date
+    ? BigInt.fromString(expiration_date)
+    : null;
+  rental.expiredTxHash = expiredTxHash || null;
+  rental.rentalOffer = rentalOffer || null;
+  rental.save();
+
+  return rental;
 }

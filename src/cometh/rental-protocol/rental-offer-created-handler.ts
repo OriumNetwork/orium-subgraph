@@ -29,33 +29,44 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
     (tokenId) => tokenId != BigInt.fromI32(-1)
   );
 
+  if (filteredTokenIds.length == 0) {
+    log.debug(
+      "[handleRentalOfferCreated] No spaceship nfts with valid address found in rental offer, tx: {}",
+      [event.transaction.hash.toHex()]
+    );
+    return;
+  }
+
   const type = COMETHSPACESHIP;
   const nfts = loadNfts(filteredTokenIds, type);
 
+  if (nfts.length == 0) {
+    log.debug(
+      "[handleRentalOfferCreated] No valid spaceship nfts with valid id found in rental offer, tx: {}",
+      [event.transaction.hash.toHex()]
+    );
+    return;
+  }
+
   // create rental offer
+  const rentalOfferId = `${event.transaction.from.toHexString()}-${
+    event.params.nonce
+  }`;
+  const rentalOffer = new RentalOffer(rentalOfferId);
+  rentalOffer.nfts = nfts.map<string>((nft) => nft.id);
+  rentalOffer.lender = event.params.maker.toHexString();
+  rentalOffer.createdAt = event.block.timestamp;
+  rentalOffer.creationTxHash = event.transaction.hash.toHex();
+  rentalOffer.duration = event.params.nfts.map<BigInt>((nft) => nft.duration);
+  rentalOffer.feeAmount = event.params.feeAmount;
+  rentalOffer.feeToken = event.params.feeToken.toHexString();
+  rentalOffer.save();
+
   for (let i = 0; i < nfts.length; i++) {
     const nft = nfts[i];
-    const rentalOfferId = `${event.transaction.from.toHexString()}-${
-      event.params.nonce
-    }`;
-    const rentalOffer = new RentalOffer(rentalOfferId);
-    rentalOffer.nft = nft.id;
-    rentalOffer.lender = event.params.maker.toHexString();
-    rentalOffer.createdAt = event.block.timestamp;
-    rentalOffer.creationTxHash = event.transaction.hash.toHex();
-    rentalOffer.duration = event.params.nfts[i].duration;
-    rentalOffer.feeAmount = event.params.feeAmount;
-    rentalOffer.feeToken = event.params.feeToken.toHexString();
-
-    rentalOffer.profitShareTokens = [event.params.feeToken.toHexString()]; // TODO: check if this is correct
-    rentalOffer.profitShareSplit = [
-      //TODO: check if this is correct
-      BigInt.fromI32(event.params.nfts[i].basisPoints),
-    ];
-    rentalOffer.save();
-
     // link rental offer to nft
     nft.currentRentalOffer = rentalOfferId;
+    nft.rentalOfferHistory = nft.rentalOfferHistory.concat([rentalOfferId]);
     nft.save();
     log.warning(
       "[handleRentalOfferCreated] RentalOffer {} created for NFT {}, tx: {}",

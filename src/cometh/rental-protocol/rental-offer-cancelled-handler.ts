@@ -31,12 +31,12 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
     event.transaction.hash.toHex(),
   ]);
 
-  const nft = Nft.load(rentalOffer.nft);
+  const nft = Nft.load(rentalOffer.nfts[0]);
 
   if (!nft) {
     throw new Error(
       "[handleRentalOfferCancelled] NFT " +
-        rentalOffer.nft +
+        rentalOffer.nfts[0] +
         " does not exist, tx: " +
         event.transaction.hash.toHex()
     );
@@ -46,7 +46,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
 
   if (!currentRentalOfferId) {
     log.warning(
-      "[handleGotchiLendingCancelled] NFT {} has no rental offer, tx: {}, skipping...",
+      "[handleRentalOfferCancelled] NFT {} has no rental offer, tx: {}, skipping...",
       [nft.id, event.transaction.hash.toHex()]
     );
     return;
@@ -54,7 +54,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
 
   if (currentRentalOfferId !== rentalOffer.id) {
     log.warning(
-      "[handleGotchiLendingCancelled] NFT {} has a different rental offer, tx: {}, skipping...",
+      "[handleRentalOfferCancelled] NFT {} has a different rental offer, tx: {}, skipping...",
       [nft.id, event.transaction.hash.toHex()]
     );
     return;
@@ -65,7 +65,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
   nft.save();
 
   log.warning(
-    "[handleGotchiLendingCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}. Tx: {}",
+    "[handleRentalOfferCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}. Tx: {}",
     [nft.id, currentRentalOfferId!, event.transaction.hash.toHex()]
   );
 }
