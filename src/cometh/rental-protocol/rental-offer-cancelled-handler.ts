@@ -31,31 +31,45 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
     event.transaction.hash.toHex(),
   ]);
 
-  const nft = Nft.load(rentalOffer.nfts[0]);
+  for (let i = 0; i < rentalOffer.nfts.length; i++) {
+    const nft = Nft.load(rentalOffer.nfts[i]);
 
-  if (!nft) {
-    throw new Error(
-      "[handleRentalOfferCancelled] NFT " +
-        rentalOffer.nfts[0] +
-        " does not exist, tx: " +
-        event.transaction.hash.toHex()
+    if (!nft) {
+      throw new Error(
+        "[handleRentalOfferCancelled] NFT " +
+          rentalOffer.nfts[i] +
+          " does not exist, tx: " +
+          event.transaction.hash.toHex()
+      );
+    }
+
+    updateNftCurrentRentalOffer(
+      nft!,
+      rentalOffer,
+      event.transaction.hash.toHex()
     );
   }
+}
 
+function updateNftCurrentRentalOffer(
+  nft: Nft,
+  rentalOffer: RentalOffer,
+  txHash: string
+): void {
   const currentRentalOfferId = nft.currentRentalOffer;
 
   if (!currentRentalOfferId) {
     log.warning(
       "[handleRentalOfferCancelled] NFT {} has no rental offer, tx: {}, skipping...",
-      [nft.id, event.transaction.hash.toHex()]
+      [nft.id, txHash]
     );
     return;
   }
 
-  if (currentRentalOfferId !== rentalOffer.id) {
+  if (currentRentalOfferId != rentalOffer.id) {
     log.warning(
-      "[handleRentalOfferCancelled] NFT {} has a different rental offer, tx: {}, skipping...",
-      [nft.id, event.transaction.hash.toHex()]
+      "[handleRentalOfferCancelled] NFT {} has a different rental offer, actualOffer: {}, nft current offer: {}, tx: {}, skipping...",
+      [nft.id, rentalOffer.id, currentRentalOfferId!, txHash]
     );
     return;
   }
@@ -66,6 +80,6 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
 
   log.warning(
     "[handleRentalOfferCancelled] Rental Offer for NFT {} was cancelled. RentalOfferId: {}. Tx: {}",
-    [nft.id, currentRentalOfferId!, event.transaction.hash.toHex()]
+    [nft.id, currentRentalOfferId!, txHash]
   );
 }

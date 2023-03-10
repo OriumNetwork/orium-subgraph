@@ -76,7 +76,7 @@ export function createRentalOfferCancelledEvent(
   event.parameters = new Array<ethereum.EventParam>();
   event.parameters.push(buildEventParamUint("nonce", nonce));
   event.parameters.push(buildEventParamAddress("maker", maker));
-
+  event.transaction.from = Address.fromString(maker);
   return event;
 }
 
