@@ -29,7 +29,7 @@ const feeToken = "0x44a6e0be76e1d9620a7f76588e4509fe4fa8e8c8";
 const feeAmount = "1000000000000000000";
 const deadline = "1675888946";
 
-describe("Cometh - Create Rental Offer", () => {
+describe("Cometh - Rental Offer Created Event", () => {
   beforeEach(() => {
     createMockSpaceship(tokenId);
   });
@@ -38,7 +38,7 @@ describe("Cometh - Create Rental Offer", () => {
     clearStore();
   });
 
-  test("Should create cometh rental offer", () => {
+  test("Should create rental offer", () => {
     const event = createRentalOfferCreatedEvent(
       nonce,
       maker,
@@ -78,7 +78,7 @@ describe("Cometh - Create Rental Offer", () => {
     assert.fieldEquals("RentalOffer", rentalOfferId, "feeToken", feeToken);
     assert.fieldEquals("RentalOffer", rentalOfferId, "feeAmount", feeAmount);
   });
-  test("Should skip create cometh rental offer if token id is invalid", () => {
+  test("Should skip create rental offer if token id is invalid", () => {
     const invalidTokenId = "0";
     nfts[0].tokenId = invalidTokenId;
     const event = createRentalOfferCreatedEvent(
@@ -94,7 +94,7 @@ describe("Cometh - Create Rental Offer", () => {
     handleRentalOfferCreated(event);
     assert.entityCount("RentalOffer", 0);
   });
-  test("Should skip create cometh rental offer if token address is invalid", () => {
+  test("Should skip create rental offer if token address is invalid", () => {
     nfts[0].token = ZERO_ADDRESS;
     const event = createRentalOfferCreatedEvent(
       nonce,

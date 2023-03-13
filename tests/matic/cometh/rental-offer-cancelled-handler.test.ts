@@ -33,7 +33,7 @@ const feeAmount = "1000000000000000000";
 const deadline = "1675888946";
 const rentalOfferId = `${maker}-${nonce}`;
 
-describe("Cancel Aavegotchi Rental Offer", () => {
+describe("Cometh - Rental Offer Cancelled Event", () => {
   describe("When entities does not exist", () => {
     test("should skip if rental offer does not exist", () => {
       createMockSpaceship(tokenId);
@@ -42,12 +42,12 @@ describe("Cancel Aavegotchi Rental Offer", () => {
 
       handleRentalOfferCancelled(event);
     });
-    test("Should not fail if nft does not exist", () => {
+    test("Should not fail if NFT does not exist", () => {
       const event = createRentalOfferCancelledEvent(nonce, maker);
 
       handleRentalOfferCancelled(event);
     });
-    test("Should skip if nft is attched to rental offer that doesn't exists", () => {
+    test("Should skip if NFT is attched to rental offer that doesn't exists", () => {
       const event = createRentalOfferCancelledEvent(nonce, maker);
 
       assert.notInStore("RentalOffer", rentalOfferId);
@@ -85,7 +85,7 @@ describe("Cancel Aavegotchi Rental Offer", () => {
 
       assert.fieldEquals("Nft", nftId, "currentRentalOffer", "null");
     });
-    test("Should skip if gotchi and rental offer exist, but rental offer is not attached to gotchi", () => {
+    test("Should skip if NFT and rental offer exist, but rental offer is not attached to NFT", () => {
       const nft = loadNft(COMETHSPACESHIP, BigInt.fromString(tokenId));
       nft.currentRentalOffer = null;
       nft.save();
