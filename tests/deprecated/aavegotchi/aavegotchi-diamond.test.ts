@@ -49,24 +49,4 @@ describe("Aavegotchi Diamond", () => {
   afterAll(() => {
     clearStore();
   });
-
-  describe("Can handle States", () => {
-    test("Should handle CLOSE_PORTAL (Transfer)", () => {
-      const from = "0x1111111111111111111111111111111111111111";
-      const to = "0x2222222222222222222222222222222222222222";
-      const event = createNewTransferEvent(from, to);
-      const _id = generateNftId("AAVEGOTCHI", event.params._tokenId);
-      const previousOwner = from;
-      const currentOwner = to;
-
-      handleAavegotchiTransfer(event);
-
-      assert.fieldEquals("Nft", _id, "previousOwner", previousOwner);
-      assert.fieldEquals("Nft", _id, "currentOwner", currentOwner);
-      assert.fieldEquals("Nft", _id, "state", "CLOSED_PORTAL");
-      assert.fieldEquals("Nft", _id, "type", "AAVEGOTCHI");
-      assert.fieldEquals("Nft", _id, "tokenId", "1");
-      assert.fieldEquals("Nft", _id, "platform", "Aavegotchi");
-    });
-  });
 });

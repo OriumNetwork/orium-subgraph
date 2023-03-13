@@ -44,7 +44,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
     }
 
     updateNftCurrentRentalOffer(
-      nft!,
+      nft,
       rentalOffer,
       event.transaction.hash.toHex()
     );

@@ -87,11 +87,11 @@ export function createMockRentalOffer(
   creationTxHash: string = "0x0000000"
 ): RentalOffer {
   const rentalOffer = new RentalOffer(tokenId);
-  rentalOffer.nft = tokenId;
+  rentalOffer.nfts = [tokenId];
   rentalOffer.lender = lender;
   rentalOffer.feeToken = GHST_TOKEN_ADDRESS;
   rentalOffer.feeAmount = BigInt.fromString(initialCost);
-  rentalOffer.duration = BigInt.fromString(duration);
+  rentalOffer.duration = [BigInt.fromString(duration)];
   rentalOffer.profitShareSplit = revenueSplit.map<BigInt>((split) =>
     BigInt.fromString(split)
   );

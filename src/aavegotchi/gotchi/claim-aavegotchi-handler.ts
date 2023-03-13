@@ -32,6 +32,7 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
     entity.currentOwner = owner;
     entity.originalOwner = owner;
     entity.previousOwner = ZERO_ADDRESS;
+    entity.rentalOfferHistory = [];
   }
 
   entity.state = AAVEGOTCHI;
