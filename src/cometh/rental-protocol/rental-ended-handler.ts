@@ -26,21 +26,23 @@ export function handleRentalEnded(event: RentalEnded): void {
 
   const nft = Nft.load(nftId);
   if (!nft) {
-    log.debug("[handleRentalEnded] Spaceship {} does not exist, tx: {}", [
-      event.params.tokenId.toString(),
-      event.transaction.hash.toHex(),
-    ]);
-    return;
+    throw new Error(
+      "[handleRentalEnded] Spaceship " +
+        event.params.tokenId.toString() +
+        " does not exist, tx: " +
+        event.transaction.hash.toHex()
+    );
   }
 
   const currentRentalId = nft.currentRental;
 
   if (!currentRentalId) {
-    log.warning(
-      "[handleRentalEnded] NFT {} has no rental, tx: {}, skipping ...",
-      [nft.id, event.transaction.hash.toHex()]
+    throw new Error(
+      "[handleRentalEnded] NFT " +
+        nft.id +
+        " has no rental, tx: " +
+        event.transaction.hash.toHex()
     );
-    return;
   }
 
   const currentRental = Rental.load(currentRentalId!);
@@ -55,8 +57,8 @@ export function handleRentalEnded(event: RentalEnded): void {
   }
 
   // update rental
-  currentRental.expiration_date = event.block.timestamp;
-  currentRental.expiredTxHash = event.transaction.hash.toHex();
+  currentRental.ended_at = event.block.timestamp;
+  currentRental.endRentalHash = event.transaction.hash.toHex();
   currentRental.save();
 
   // remove current rental from nft, because it ended

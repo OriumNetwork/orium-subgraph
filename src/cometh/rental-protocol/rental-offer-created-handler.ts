@@ -17,17 +17,12 @@ import { SPACESHIP_ADDRESS } from "../../utils/addresses";
  *   );
  */
 export function handleRentalOfferCreated(event: RentalOfferCreated): void {
-  // get nft
-  const tokenIds = event.params.nfts.map<BigInt>((nft) => {
-    return nft.token.toHexString() == SPACESHIP_ADDRESS
-      ? nft.tokenId
-      : BigInt.fromI32(-1);
-  });
-
-  //filter out non spaceship nfts
-  const filteredTokenIds = tokenIds.filter(
-    (tokenId) => tokenId != BigInt.fromI32(-1)
+  // filter out nfts that are not spaceships
+  const filteredNfts = event.params.nfts.filter(
+    (nft) => nft.token.toHexString() == SPACESHIP_ADDRESS
   );
+
+  const filteredTokenIds = filteredNfts.map<BigInt>((nft) => nft.tokenId);
 
   if (filteredTokenIds.length == 0) {
     log.debug(
@@ -37,8 +32,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
     return;
   }
 
-  const type = COMETHSPACESHIP;
-  const nfts = loadNfts(filteredTokenIds, type);
+  const nfts = loadNfts(filteredTokenIds, COMETHSPACESHIP);
 
   if (nfts.length == 0) {
     log.debug(
@@ -58,6 +52,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.createdAt = event.block.timestamp;
   rentalOffer.creationTxHash = event.transaction.hash.toHex();
   rentalOffer.duration = event.params.nfts.map<BigInt>((nft) => nft.duration);
+  rentalOffer.deadline = event.params.deadline;
   rentalOffer.feeAmount = event.params.feeAmount;
   rentalOffer.feeToken = event.params.feeToken.toHexString();
   rentalOffer.save();

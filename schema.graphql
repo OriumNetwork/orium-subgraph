@@ -55,7 +55,8 @@ type Rental @entity(immutable: false) {
   start_date: BigInt! #TODO: change to camel case
   startedTxHash: String!
   expiration_date: BigInt #TODO: change to camel case
-  expiredTxHash: String
+  ended_at: BigInt
+  endRentalHash: String
   rentalOffer: RentalOffer
 }
 
@@ -68,6 +69,7 @@ type RentalOffer @entity(immutable: false) {
   creationTxHash: String!
   cancellationTxHash: String
   duration: [BigInt!]
+  deadline: BigInt
   rental: Rental @derivedFrom(field: "rentalOffer")
   feeToken: String
   feeAmount: BigInt

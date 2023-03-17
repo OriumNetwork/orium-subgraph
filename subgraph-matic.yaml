@@ -199,6 +199,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Nft
+        - Rental
+        - RentalOffer
       abis:
         - name: ComethRentalProtocol
           file: ./abis/ComethRentalProtocol.json

@@ -91,7 +91,7 @@ describe("Cometh - Rental Started", () => {
       const rentalOfferId = gotchi.currentRentalOffer;
 
       handleRentalStarted(event);
-      const rentalId = `${maker}-${nonce}`;
+      const rentalId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
 
       assert.fieldEquals("Rental", rentalId, "nft", nftId);
       assert.fieldEquals("Rental", rentalId, "lender", maker);

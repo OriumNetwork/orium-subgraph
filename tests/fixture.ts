@@ -113,7 +113,7 @@ export function createMockRental(
   start_date: string,
   startedTxHash: string,
   expiration_date: string | null = null,
-  expiredTxHash: string | null = null,
+  endRentalHash: string | null = null,
   rentalOffer: string | null = null
 ): Rental {
   const rental = new Rental(id);
@@ -125,7 +125,7 @@ export function createMockRental(
   rental.expiration_date = expiration_date
     ? BigInt.fromString(expiration_date)
     : null;
-  rental.expiredTxHash = expiredTxHash || null;
+  rental.endRentalHash = endRentalHash || null;
   rental.rentalOffer = rentalOffer || null;
   rental.save();
 

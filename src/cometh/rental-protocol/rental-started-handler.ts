@@ -48,20 +48,20 @@ export function handleRentalStarted(event: RentalStarted): void {
     return;
   }
 
-  const previoustRental = nft.currentRental;
-  if (previoustRental) {
+  const previousRental = nft.currentRental;
+  if (previousRental) {
     throw new Error(
       "[handleRentalStarted] NFT " +
         nftId +
         " already has a rental " +
-        previoustRental +
+        previousRental +
         ", tx: " +
         event.transaction.hash.toHex()
     );
   }
 
   const currentRental = new Rental(
-    `${event.transaction.from.toHexString()}-${event.params.nonce}`
+    `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`
   );
   currentRental.nft = nftId;
   currentRental.lender = event.params.lender.toHexString();
@@ -69,6 +69,7 @@ export function handleRentalStarted(event: RentalStarted): void {
   currentRental.start_date = event.block.timestamp;
   currentRental.startedTxHash = event.transaction.hash.toHex();
   currentRental.rentalOffer = currentRentalOfferId;
+  currentRental.expiration_date = event.params.end;
   currentRental.save();
 
   // remove current rental offer from nft, because it has been executed, and link rental to nft
