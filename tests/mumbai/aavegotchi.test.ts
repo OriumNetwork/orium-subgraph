@@ -34,7 +34,6 @@ beforeEach(() => {
   entity.type = "AAVEGOTCHI";
   entity.tokenId = BigInt.fromI32(123);
   entity.address = GOTCHI_ADDRESS.toLowerCase();
-  entity.rentalOfferHistory = [];
   entity.save();
 });
 

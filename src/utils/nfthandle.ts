@@ -27,7 +27,6 @@ export class NftHandle {
       entity.platform = this.platform;
       entity.tokenId = tokenId;
       entity.address = event.address.toHexString().toLowerCase();
-      entity.rentalOfferHistory = [];
     }
 
     let toAccount = Account.load(to);

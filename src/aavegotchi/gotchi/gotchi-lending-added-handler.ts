@@ -54,7 +54,6 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
 
   // link rental offer to nft
   nft.currentRentalOffer = rentalOfferId;
-  nft.rentalOfferHistory = nft.rentalOfferHistory.concat([rentalOfferId]);
   nft.save();
 
   log.warning("[GotchiLendingAdded]: Gotchi {} added to rental offer {}", [
