@@ -53,8 +53,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
 
   for (let i = 0; i < nfts.length; i++) {
     const nft = nfts[i]
-    // link rental offer to nft
-    nft.currentRentalOffer = rentalOfferId
+    // no need to put as current rental offer, since the nft can have multiple rental offers at the same time
     nft.rentalOfferHistory = nft.rentalOfferHistory.concat([rentalOfferId])
     nft.save()
     log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFT {}, tx: {}', [

@@ -18,6 +18,7 @@ import { SPACESHIP_ADDRESS } from '../../utils/addresses'
  *        uint256 end
  *    );
  */
+
 export function handleRentalStarted(event: RentalStarted): void {
   const tokenId = event.params.tokenId
   const txHash = event.transaction.hash.toHex()

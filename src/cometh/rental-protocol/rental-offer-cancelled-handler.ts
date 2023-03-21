@@ -28,48 +28,4 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
     rentalOffer.id,
     event.transaction.hash.toHex(),
   ])
-
-  for (let i = 0; i < rentalOffer.nfts.length; i++) {
-    const nft = Nft.load(rentalOffer.nfts[i])
-
-    if (!nft) {
-      throw new Error(
-        '[handleRentalOfferCancelled] NFT ' +
-          rentalOffer.nfts[i] +
-          ' does not exist, tx: ' +
-          event.transaction.hash.toHex()
-      )
-    }
-
-    updateNftCurrentRentalOffer(nft, rentalOffer, event.transaction.hash.toHex())
-  }
-}
-
-function updateNftCurrentRentalOffer(nft: Nft, rentalOffer: RentalOffer, txHash: string): void {
-  const currentRentalOfferId = nft.currentRentalOffer
-
-  if (!currentRentalOfferId) {
-    log.warning(
-      '[handleRentalOfferCancelled][updateNftCurrentRentalOffer] NFT {} has no rental offer, tx: {}, skipping nft update...',
-      [nft.id, txHash]
-    )
-    return
-  }
-
-  if (currentRentalOfferId != rentalOffer.id) {
-    log.warning(
-      '[handleRentalOfferCancelled][updateNftCurrentRentalOffer] NFT {} has a different rental offer, actualOffer: {}, nft current offer: {}, tx: {}, skipping nft update...',
-      [nft.id, rentalOffer.id, currentRentalOfferId!, txHash]
-    )
-    return
-  }
-
-  // remove current rental offer from nft, because it has been cancelled
-  nft.currentRentalOffer = null
-  nft.save()
-
-  log.warning(
-    '[handleRentalOfferCancelled][updateNftCurrentRentalOffer] Rental Offer for NFT {} was cancelled. RentalOfferId: {}. Tx: {}',
-    [nft.id, currentRentalOfferId!, txHash]
-  )
 }
