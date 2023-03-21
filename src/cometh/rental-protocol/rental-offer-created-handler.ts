@@ -31,7 +31,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
 
   const nfts = loadNfts(filteredTokenIds, COMETHSPACESHIP)
 
-  if (nfts.length == 0) {
+  if (!nfts.length) {
     log.debug('[handleRentalOfferCreated] No valid spaceship nfts with valid id found in rental offer, tx: {}', [
       event.transaction.hash.toHex(),
     ])
