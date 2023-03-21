@@ -35,11 +35,11 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   // create rental offer
   const rentalOfferId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
   const rentalOffer = new RentalOffer(rentalOfferId);
-  rentalOffer.nft = nftId;
+  rentalOffer.nfts = [nftId];
   rentalOffer.lender = event.params.lender.toHexString().toLowerCase();
   rentalOffer.createdAt = event.params.timeCreated;
   rentalOffer.creationTxHash = event.transaction.hash.toHex();
-  rentalOffer.duration = event.params.period;
+  rentalOffer.duration = [event.params.period];
   rentalOffer.feeAmount = event.params.initialCost;
   rentalOffer.feeToken = GHST_TOKEN_ADDRESS;
 

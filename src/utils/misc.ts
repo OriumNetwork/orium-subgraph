@@ -15,6 +15,22 @@ export function loadNft(type: string, tokenId: BigInt): Nft {
   return nft;
 }
 
+export function loadNfts(tokenIds: BigInt[], type: string): Nft[] {
+  const nfts: Nft[] = [];
+
+  //we are using for instead of map, because closures are not supported in AssemblyScript
+  for (let i = 0; i < tokenIds.length; i++) {
+    const nftId = generateNftId(type, tokenIds[i]);
+    const nft = Nft.load(nftId);
+    if (!nft) {
+      continue;
+    }
+    nfts.push(nft);
+  }
+
+  return nfts;
+}
+
 export function loadRental(rentalId: string): Rental {
   const rental = Rental.load(rentalId);
   if (!rental) {

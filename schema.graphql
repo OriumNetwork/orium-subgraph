@@ -19,6 +19,7 @@ enum NftType {
   WNOVASPACESHIP
   TRAVELER
   WTRAVELER
+  COMETHSPACESHIP
 }
 
 type Nft @entity(immutable: false) {
@@ -35,8 +36,9 @@ type Nft @entity(immutable: false) {
 
   currentRental: Rental
   rentalHistory: [Rental!]! @derivedFrom(field: "nft")
+
   currentRentalOffer: RentalOffer
-  rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nft")
+  rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nfts")
 }
 
 type Account @entity(immutable: false) {
@@ -51,22 +53,24 @@ type Rental @entity(immutable: false) {
   nft: Nft!
   borrower: Account!
   lender: Account!
-  start_date: BigInt! #TODO: change to camel case
+  startDate: BigInt!
   startedTxHash: String!
-  expiration_date: BigInt #TODO: change to camel case
-  expiredTxHash: String
+  expirationDate: BigInt
+  endedAt: BigInt
+  endRentalHash: String
   rentalOffer: RentalOffer
 }
 
 type RentalOffer @entity(immutable: false) {
   id: ID!
-  nft: Nft!
+  nfts: [Nft!]!
   lender: Account!
   createdAt: BigInt!
   cancelledAt: BigInt
   creationTxHash: String!
   cancellationTxHash: String
-  duration: BigInt
+  duration: [BigInt!]
+  deadline: BigInt
   rental: Rental @derivedFrom(field: "rentalOffer")
   feeToken: String
   feeAmount: BigInt
