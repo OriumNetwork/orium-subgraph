@@ -1,5 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Nft, RentalOffer } from '../../../generated/schema'
+import { RentalOffer } from '../../../generated/schema'
 import { RentalOfferCancelled } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
 
 /**

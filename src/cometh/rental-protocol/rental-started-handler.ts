@@ -58,10 +58,10 @@ export function handleRentalStarted(event: RentalStarted): void {
   currentRental.nft = nftId
   currentRental.lender = event.params.lender.toHexString()
   currentRental.borrower = event.params.tenant.toHexString()
-  currentRental.start_date = event.block.timestamp
+  currentRental.startDate = event.block.timestamp
   currentRental.startedTxHash = txHash
   currentRental.rentalOffer = rentalOffer.id
-  currentRental.expiration_date = event.params.end
+  currentRental.expirationDate = event.params.end
   currentRental.save()
 
   // no need to remove current rental offer from nft, because currentRentalOffer will only track the last one created.

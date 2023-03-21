@@ -50,7 +50,7 @@ export function handleRentalEnded(event: RentalEnded): void {
   }
 
   // update rental
-  currentRental.ended_at = event.block.timestamp
+  currentRental.endedAt = event.block.timestamp
   currentRental.endRentalHash = event.transaction.hash.toHex()
   currentRental.save()
 

@@ -18,20 +18,20 @@ import { SPACESHIP_ADDRESS } from '../../utils/addresses'
  */
 export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // filter out nfts that are not spaceships
-  const filteredNfts = event.params.nfts.filter((nft) => nft.token.toHexString() == SPACESHIP_ADDRESS)
+  const spaceshipsIds = event.params.nfts
+    .filter((nft) => nft.token.toHexString() == SPACESHIP_ADDRESS)
+    .map<BigInt>((nft) => nft.tokenId)
 
-  const filteredTokenIds = filteredNfts.map<BigInt>((nft) => nft.tokenId)
-
-  if (filteredTokenIds.length == 0) {
+  if (!spaceshipsIds.length) {
     log.debug('[handleRentalOfferCreated] No spaceship nfts with valid address found in rental offer, tx: {}', [
       event.transaction.hash.toHex(),
     ])
     return
   }
 
-  const nfts = loadNfts(filteredTokenIds, COMETHSPACESHIP)
+  const foundNfts = loadNfts(spaceshipsIds, COMETHSPACESHIP)
 
-  if (!nfts.length) {
+  if (!foundNfts.length) {
     log.debug('[handleRentalOfferCreated] No valid spaceship nfts with valid id found in rental offer, tx: {}', [
       event.transaction.hash.toHex(),
     ])
@@ -41,7 +41,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // create rental offer
   const rentalOfferId = `${event.params.maker.toHexString()}-${event.params.nonce}`
   const rentalOffer = new RentalOffer(rentalOfferId)
-  rentalOffer.nfts = nfts.map<string>((nft) => nft.id)
+  rentalOffer.nfts = foundNfts.map<string>((foundNfts) => foundNfts.id)
   rentalOffer.lender = event.params.maker.toHexString()
   rentalOffer.createdAt = event.block.timestamp
   rentalOffer.creationTxHash = event.transaction.hash.toHex()
@@ -51,15 +51,9 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.feeToken = event.params.feeToken.toHexString()
   rentalOffer.save()
 
-  for (let i = 0; i < nfts.length; i++) {
-    const nft = nfts[i]
-    // no need to put as current rental offer, since the nft can have multiple rental offers at the same time
-    nft.rentalOfferHistory = nft.rentalOfferHistory.concat([rentalOfferId])
-    nft.save()
-    log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFT {}, tx: {}', [
-      rentalOfferId,
-      nft.id,
-      event.transaction.hash.toHex(),
-    ])
-  }
+  log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [
+    rentalOfferId,
+    rentalOffer.nfts.toString(),
+    event.transaction.hash.toHex(),
+  ])
 }

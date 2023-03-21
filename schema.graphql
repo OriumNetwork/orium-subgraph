@@ -36,8 +36,9 @@ type Nft @entity(immutable: false) {
 
   currentRental: Rental
   rentalHistory: [Rental!]! @derivedFrom(field: "nft")
+
   currentRentalOffer: RentalOffer
-  rentalOfferHistory: [RentalOffer!]!
+  rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nfts")
 }
 
 type Account @entity(immutable: false) {
@@ -52,10 +53,10 @@ type Rental @entity(immutable: false) {
   nft: Nft!
   borrower: Account!
   lender: Account!
-  start_date: BigInt! #TODO: change to camel case
+  startDate: BigInt!
   startedTxHash: String!
-  expiration_date: BigInt #TODO: change to camel case
-  ended_at: BigInt
+  expirationDate: BigInt
+  endedAt: BigInt
   endRentalHash: String
   rentalOffer: RentalOffer
 }
