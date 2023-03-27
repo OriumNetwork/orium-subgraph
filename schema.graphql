@@ -70,11 +70,10 @@ type RentalOffer @entity(immutable: false) {
   creationTxHash: String!
   cancellationTxHash: String
   duration: [BigInt!]
-  deadline: BigInt
   rental: Rental @derivedFrom(field: "rentalOffer")
   feeToken: String
   feeAmount: BigInt
-  expirationDate: BigInt
+  expirationDate: BigInt!
   profitShareTokens: [String!]
   profitShareSplit: [BigInt!]
 }

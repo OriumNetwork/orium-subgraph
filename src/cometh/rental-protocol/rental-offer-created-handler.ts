@@ -49,6 +49,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.deadline = event.params.deadline
   rentalOffer.feeAmount = event.params.feeAmount
   rentalOffer.feeToken = event.params.feeToken.toHexString()
+  rentalOffer.expirationDate = event.params.deadline
   rentalOffer.save()
 
   log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [
