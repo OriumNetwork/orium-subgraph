@@ -74,7 +74,7 @@ type RentalOffer @entity(immutable: false) {
   rental: Rental @derivedFrom(field: "rentalOffer")
   feeToken: String
   feeAmount: BigInt
-  expirationDate: BigInt
+  expirationDate: BigInt!
   profitShareTokens: [String!]
   profitShareSplit: [BigInt!]
 }
