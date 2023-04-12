@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { GotchiLendingExecuted } from '../../../generated/AavegotchiDiamond/AavegotchiDiamond'
-import { Nft, Rental } from '../../../generated/schema'
+import { Nft, Rental, RentalOffer } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
 import { AAVEGOTCHI } from '../../utils/constants'
 
@@ -39,6 +39,24 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
     log.warning('[handleGotchiLendingExecuted] NFT {} has no rental offer, skipping...', [nft.id])
     return
   }
+  
+  const rentalOffer = RentalOffer.load(currentRentalOfferId!)
+
+  if (!rentalOffer) {
+    throw new Error(
+      '[handleGotchiLendingExecuted] No rental offer with id ' +
+        currentRentalOfferId! +
+        ' was found for token id: ' +
+        event.params.tokenId.toString() +
+        ', lender: ' +
+        event.params.lender.toHexString() +
+        ', tx: ' +
+        event.transaction.hash.toHex() 
+    )
+  }
+
+  rentalOffer.executedTxHash = event.transaction.hash.toHex()
+  rentalOffer.save()
 
   const previoustRental = nft.currentRental
   if (previoustRental) {

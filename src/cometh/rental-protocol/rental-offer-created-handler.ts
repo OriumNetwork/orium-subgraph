@@ -46,7 +46,6 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.createdAt = event.block.timestamp
   rentalOffer.creationTxHash = event.transaction.hash.toHex()
   rentalOffer.duration = event.params.nfts.map<BigInt>((nft) => nft.duration)
-  rentalOffer.deadline = event.params.deadline
   rentalOffer.feeAmount = event.params.feeAmount
   rentalOffer.feeToken = event.params.feeToken.toHexString()
   rentalOffer.expirationDate = event.params.deadline
