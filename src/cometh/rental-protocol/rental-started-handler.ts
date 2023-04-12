@@ -39,7 +39,7 @@ export function handleRentalStarted(event: RentalStarted): void {
     return
   }
   
-  rentalOffer.executedTxHash = txHash
+  rentalOffer.executionTxHash = txHash
   rentalOffer.save()
 
   const nftId = generateNftId(COMETHSPACESHIP, tokenId)

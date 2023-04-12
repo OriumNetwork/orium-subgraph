@@ -55,7 +55,7 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
     )
   }
 
-  rentalOffer.executedTxHash = event.transaction.hash.toHex()
+  rentalOffer.executionTxHash = event.transaction.hash.toHex()
   rentalOffer.save()
 
   const previoustRental = nft.currentRental
