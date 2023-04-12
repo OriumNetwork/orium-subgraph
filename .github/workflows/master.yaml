@@ -48,4 +48,6 @@ jobs:
         run: npm run deploy-matic
       - name: Subgraph Deploy Polygon Satsuma
         run: npx graph deploy orium-subgraph --version-label ${{ github.sha }} --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key ${{ secrets.SATSUMA_DEPLOY_KEY }}
-
+      - name: Subgraph Promote Satsuma
+        run: |
+              curl -X POST https://app.satsuma.xyz/api/subgraphs/8c268d3e8b83112a7d0c732a9b88ba1c732da600bffaf68790171b9a0b5d5394/orium-subgraph/${{ github.sha }}/auto-promote-live -H "Content-Type: application/json" -H "x-api-key: ${{ secrets.SATSUMA_DEPLOY_KEY }}"
