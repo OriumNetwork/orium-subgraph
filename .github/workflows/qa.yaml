@@ -1,0 +1,42 @@
+name: Build
+on:
+  push:
+    branches:
+      - qa
+jobs:
+  build_test_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 16
+      - name: Install Dependencies
+        run: npm ci
+        # Goerli
+      - name: Code Generator Goerli
+        run: npm run codegen-goerli
+      - name: Build Goerli
+        run: npm run build-goerli
+#      - name: Goerli Test
+#        run: npm run test-goerli
+        # Mumbai
+      - name: Code Generator Mumbai
+        run: npm run codegen-mumbai
+      - name: Build Mumbai
+        run: npm run build-mumbai
+      - name: Mumbai Test
+        run: npm run test-mumbai
+        # Polygon
+      - name: Code Generator Polygon
+        run: npm run codegen-matic
+      - name: Build Polygon
+        run: npm run build-matic
+      - name: Polygon Test
+        run: npm run test-matic
+      - name: Subraph Deploy Satsuma QA
+        run: npx graph deploy orium-subgraph --version-label qa --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key ${{ secrets.SATSUMA_DEPLOY_KEY }}
