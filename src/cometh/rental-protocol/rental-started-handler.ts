@@ -38,6 +38,9 @@ export function handleRentalStarted(event: RentalStarted): void {
     )
     return
   }
+  
+  rentalOffer.executionTxHash = txHash
+  rentalOffer.save()
 
   const nftId = generateNftId(COMETHSPACESHIP, tokenId)
   const nft = Nft.load(nftId)
