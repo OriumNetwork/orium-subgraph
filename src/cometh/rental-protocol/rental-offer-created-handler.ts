@@ -51,6 +51,18 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.expirationDate = event.params.deadline
   rentalOffer.save()
 
+  for (let i = 0; i < foundNfts.length; i++) {
+    const foundNft = foundNfts[i]
+
+    if (!foundNft.rentalOfferHistory) {
+      foundNft.rentalOfferHistory = [rentalOfferId];
+    } else {
+      foundNft.rentalOfferHistory = foundNft.rentalOfferHistory!.concat([rentalOfferId]);
+    }
+
+    foundNft.save()
+  }
+
   log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [
     rentalOfferId,
     rentalOffer.nfts.toString(),

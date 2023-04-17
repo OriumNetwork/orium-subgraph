@@ -38,7 +38,7 @@ type Nft @entity(immutable: false) {
   rentalHistory: [Rental!]! @derivedFrom(field: "nft")
 
   currentRentalOffer: RentalOffer
-  rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nfts")
+  rentalOfferHistory: [RentalOffer!]
 }
 
 type Account @entity(immutable: false) {
