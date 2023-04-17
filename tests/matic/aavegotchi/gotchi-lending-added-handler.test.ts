@@ -53,6 +53,7 @@ describe("Aavegotchi Rentals", () => {
     const rentalOfferId = `${event.transaction.hash.toHex()}-${event.logIndex.toString()}`;
     const nftId = "AAVEGOTCHI-" + tokenId;
     assert.fieldEquals("Nft", nftId, "currentRentalOffer", rentalOfferId);
+    assert.fieldEquals("Nft", nftId, "rentalOfferHistory", `[${rentalOfferId}]`);
     assert.fieldEquals("RentalOffer", rentalOfferId, "nfts", `[${nftId}]`);
     assert.fieldEquals("RentalOffer", rentalOfferId, "lender", lender);
     assert.fieldEquals(
@@ -114,6 +115,7 @@ describe("Aavegotchi Rentals", () => {
     const nftId = "AAVEGOTCHI-" + tokenId;
 
     assert.fieldEquals("Nft", nftId, "currentRentalOffer", rentalOfferId);
+    assert.fieldEquals("Nft", nftId, "rentalOfferHistory", `[${rentalOfferId}]`);
     assert.fieldEquals("RentalOffer", rentalOfferId, "nfts", `[${nftId}]`);
     assert.fieldEquals("RentalOffer", rentalOfferId, "lender", lender);
     assert.fieldEquals(

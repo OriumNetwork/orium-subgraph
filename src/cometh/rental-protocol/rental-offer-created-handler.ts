@@ -2,7 +2,7 @@ import { BigInt } from '@graphprotocol/graph-ts'
 import { RentalOffer } from '../../../generated/schema'
 import { COMETHSPACESHIP } from '../../utils/constants'
 import { RentalOfferCreated } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
-import { loadNfts } from '../../utils/misc'
+import { loadNfts, updateNftRentalOfferHistory } from '../../utils/misc'
 import { log } from '@graphprotocol/graph-ts'
 import { SPACESHIP_ADDRESS } from '../../utils/addresses'
 /**
@@ -52,15 +52,7 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.save()
 
   for (let i = 0; i < foundNfts.length; i++) {
-    const foundNft = foundNfts[i]
-
-    if (!foundNft.rentalOfferHistory) {
-      foundNft.rentalOfferHistory = [rentalOfferId];
-    } else {
-      foundNft.rentalOfferHistory = foundNft.rentalOfferHistory!.concat([rentalOfferId]);
-    }
-
-    foundNft.save()
+    updateNftRentalOfferHistory(rentalOffer, foundNfts[i]);
   }
 
   log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [

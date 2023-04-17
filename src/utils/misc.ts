@@ -50,3 +50,11 @@ export function loadRentalOffer(rentalOfferId: string): RentalOffer {
 
   return rentalOffer;
 }
+
+export function updateNftRentalOfferHistory(
+  rentalOffer: RentalOffer,
+  nft: Nft
+): void {
+  nft.rentalOfferHistory = nft.rentalOfferHistory ? nft.rentalOfferHistory!.concat([rentalOffer.id]) : [rentalOffer.id];
+  nft.save();
+}

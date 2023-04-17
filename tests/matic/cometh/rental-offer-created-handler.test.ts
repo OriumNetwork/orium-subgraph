@@ -39,6 +39,7 @@ describe('Cometh - Rental Offer Created Event', () => {
     const rentalOfferId = `${maker}-${nonce}`
     const nftId = `${COMETHSPACESHIP}-${tokenId}`
 
+    assert.fieldEquals('Nft', nftId, 'rentalOfferHistory', `[${rentalOfferId}]`)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'nfts', `[${nftId}]`)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'lender', maker)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'createdAt', event.block.timestamp.toString())
