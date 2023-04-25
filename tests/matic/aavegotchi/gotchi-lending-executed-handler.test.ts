@@ -84,7 +84,7 @@ describe('Start a Aavegotchi Rental', () => {
 
       assert.fieldEquals('Rental', rentalId, 'nft', nftId)
       assert.fieldEquals('Rental', rentalId, 'lender', lender)
-      assert.fieldEquals('Rental', rentalId, 'startDate', event.block.timestamp.toString())
+      assert.fieldEquals('Rental', rentalId, 'startedAt', event.block.timestamp.toString())
       assert.fieldEquals('Rental', rentalId, 'startedTxHash', event.block.hash.toHex())
       assert.fieldEquals('Rental', rentalId, 'rentalOffer', rentalOfferId!)
 

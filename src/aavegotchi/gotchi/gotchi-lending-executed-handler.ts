@@ -39,19 +39,19 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
     log.warning('[handleGotchiLendingExecuted] NFT {} has no rental offer, skipping...', [nft.id])
     return
   }
-  
+
   const rentalOffer = RentalOffer.load(currentRentalOfferId!)
 
   if (!rentalOffer) {
     throw new Error(
       '[handleGotchiLendingExecuted] No rental offer with id ' +
-        currentRentalOfferId! +
-        ' was found for token id: ' +
-        event.params.tokenId.toString() +
-        ', lender: ' +
-        event.params.lender.toHexString() +
-        ', tx: ' +
-        event.transaction.hash.toHex() 
+      currentRentalOfferId! +
+      ' was found for token id: ' +
+      event.params.tokenId.toString() +
+      ', lender: ' +
+      event.params.lender.toHexString() +
+      ', tx: ' +
+      event.transaction.hash.toHex()
     )
   }
 
@@ -62,11 +62,11 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   if (previoustRental) {
     throw new Error(
       '[handleGotchiLendingExecuted] NFT ' +
-        nftId +
-        ' already has a rental ' +
-        previoustRental +
-        ', tx: ' +
-        event.transaction.hash.toHex()
+      nftId +
+      ' already has a rental ' +
+      previoustRental +
+      ', tx: ' +
+      event.transaction.hash.toHex()
     )
   }
 
@@ -74,9 +74,10 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   currentRental.nft = nftId
   currentRental.lender = event.params.lender.toHexString().toLowerCase()
   currentRental.borrower = event.params.borrower.toHexString().toLowerCase()
-  currentRental.startDate = event.block.timestamp
+  currentRental.startedAt = event.block.timestamp
   currentRental.startedTxHash = event.transaction.hash.toHex()
   currentRental.rentalOffer = currentRentalOfferId
+  currentRental.expirationDate = event.block.timestamp.plus(event.params.timeAgreed);
   currentRental.save()
 
   // remove current rental offer from nft, because it has been executed, and link rental to nft

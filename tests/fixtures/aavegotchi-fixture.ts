@@ -166,20 +166,20 @@ export function createMockRental(
   nft: string,
   borrower: string,
   lender: string,
-  startDate: string,
+  startedAt: string,
   startedTxHash: string,
   expirationDate: string | null = null,
-  endRentalHash: string | null = null,
+  endedTxHash: string | null = null,
   rentalOffer: string | null = null
 ): Rental {
   const rental = new Rental(id)
   rental.nft = nft
   rental.borrower = borrower
   rental.lender = lender
-  rental.startDate = BigInt.fromString(startDate)
+  rental.startedAt = BigInt.fromString(startedAt)
   rental.startedTxHash = startedTxHash
   rental.expirationDate = expirationDate ? BigInt.fromString(expirationDate) : null
-  rental.endRentalHash = endRentalHash || null
+  rental.endedTxHash = endedTxHash || null
   rental.rentalOffer = rentalOffer || null
   rental.save()
 
@@ -192,10 +192,10 @@ type Rental @entity(immutable: false) {
   nft: Nft!
   borrower: Account!
   lender: Account!
-  startDate: BigInt! #TODO: change to camel case
+  startedAt: BigInt! #TODO: change to camel case
   startedTxHash: String!
   expirationDate: BigInt #TODO: change to camel case
-  endRentalHash: String
+  endedTxHash: String
   rentalOffer: RentalOffer
 }
  */

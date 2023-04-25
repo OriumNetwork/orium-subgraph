@@ -29,9 +29,9 @@ export function handleRentalEnded(event: RentalEnded): void {
   if (!nft) {
     throw new Error(
       '[handleRentalEnded] Spaceship ' +
-        event.params.tokenId.toString() +
-        ' does not exist, tx: ' +
-        event.transaction.hash.toHex()
+      event.params.tokenId.toString() +
+      ' does not exist, tx: ' +
+      event.transaction.hash.toHex()
     )
   }
 
@@ -51,7 +51,7 @@ export function handleRentalEnded(event: RentalEnded): void {
 
   // update rental
   currentRental.endedAt = event.block.timestamp
-  currentRental.endRentalHash = event.transaction.hash.toHex()
+  currentRental.endedTxHash = event.transaction.hash.toHex()
   currentRental.save()
 
   // remove current rental from nft, because it ended

@@ -17,7 +17,7 @@ import { log } from "@graphprotocol/graph-ts";
  *       NFT[] nfts,
  *       address feeToken,
  *       uint256 feeAmount,
- *       uint256 deadline
+ *       uint256 expirationDate
  *   );
  */
 
@@ -28,7 +28,7 @@ export function createRentalOfferCreatedEvent(
   nfts: ComethNFT[],
   feeToken: string,
   feeAmount: string,
-  deadline: string
+  expirationDate: string
 ): RentalOfferCreated {
   const event = changetype<RentalOfferCreated>(newMockEvent());
   let nftsTuple: ethereum.Tuple[] = new Array<ethereum.Tuple>();
@@ -58,7 +58,7 @@ export function createRentalOfferCreatedEvent(
   );
   event.parameters.push(buildEventParamAddress("feeToken", feeToken));
   event.parameters.push(buildEventParamUint("feeAmount", feeAmount));
-  event.parameters.push(buildEventParamUint("deadline", deadline));
+  event.parameters.push(buildEventParamUint("expirationDate", expirationDate));
   return event;
 }
 

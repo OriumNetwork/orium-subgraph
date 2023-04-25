@@ -23,7 +23,7 @@ let nfts: ComethNFT[] = [
 ]
 const feeToken = '0x44a6e0be76e1d9620a7f76588e4509fe4fa8e8c8'
 const feeAmount = '1000000000000000000'
-const deadline = '1675888946'
+const expirationDate = '1675888946'
 const rentalOfferId = `${maker}-${nonce}`
 
 describe('Cometh - Rental Offer Cancelled Event', () => {
@@ -59,7 +59,7 @@ describe('Cometh - Rental Offer Cancelled Event', () => {
         nfts[0].duration,
         [nfts[0].basisPoints],
         [feeToken],
-        deadline
+        expirationDate
       )
 
       rentalOffer.id = rentalOfferId
