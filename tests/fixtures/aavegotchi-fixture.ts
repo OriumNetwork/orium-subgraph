@@ -185,17 +185,3 @@ export function createMockRental(
 
   return rental
 }
-
-/* 
-type Rental @entity(immutable: false) {
-  id: ID!
-  nft: Nft!
-  borrower: Account!
-  lender: Account!
-  startedAt: BigInt! #TODO: change to camel case
-  startedTxHash: String!
-  expirationDate: BigInt #TODO: change to camel case
-  endedTxHash: String
-  rentalOffer: RentalOffer
-}
- */

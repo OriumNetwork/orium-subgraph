@@ -17,7 +17,7 @@ import { log } from "@graphprotocol/graph-ts";
  *       NFT[] nfts,
  *       address feeToken,
  *       uint256 feeAmount,
- *       uint256 expirationDate
+ *       uint256 deadline
  *   );
  */
 
@@ -58,7 +58,7 @@ export function createRentalOfferCreatedEvent(
   );
   event.parameters.push(buildEventParamAddress("feeToken", feeToken));
   event.parameters.push(buildEventParamUint("feeAmount", feeAmount));
-  event.parameters.push(buildEventParamUint("expirationDate", expirationDate));
+  event.parameters.push(buildEventParamUint("deadline", expirationDate));
   return event;
 }
 
