@@ -44,7 +44,7 @@ export function handleUpdateUser(event: UpdateUser): void {
   rental.nft = generateNftId(TYPE, tokenId)
   rental.borrower = userAccount.id
   rental.lender = nft.currentOwner
-  rental.startDate = event.block.timestamp
+  rental.startedAt = event.block.timestamp
   rental.expirationDate = expires
   rental.save()
 
@@ -69,12 +69,12 @@ function updatePreviousRental(nft: Nft, blockTimestamp: BigInt): void {
 
   const rental = loadRental(previousRentalId!)
 
-  if (rental.expirationDate) {
-    if (rental.expirationDate!.lt(blockTimestamp)) {
+  if (rental.endedAt) {
+    if (rental.endedAt!.lt(blockTimestamp)) {
       return
     }
   }
 
-  rental.expirationDate = blockTimestamp
+  rental.endedAt = blockTimestamp
   rental.save()
 }

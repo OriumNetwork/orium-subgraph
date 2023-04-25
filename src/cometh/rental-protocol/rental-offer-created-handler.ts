@@ -1,6 +1,6 @@
 import { BigInt } from '@graphprotocol/graph-ts'
 import { RentalOffer } from '../../../generated/schema'
-import { COMETHSPACESHIP } from '../../utils/constants'
+import { COMETHSPACESHIP, ZERO_ADDRESS } from '../../utils/constants'
 import { RentalOfferCreated } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
 import { loadNfts } from '../../utils/misc'
 import { log } from '@graphprotocol/graph-ts'
@@ -49,6 +49,11 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   rentalOffer.feeAmount = event.params.feeAmount
   rentalOffer.feeToken = event.params.feeToken.toHexString()
   rentalOffer.expirationDate = event.params.deadline
+
+  if (event.params.taker.toHexString() != ZERO_ADDRESS) {
+    rentalOffer.taker = event.params.taker.toHexString()
+  }
+
   rentalOffer.save()
 
   log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [

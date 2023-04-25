@@ -38,7 +38,7 @@ export function handleRentalStarted(event: RentalStarted): void {
     )
     return
   }
-  
+
   rentalOffer.executionTxHash = txHash
   rentalOffer.save()
 
@@ -61,7 +61,7 @@ export function handleRentalStarted(event: RentalStarted): void {
   currentRental.nft = nftId
   currentRental.lender = event.params.lender.toHexString()
   currentRental.borrower = event.params.tenant.toHexString()
-  currentRental.startDate = event.block.timestamp
+  currentRental.startedAt = event.block.timestamp
   currentRental.startedTxHash = txHash
   currentRental.rentalOffer = rentalOffer.id
   currentRental.expirationDate = event.params.end

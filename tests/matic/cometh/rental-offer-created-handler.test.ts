@@ -20,7 +20,7 @@ let nfts: ComethNFT[] = [
 ]
 const feeToken = '0x44a6e0be76e1d9620a7f76588e4509fe4fa8e8c8'
 const feeAmount = '1000000000000000000'
-const deadline = '1675888946'
+const expirationDate = '1675888946'
 
 describe('Cometh - Rental Offer Created Event', () => {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Cometh - Rental Offer Created Event', () => {
   })
 
   test('Should create rental offer', () => {
-    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, deadline)
+    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, expirationDate)
 
     handleRentalOfferCreated(event)
 
@@ -50,14 +50,14 @@ describe('Cometh - Rental Offer Created Event', () => {
   test('Should skip create rental offer if token id is invalid', () => {
     const invalidTokenId = '0'
     nfts[0].tokenId = invalidTokenId
-    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, deadline)
+    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, expirationDate)
     assert.entityCount('RentalOffer', 0)
     handleRentalOfferCreated(event)
     assert.entityCount('RentalOffer', 0)
   })
   test('Should skip create rental offer if token address is invalid', () => {
     nfts[0].token = ZERO_ADDRESS
-    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, deadline)
+    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, expirationDate)
     assert.entityCount('RentalOffer', 0)
     handleRentalOfferCreated(event)
     assert.entityCount('RentalOffer', 0)

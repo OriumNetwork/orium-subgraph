@@ -44,6 +44,10 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   rentalOffer.feeToken = GHST_TOKEN_ADDRESS;
   rentalOffer.expirationDate = MAX_UINT256;
 
+  if (event.params.whitelistId != BigInt.fromI32(0)) {
+    rentalOffer.taker = event.params.whitelistId.toString();
+  }
+
   rentalOffer.profitShareTokens = event.params.revenueTokens.map<string>((t) =>
     t.toHex().toLowerCase()
   );
