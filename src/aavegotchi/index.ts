@@ -5,3 +5,6 @@ export { handleGotchiLendingAdded } from "./gotchi/gotchi-lending-added-handler"
 export { handleGotchiLendingExecuted } from "./gotchi/gotchi-lending-executed-handler";
 export { handleGotchiLendingEnded } from "./gotchi/gotchi-lending-ended-handler";
 export { handleGotchiLendingCancelled } from "./gotchi/gotchi-lending-cancelled-handler";
+export { handleChannelAlchemica } from "./realm/channel-alchemica-handler";
+export { handleAlchemicaClaimed } from "./realm/alchemica-claimed-handler";
+export { handleTransferTokensToGotchi } from "./realm/transfer-tokens-to-gotchi-handler";

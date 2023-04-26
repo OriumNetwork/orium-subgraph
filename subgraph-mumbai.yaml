@@ -33,6 +33,12 @@ dataSources:
           handler: handleGotchiLendingExecuted
         - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
           handler: handleGotchiLendingEnded
+        - event: ChannelAlchemica(indexed uint256,indexed uint256,uint256[4],uint256,uint256)
+          handler: handleChannelAlchemica
+        - event: AlchemicaClaimed(indexed uint256,indexed uint256,indexed uint256,uint256,uint256,uint256)
+          handler: handleAlchemicaClaimed
+        - event: TransferTokensToGotchi(indexed address,indexed uint256,address,uint256)
+          handler: handleTransferTokensToGotchi
       file: ./src/aavegotchi/index.ts
 
   # (Aavegotchi) Realm

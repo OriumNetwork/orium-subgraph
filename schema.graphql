@@ -80,6 +80,16 @@ type RentalOffer @entity(immutable: false) {
   profitShareSplit: [BigInt!]
 }
 
+type RentalEarning @entity(immutable: false) {
+  id: ID! # ${txHash}-${logIndex}
+  tokenAddress: String!
+  amount: BigInt!
+  nft: Nft!
+  rental: Rental!
+  txHash: String!
+  timestamp: BigInt!
+}
+
 type ClaimedToken @entity {
   id: ID!
   rental: Rental!
