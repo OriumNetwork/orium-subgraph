@@ -15,13 +15,13 @@ import { Nft, RentalEarning } from "../../../generated/schema";
  */
 export function handleChannelAlchemica(event: ChannelAlchemica): void {
     const realmId = generateNftId(AAVEGOTCHI_LAND, event.params._realmId);
-    handleAlchemicaForNft(event, realmId);
+    handleChannelAlchemicaForNft(event, realmId);
 
     const gotchiId = generateNftId(AAVEGOTCHI, event.params._gotchiId);
-    handleAlchemicaForNft(event, gotchiId);
+    handleChannelAlchemicaForNft(event, gotchiId);
 }
 
-function handleAlchemicaForNft(event: ChannelAlchemica, nftId: string): void{
+function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string): void {
     const nft = Nft.load(nftId);
 
     if (!nft) {
@@ -31,30 +31,30 @@ function handleAlchemicaForNft(event: ChannelAlchemica, nftId: string): void{
 
     const rentalId = nft.currentRental;
 
-    if(!rentalId){
+    if (!rentalId) {
         log.debug("[handleChannelAlchemica] Nft {} has no rental, tx: {}", [nftId, event.transaction.hash.toHexString()]);
         return;
     }
 
-    for(let i = 0; i < event.params._alchemica.length; i++) {
-    const rentalEarning = new RentalEarning(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}-${i}`);
-    rentalEarning.tokenAddress = ALCHEMICA_TYPE_TO_ADDRESS[i];
-    rentalEarning.amount = event.params._alchemica[i];
-    rentalEarning.nft = nftId;
-    rentalEarning.rental = rentalId!;
-    rentalEarning.txHash = event.transaction.hash.toHex();
-    rentalEarning.timestamp = event.block.timestamp;
-    rentalEarning.save();
+    for (let i = 0; i < event.params._alchemica.length; i++) {
+        const rentalEarning = new RentalEarning(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}-${i}`);
+        rentalEarning.tokenAddress = ALCHEMICA_TYPE_TO_ADDRESS[i];
+        rentalEarning.amount = event.params._alchemica[i];
+        rentalEarning.nft = nftId;
+        rentalEarning.rental = rentalId!;
+        rentalEarning.txHash = event.transaction.hash.toHex();
+        rentalEarning.timestamp = event.block.timestamp;
+        rentalEarning.save();
 
-    log.warning("[handleChannelAlchemica] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}", [
-        rentalEarning.tokenAddress,
-        rentalEarning.amount.toString(),
-        rentalEarning.nft,
-        rentalEarning.rental,
-        rentalEarning.txHash,
-        rentalEarning.timestamp.toString()
-    ]);
-}
+        log.warning("[handleChannelAlchemica] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}", [
+            rentalEarning.tokenAddress,
+            rentalEarning.amount.toString(),
+            rentalEarning.nft,
+            rentalEarning.rental,
+            rentalEarning.txHash,
+            rentalEarning.timestamp.toString()
+        ]);
+    }
 }
 
 
