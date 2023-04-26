@@ -59,6 +59,7 @@ type Rental @entity(immutable: false) {
   endedTxHash: String
   expirationDate: BigInt
   rentalOffer: RentalOffer
+  rentalEarnings: [RentalEarning!] @derivedFrom(field: "rental")
 }
 
 type RentalOffer @entity(immutable: false) {
