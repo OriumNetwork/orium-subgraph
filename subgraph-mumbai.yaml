@@ -33,12 +33,6 @@ dataSources:
           handler: handleGotchiLendingExecuted
         - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
           handler: handleGotchiLendingEnded
-        - event: ChannelAlchemica(indexed uint256,indexed uint256,uint256[4],uint256,uint256)
-          handler: handleChannelAlchemica
-        - event: AlchemicaClaimed(indexed uint256,indexed uint256,indexed uint256,uint256,uint256,uint256)
-          handler: handleAlchemicaClaimed
-        - event: TransferTokensToGotchi(indexed address,indexed uint256,address,uint256)
-          handler: handleTransferTokensToGotchi
       file: ./src/aavegotchi/index.ts
 
   # (Aavegotchi) Realm
@@ -47,7 +41,7 @@ dataSources:
     network: mumbai
     source:
       address: "0x726f201a9ab38cd56d60ee392165f1434c4f193d"
-      abi: AavegotchiDiamond
+      abi: RealmDiamond
       startBlock: 20667840
     mapping:
       kind: ethereum/events
@@ -56,11 +50,17 @@ dataSources:
       entities:
         - Transfer
       abis:
-        - name: AavegotchiDiamond
-          file: ./abis/AavegotchiDiamond.json
+        - name: RealmDiamond
+          file: ./abis/RealmDiamond.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
+        - event: ChannelAlchemica(indexed uint256,indexed uint256,uint256[4],uint256,uint256)
+          handler: handleChannelAlchemica
+        - event: AlchemicaClaimed(indexed uint256,indexed uint256,indexed uint256,uint256,uint256,uint256)
+          handler: handleAlchemicaClaimed
+        - event: TransferTokensToGotchi(indexed address,indexed uint256,address,uint256)
+          handler: handleTransferTokensToGotchi
       file: ./src/aavegotchi/index.ts
   # (NovaCreed) Avatar
   - kind: ethereum
