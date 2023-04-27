@@ -13,7 +13,7 @@ export const MAX_UINT256 = BigInt.fromString("1157920892373161954235709850086879
 
 export const ALCHEMICA_TYPE_TO_ADDRESS = [FUD_TOKEN_ADDRESS, FOMO_TOKEN_ADDRESS, ALPHA_TOKEN_ADDRESS, KEK_TOKEN_ADDRESS];
 
-export const REWARDS_DISTRIBUTED_EVENT = "RewardsDistributed";
-export const ALCHEMICA_CLAIMED_EVENT = "AlchemicaClaimed";
-export const CHANNEL_ALCHEMICA_EVENT = "ChannelAlchemicaClaimed";
-export const TRANSFER_TOKENS_TO_GOTCHI_EVENT = "TransferTokensToAavegotchi";
+export const REWARDS_DISTRIBUTED_EVENT = "Player Rewards";
+export const ALCHEMICA_CLAIMED_EVENT = "Farming";
+export const CHANNEL_ALCHEMICA_EVENT = "Channeling";
+export const TRANSFER_TOKENS_TO_GOTCHI_EVENT = "Vortex";
