@@ -89,6 +89,7 @@ type RentalEarning @entity(immutable: false) {
   rental: Rental!
   txHash: String!
   timestamp: BigInt!
+  eventName: String!
 }
 
 type ClaimedToken @entity {

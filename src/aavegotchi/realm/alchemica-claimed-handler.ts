@@ -1,7 +1,7 @@
 import { log } from "matchstick-as";
 import { AlchemicaClaimed } from "../../../generated/Realm/RealmDiamond";
 import { generateNftId } from "../../utils/misc";
-import { AAVEGOTCHI, AAVEGOTCHI_LAND, ALCHEMICA_TYPE_TO_ADDRESS } from "../../utils/constants";
+import { AAVEGOTCHI, AAVEGOTCHI_LAND, ALCHEMICA_CLAIMED_EVENT, ALCHEMICA_TYPE_TO_ADDRESS } from "../../utils/constants";
 import { Nft, RentalEarning } from "../../../generated/schema";
 
 /**
@@ -22,7 +22,7 @@ export function handleAlchemicaClaimed(event: AlchemicaClaimed): void {
     handleAlchemicaForNft(event, gotchiId);
 }
 
-function handleAlchemicaForNft(event: AlchemicaClaimed, nftId: string): void{
+function handleAlchemicaForNft(event: AlchemicaClaimed, nftId: string): void {
     const nft = Nft.load(nftId);
 
     if (!nft) {
@@ -32,7 +32,7 @@ function handleAlchemicaForNft(event: AlchemicaClaimed, nftId: string): void{
 
     const rentalId = nft.currentRental;
 
-    if(!rentalId){
+    if (!rentalId) {
         log.debug("[handleAlchemicaClaimed] Nft {} has no rental, tx: {}", [nftId, event.transaction.hash.toHexString()]);
         return;
     }
@@ -44,15 +44,17 @@ function handleAlchemicaForNft(event: AlchemicaClaimed, nftId: string): void{
     rentalEarning.rental = rentalId!;
     rentalEarning.txHash = event.transaction.hash.toHex();
     rentalEarning.timestamp = event.block.timestamp;
+    rentalEarning.eventName = ALCHEMICA_CLAIMED_EVENT;
     rentalEarning.save();
 
-    log.warning("[handleAlchemicaClaimed] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}", [
+    log.warning("[handleAlchemicaClaimed] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}, eventName {}", [
         rentalEarning.tokenAddress,
         rentalEarning.amount.toString(),
         rentalEarning.nft,
         rentalEarning.rental,
         rentalEarning.txHash,
-        rentalEarning.timestamp.toString()
+        rentalEarning.timestamp.toString(),
+        rentalEarning.eventName
     ]);
 }
 

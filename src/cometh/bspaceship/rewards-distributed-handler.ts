@@ -35,14 +35,16 @@ export function handleRewardsDistributed(event: RewardsDistributed): void {
   rentalEarning.rental = rentalId!;
   rentalEarning.txHash = event.transaction.hash.toHex();
   rentalEarning.timestamp = event.block.timestamp;
+  rentalEarning.eventName = event.logType ? event.logType!.toString() : "";
   rentalEarning.save();
 
-  log.warning("[handleRewardsDistributed] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}", [
+  log.warning("[handleRewardsDistributed] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}, eventName {}", [
     rentalEarning.tokenAddress,
     rentalEarning.amount.toString(),
     rentalEarning.nft,
     rentalEarning.rental,
     rentalEarning.txHash,
-    rentalEarning.timestamp.toString()
+    rentalEarning.timestamp.toString(),
+    rentalEarning.eventName,
   ]);
 }
