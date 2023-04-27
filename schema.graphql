@@ -59,6 +59,7 @@ type Rental @entity(immutable: false) {
   endedTxHash: String
   expirationDate: BigInt
   rentalOffer: RentalOffer
+  rentalEarnings: [RentalEarning!] @derivedFrom(field: "rental")
 }
 
 type RentalOffer @entity(immutable: false) {
@@ -78,6 +79,17 @@ type RentalOffer @entity(immutable: false) {
   expirationDate: BigInt!
   profitShareTokens: [String!]
   profitShareSplit: [BigInt!]
+}
+
+type RentalEarning @entity(immutable: false) {
+  id: ID! # ${txHash}-${logIndex}
+  tokenAddress: String!
+  amount: BigInt!
+  nft: Nft!
+  rental: Rental!
+  txHash: String!
+  timestamp: BigInt!
+  eventName: String!
 }
 
 type ClaimedToken @entity {
