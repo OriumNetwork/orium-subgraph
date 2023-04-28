@@ -13,8 +13,8 @@ const TYPE = "AAVEGOTCHI_LAND";
   *      );
   * 
   *  Action Rights:
-  *     0: Channeling
-  *     1: Empty Reservoir
+  *     0: Channeling -> whitelist
+  *     1: Empty Reservoir -> ?
   *     2: Equip Installations
   *     3: Equip Tiles
   *     4: Unequip Installations
@@ -27,8 +27,17 @@ const TYPE = "AAVEGOTCHI_LAND";
   *     2: Whitelisted Only
   *     3: Allow blacklisted
   *     4: Anyone
+  * 
+  *  This event is only called when the access right is Whitelisted Only
   */
 export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
+
+  if (event.params._actionRight.notEqual(BigInt.zero())) {
+    // To start a rental, the action right must be Channeling
+    log.debug("Action right {} is not Channeling, tx: {}", [event.params._actionRight.toString(), event.transaction.hash.toHex()]);
+    return;
+  }
+
   const nftId = generateNftId(TYPE, event.params._realmId);
   const nft = Nft.load(nftId);
 
