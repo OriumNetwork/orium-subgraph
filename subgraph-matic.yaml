@@ -61,9 +61,7 @@ dataSources:
           handler: handleAlchemicaClaimed
         - event: ChannelAlchemica(indexed uint256,indexed uint256,uint256[4],uint256,uint256)
           handler: handleChannelAlchemica
-        - event: ParcelAccessRightSet(uint256,uint256,uint256)
-          handler: handleParcelAccessRightSet
-        - event: ParcelWhitelistSet(uint256 _realmId, uint256 _actionRight, uint256 _whitelistId);
+        - event: ParcelWhitelistSet(uint256,uint256,uint256)
           handler: handleParcelWhitelistSet
       file: ./src/aavegotchi/index.ts
 

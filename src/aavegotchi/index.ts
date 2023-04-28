@@ -8,5 +8,4 @@ export { handleGotchiLendingCancelled } from "./gotchi/gotchi-lending-cancelled-
 export { handleChannelAlchemica } from "./realm/channel-alchemica-handler";
 export { handleAlchemicaClaimed } from "./realm/alchemica-claimed-handler";
 export { handleTransferTokensToGotchi } from "./realm/transfer-tokens-to-gotchi-handler";
-export { handleParcelAccessRightSet } from "./realm/parcel-access-right-set-handler";
 export { handleParcelWhitelistSet } from "./realm/parcel-whitelist-set-handler";
