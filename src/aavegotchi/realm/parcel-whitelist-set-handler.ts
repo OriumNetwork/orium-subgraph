@@ -1,9 +1,10 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
 import { ParcelWhitelistSet } from "../../../generated/Realm/RealmDiamond";
-import { DirectRental, Nft } from "../../../generated/schema";
+import { AavegotchiLand, Nft } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
-
-const TYPE = "AAVEGOTCHI_LAND";
+import { AccessRight, ActionRight } from "../../utils/types";
+import { createDirectRental, endPreviousRental, updateLandRights } from "../../utils/land-rentals";
+import { AAVEGOTCHI_LAND } from "../../utils/constants";
 
 /**
   * event ParcelWhitelistSet(
@@ -31,14 +32,13 @@ const TYPE = "AAVEGOTCHI_LAND";
   *  This event is only called when the access right is Whitelisted Only
   */
 export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
-
-  if (event.params._actionRight.notEqual(BigInt.zero())) {
-    // To start a rental, the action right must be Channeling
-    log.debug("Action right {} is not Channeling, tx: {}", [event.params._actionRight.toString(), event.transaction.hash.toHex()]);
+  // To start a rental, the action right must be Channeling or Empty Reservoir
+  if (event.params._actionRight.gt(BigInt.fromI32(ActionRight.EMPTY_RESERVOIR))) {
+    log.debug("[handleParcelWhitelistSet] Action right {} is not Channeling or Empty Reservoir, tx: {}", [event.params._actionRight.toString(), event.transaction.hash.toHex()]);
     return;
   }
 
-  const nftId = generateNftId(TYPE, event.params._realmId);
+  const nftId = generateNftId(AAVEGOTCHI_LAND, event.params._realmId);
   const nft = Nft.load(nftId);
 
   if (!nft) {
@@ -46,21 +46,21 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
     return;
   }
 
-  const directRental = new DirectRental(`${event.transaction.hash.toHex()}-${event.logIndex.toString()}`);
-  directRental.nft = nft.id;
-  directRental.lender = nft.currentOwner;
-  directRental.taker = event.params._whitelistId.toHexString();
-  directRental.lender = nft.currentOwner;
-  directRental.startedAt = event.block.timestamp;
-  directRental.startedTxHash = event.transaction.hash.toHex();
-  directRental.save();
+  const land = AavegotchiLand.load(nft.id);
 
-  if(nft.currentDirectRental){
-    endPreviousRental(nft.currentDirectRental!, event.transaction.hash.toHex(), event.block.timestamp);
+  if (!land) {
+    log.debug("[handleParcelWhitelistSet] Land {} not found, tx: {}", [nft.id, event.transaction.hash.toHex()]);
+    return;
   }
 
-  nft.currentDirectRental = directRental.id;
-  nft.save();
+  // We always end the previous rental, if it exists
+  endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp);
+
+  // We update the land rights with the new access right and return the updated land
+  const updatedLand = updateLandRights(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY), event.params._whitelistId);
+
+  // If the access right is not ONLY_OWNER for both Channeling and Empty Reservoir, we create a new direct rental
+  const directRental = createDirectRental(nft, updatedLand, event.transaction.hash.toHex(), event.block.timestamp, event.logIndex);
 
   log.warning("[handleParcelWhitelistSet] nftId {}, directRentalId {}, lender {}, taker {}, startedAt {}, startedTxHash {}", [
     directRental.nft,
@@ -72,15 +72,3 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
   ]);
 }
 
-function endPreviousRental(previousRentalId: string, txHash: string, timestamp: BigInt): void {
-    const previousRental = DirectRental.load(previousRentalId);
-
-    if (!previousRental) {
-      log.debug("[handleParcelWhitelistSet] previous rental {} not found, tx: {}", [previousRentalId, txHash]);
-      return;
-    }
-
-    previousRental.endedAt = timestamp;
-    previousRental.endedTxHash = txHash;
-    previousRental.save();
-}
