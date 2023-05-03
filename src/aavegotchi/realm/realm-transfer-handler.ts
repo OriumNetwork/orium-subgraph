@@ -1,5 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { Transfer } from "../../../generated/Realm/RealmDiamond";
+import { Transfer } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { AavegotchiLand } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
 import { NftHandle } from "../../utils/nfthandle";
