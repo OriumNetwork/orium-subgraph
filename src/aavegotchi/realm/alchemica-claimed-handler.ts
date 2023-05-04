@@ -57,7 +57,7 @@ function handleAlchemicaForNft(event: AlchemicaClaimed, nftId: string, isDirectR
         rentalEarning.tokenAddress,
         rentalEarning.amount.toString(),
         rentalEarning.nft,
-        rentalEarning.rental!,
+        rentalId!,
         rentalEarning.txHash,
         rentalEarning.timestamp.toString(),
         rentalEarning.eventName

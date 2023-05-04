@@ -3,7 +3,7 @@ import { ParcelWhitelistSet } from "../../../generated/Realm/RealmDiamond";
 import { AavegotchiLand, Nft } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
 import { AccessRight, ActionRight } from "../../utils/types";
-import { createDirectRental, endPreviousRental, updateLandRights } from "../../utils/land-rentals";
+import { createDirectRental, endPreviousRental, isLandRightChanged, updateLandRights } from "../../utils/land-rentals";
 import { AAVEGOTCHI_LAND } from "../../utils/constants";
 
 /**
@@ -53,6 +53,12 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
     return;
   }
 
+  // If the land rights are not changed, we don't do anything
+  if (isLandRightChanged(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY), event.params._whitelistId)) {
+    log.warning("[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}", [nft.id, event.transaction.hash.toHex()]);
+    return;
+  }
+
   // We always end the previous rental, if it exists
   endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp);
 
@@ -71,4 +77,3 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
     directRental.startedTxHash,
   ]);
 }
-

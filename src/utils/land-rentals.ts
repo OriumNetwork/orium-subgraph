@@ -54,3 +54,12 @@ export function createDirectRental(nft: Nft, land: AavegotchiLand, txHash: strin
   
   return land
   }
+
+  export function isLandRightChanged(land: AavegotchiLand, actionRight: BigInt, accessRight: BigInt, whitelistId: BigInt): boolean {
+    // We skip the other action rights, so it MUST be Channeling or Empty Reservoir here
+    if (actionRight.equals(BigInt.fromI32(ActionRight.CHANNELING))) {
+      return land.channelingAccessRight.notEqual(accessRight) || land.channelingWhitelist.notEqual(whitelistId);
+    } else {
+      return land.emptyReservoirAccessRight.notEqual(accessRight) || land.emptyReservoirWhitelist.notEqual(whitelistId);
+    }
+  }

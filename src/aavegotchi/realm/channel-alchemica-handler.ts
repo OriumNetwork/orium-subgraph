@@ -57,7 +57,7 @@ function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string, is
             rentalEarning.tokenAddress,
             rentalEarning.amount.toString(),
             rentalEarning.nft,
-            rentalEarning.rental!,
+            rentalId!,
             rentalEarning.txHash,
             rentalEarning.timestamp.toString(),
             rentalEarning.eventName

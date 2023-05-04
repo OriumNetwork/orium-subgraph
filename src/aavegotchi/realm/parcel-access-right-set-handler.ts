@@ -3,7 +3,7 @@ import { ParcelAccessRightSet } from "../../../generated/Realm/RealmDiamond";
 import { AavegotchiLand, Nft } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
 import { AccessRight, ActionRight } from "../../utils/types";
-import { endPreviousRental, createDirectRental, updateLandRights } from "../../utils/land-rentals";
+import { endPreviousRental, createDirectRental, updateLandRights, isLandRightChanged } from "../../utils/land-rentals";
 import { AAVEGOTCHI_LAND } from "../../utils/constants";
 
 /**
@@ -48,6 +48,12 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
 
   if (!land) {
     log.debug("[handleParcelAccessRightSet] Land {} not found, tx: {}", [nft.id, event.transaction.hash.toHex()]);
+    return;
+  }
+
+  // If the land rights are not changed, we don't do anything
+  if (isLandRightChanged(land, event.params._actionRight, event.params._accessRight, BigInt.zero())) {
+    log.warning("[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}", [nft.id, event.transaction.hash.toHex()]);
     return;
   }
 
