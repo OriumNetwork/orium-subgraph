@@ -54,7 +54,7 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
   }
 
   // If the land rights are not changed, we don't do anything
-  if (isLandRightChanged(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY), event.params._whitelistId)) {
+  if (!isLandRightChanged(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY), event.params._whitelistId)) {
     log.warning("[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}", [nft.id, event.transaction.hash.toHex()]);
     return;
   }

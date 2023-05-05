@@ -52,7 +52,7 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
   }
 
   // If the land rights are not changed, we don't do anything
-  if (isLandRightChanged(land, event.params._actionRight, event.params._accessRight, BigInt.zero())) {
+  if (!isLandRightChanged(land, event.params._actionRight, event.params._accessRight, BigInt.zero())) {
     log.warning("[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}", [nft.id, event.transaction.hash.toHex()]);
     return;
   }
