@@ -1,7 +1,7 @@
 import { log } from "@graphprotocol/graph-ts";
 import { RewardsDistributed } from "../../../generated/ComethBorrowedSpaceship/ComethBorrowedSpaceship";
 import { Nft, RentalEarning } from "../../../generated/schema";
-import { COMETHSPACESHIP } from "../../utils/constants";
+import { COMETHSPACESHIP, REWARDS_DISTRIBUTED_EVENT } from "../../utils/constants";
 import { generateNftId } from "../../utils/misc";
 /**
  * event RewardsDistributed(
@@ -35,14 +35,14 @@ export function handleRewardsDistributed(event: RewardsDistributed): void {
   rentalEarning.rental = rentalId!;
   rentalEarning.txHash = event.transaction.hash.toHex();
   rentalEarning.timestamp = event.block.timestamp;
-  rentalEarning.eventName = event.logType ? event.logType!.toString() : "";
+  rentalEarning.eventName = REWARDS_DISTRIBUTED_EVENT;
   rentalEarning.save();
 
   log.warning("[handleRewardsDistributed] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}, eventName {}", [
     rentalEarning.tokenAddress,
     rentalEarning.amount.toString(),
     rentalEarning.nft,
-    rentalEarning.rental,
+    rentalEarning.rental!,
     rentalEarning.txHash,
     rentalEarning.timestamp.toString(),
     rentalEarning.eventName,

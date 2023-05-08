@@ -15,13 +15,13 @@ import { Nft, RentalEarning } from "../../../generated/schema";
  */
 export function handleChannelAlchemica(event: ChannelAlchemica): void {
     const realmId = generateNftId(AAVEGOTCHI_LAND, event.params._realmId);
-    handleChannelAlchemicaForNft(event, realmId);
+    handleChannelAlchemicaForNft(event, realmId, true);
 
     const gotchiId = generateNftId(AAVEGOTCHI, event.params._gotchiId);
-    handleChannelAlchemicaForNft(event, gotchiId);
+    handleChannelAlchemicaForNft(event, gotchiId, false);
 }
 
-function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string): void {
+function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string, isDirectRental: boolean): void {
     const nft = Nft.load(nftId);
 
     if (!nft) {
@@ -29,7 +29,7 @@ function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string): v
         return;
     }
 
-    const rentalId = nft.currentRental;
+    const rentalId = isDirectRental ? nft.currentDirectRental : nft.currentRental;
 
     if (!rentalId) {
         log.debug("[handleChannelAlchemica] Nft {} has no rental, tx: {}", [nftId, event.transaction.hash.toHexString()]);
@@ -41,17 +41,23 @@ function handleChannelAlchemicaForNft(event: ChannelAlchemica, nftId: string): v
         rentalEarning.tokenAddress = ALCHEMICA_TYPE_TO_ADDRESS[i];
         rentalEarning.amount = event.params._alchemica[i];
         rentalEarning.nft = nftId;
-        rentalEarning.rental = rentalId!;
         rentalEarning.txHash = event.transaction.hash.toHex();
         rentalEarning.timestamp = event.block.timestamp;
         rentalEarning.eventName = CHANNEL_ALCHEMICA_EVENT;
+
+        if (isDirectRental) {
+            rentalEarning.directRental = rentalId!;
+        } else {
+            rentalEarning.rental = rentalId!;
+        }
+
         rentalEarning.save();
 
         log.warning("[handleChannelAlchemica] tokenAddress {}, amount {}, nftId {}, rentalId {}, txHash {}, timestamp {}, eventName {}", [
             rentalEarning.tokenAddress,
             rentalEarning.amount.toString(),
             rentalEarning.nft,
-            rentalEarning.rental,
+            rentalId!,
             rentalEarning.txHash,
             rentalEarning.timestamp.toString(),
             rentalEarning.eventName

@@ -120,3 +120,4 @@ src/utils/addresses.ts
 tests/*.json
 
 .idea
+.DS_Store

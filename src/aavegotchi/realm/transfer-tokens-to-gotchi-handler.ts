@@ -41,7 +41,7 @@ export function handleTransferTokensToGotchi(event: TransferTokensToGotchi): voi
         rentalEarning.tokenAddress,
         rentalEarning.amount.toString(),
         rentalEarning.nft,
-        rentalEarning.rental,
+        rentalEarning.rental!,
         rentalEarning.txHash,
         rentalEarning.timestamp.toString(),
         rentalEarning.eventName,

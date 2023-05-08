@@ -37,6 +37,9 @@ type Nft @entity(immutable: false) {
   currentRental: Rental
   rentalHistory: [Rental!]! @derivedFrom(field: "nft")
 
+  currentDirectRental: DirectRental
+  directRentalHistory: [DirectRental!]! @derivedFrom(field: "nft")
+
   currentRentalOffer: RentalOffer
   rentalOfferHistory: [RentalOffer!]! @derivedFrom(field: "nfts")
 }
@@ -46,6 +49,21 @@ type Account @entity(immutable: false) {
   nfts: [Nft!]! @derivedFrom(field: "originalOwner")
   borrowings: [Rental!]! @derivedFrom(field: "borrower")
   lendings: [Rental!]! @derivedFrom(field: "lender")
+}
+
+type DirectRental @entity(immutable: false) {
+  id: ID!
+  nft: Nft!
+  lender: Account!
+  taker: String
+  startedAt: BigInt!
+  startedTxHash: String!
+  endedAt: BigInt
+  endedTxHash: String
+  expirationDate: BigInt
+  profitShareTokens: [String!]
+  profitShareSplit: [BigInt!]
+  rentalEarnings: [RentalEarning!] @derivedFrom(field: "directRental")
 }
 
 type Rental @entity(immutable: false) {
@@ -86,10 +104,20 @@ type RentalEarning @entity(immutable: false) {
   tokenAddress: String!
   amount: BigInt!
   nft: Nft!
-  rental: Rental!
   txHash: String!
   timestamp: BigInt!
   eventName: String!
+  rental: Rental
+  directRental: DirectRental
+}
+
+type AavegotchiLand @entity(immutable: false) {
+  id: ID!
+  nft: Nft!
+  channelingAccessRight: BigInt!
+  emptyReservoirAccessRight: BigInt!
+  channelingWhitelist: BigInt!
+  emptyReservoirWhitelist: BigInt!
 }
 
 type ClaimedToken @entity {
