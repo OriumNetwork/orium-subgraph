@@ -16,7 +16,7 @@ import {
 } from '../fixture'
 import { BigInt } from '@graphprotocol/graph-ts'
 import { GHST_TOKEN_ADDRESS } from '../../src/utils/addresses'
-import { MAX_UINT256 } from '../../src/utils/constants'
+import { MAX_EXPIRATION_DATE } from '../../src/utils/constants'
 
 export function createGotchiLendingAddedEvent(
   tokenId: string,
@@ -93,7 +93,7 @@ export function createMockRentalOffer(
   rentalOffer.profitShareTokens = revenueTokens
   rentalOffer.createdAt = BigInt.fromString(timeCreated)
   rentalOffer.creationTxHash = creationTxHash
-  rentalOffer.expirationDate = MAX_UINT256
+  rentalOffer.expirationDate = MAX_EXPIRATION_DATE
   rentalOffer.save()
 
   return rentalOffer

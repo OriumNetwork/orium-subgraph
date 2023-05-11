@@ -1,7 +1,7 @@
 import { generateNftId } from '../src/utils/misc'
 import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts'
 import { Nft, Rental, RentalOffer } from '../generated/schema'
-import { COMETHSPACESHIP, MAX_UINT256, ZERO_ADDRESS } from '../src/utils/constants'
+import { COMETHSPACESHIP, MAX_EXPIRATION_DATE, ZERO_ADDRESS } from '../src/utils/constants'
 
 export function arrayToString(stringArray: string[]): string {
   return '[' + stringArray.join(', ') + ']'
@@ -84,7 +84,7 @@ export function createMockRentalOffer(
   rentalOffer.profitShareTokens = revenueTokens
   rentalOffer.createdAt = BigInt.fromString(timeCreated)
   rentalOffer.creationTxHash = creationTxHash
-  rentalOffer.expirationDate = MAX_UINT256
+  rentalOffer.expirationDate = MAX_EXPIRATION_DATE
   rentalOffer.save()
 
   return rentalOffer

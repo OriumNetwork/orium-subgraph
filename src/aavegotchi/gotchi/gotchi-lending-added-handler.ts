@@ -3,7 +3,7 @@ import { GotchiLendingAdded } from "../../../generated/AavegotchiDiamond/Aavegot
 import { Nft, RentalOffer } from "../../../generated/schema";
 import { generateNftId } from "../../utils/misc";
 import { GHST_TOKEN_ADDRESS } from "../../utils/addresses";
-import { MAX_UINT256, ONE_ETHER } from "../../utils/constants";
+import { MAX_EXPIRATION_DATE, ONE_ETHER } from "../../utils/constants";
 
 /**
  * event GotchiLendingAdded(
@@ -42,7 +42,7 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   rentalOffer.duration = [event.params.period];
   rentalOffer.feeAmount = event.params.initialCost;
   rentalOffer.feeToken = GHST_TOKEN_ADDRESS;
-  rentalOffer.expirationDate = MAX_UINT256;
+  rentalOffer.expirationDate = MAX_EXPIRATION_DATE;
 
   if (event.params.whitelistId != BigInt.fromI32(0)) {
     rentalOffer.taker = event.params.whitelistId.toString();
