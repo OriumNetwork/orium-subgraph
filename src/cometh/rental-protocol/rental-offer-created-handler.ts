@@ -1,8 +1,8 @@
 import { BigInt } from '@graphprotocol/graph-ts'
-import { RentalOffer } from '../../../generated/schema'
+import { Nft, RentalOffer } from '../../../generated/schema'
 import { COMETHSPACESHIP, ZERO_ADDRESS } from '../../utils/constants'
 import { RentalOfferCreated } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
-import { loadNfts } from '../../utils/misc'
+import { loadNfts, updateLastOfferExpirationAt } from '../../utils/misc'
 import { log } from '@graphprotocol/graph-ts'
 import { SPACESHIP_ADDRESS } from '../../utils/addresses'
 /**
@@ -38,6 +38,12 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
     return
   }
 
+  // Update with the highest expiration date from the offers
+  // To be used exclusively for the orium scholarships protocol
+  for (let i = 0; i < foundNfts.length; i++) {
+    updateLastOfferExpirationAt(foundNfts[i], event.params.deadline)
+  }
+
   // create rental offer
   const rentalOfferId = `${event.params.maker.toHexString()}-${event.params.nonce}`
   const rentalOffer = new RentalOffer(rentalOfferId)
@@ -62,3 +68,5 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
     event.transaction.hash.toHex(),
   ])
 }
+
+
