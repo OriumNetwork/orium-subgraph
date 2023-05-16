@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { ClaimAavegotchi } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { Account, Nft } from "../../../generated/schema";
 import { AAVEGOTCHI, ZERO_ADDRESS } from "../../utils/constants";
@@ -32,6 +33,7 @@ export function handleClaimAavegotchi(event: ClaimAavegotchi): void {
     entity.currentOwner = owner;
     entity.originalOwner = owner;
     entity.previousOwner = ZERO_ADDRESS;
+    entity.lastOfferExpirationAt = BigInt.zero();
   }
 
   entity.state = AAVEGOTCHI;

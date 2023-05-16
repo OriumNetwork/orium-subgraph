@@ -19,6 +19,7 @@ export function createMockGotchi(tokenId: string): Nft {
   aavegotchi.currentOwner = ZERO_ADDRESS
   aavegotchi.previousOwner = ZERO_ADDRESS
   aavegotchi.originalOwner = ZERO_ADDRESS
+  aavegotchi.lastOfferExpirationAt = BigInt.zero()
   aavegotchi.save()
   return aavegotchi
 }
@@ -35,6 +36,7 @@ export function createMockSpaceship(tokenId: string): Nft {
   spaceship.currentOwner = ZERO_ADDRESS
   spaceship.previousOwner = ZERO_ADDRESS
   spaceship.originalOwner = ZERO_ADDRESS
+  spaceship.lastOfferExpirationAt = BigInt.zero()
   spaceship.save()
   return spaceship
 }

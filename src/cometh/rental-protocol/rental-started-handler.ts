@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Nft, Rental, RentalOffer } from '../../../generated/schema'
-import { generateNftId } from '../../utils/misc'
+import { generateNftId, removeLastOfferExpirationAt } from '../../utils/misc'
 import { COMETHSPACESHIP } from '../../utils/constants'
 import { RentalStarted } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
 import { SPACESHIP_ADDRESS } from '../../utils/addresses'
@@ -70,6 +70,8 @@ export function handleRentalStarted(event: RentalStarted): void {
   // no need to remove current rental offer from nft, because currentRentalOffer will only track the last one created.
   nft.currentRental = currentRental.id
   nft.save()
+
+  removeLastOfferExpirationAt(nftId, rentalOffer.expirationDate)
 
   log.warning('[handleRentalStarted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}, tx: {}', [
     nftId,

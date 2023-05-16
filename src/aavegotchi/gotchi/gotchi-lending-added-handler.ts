@@ -1,7 +1,7 @@
 import { BigInt, log } from "@graphprotocol/graph-ts";
 import { GotchiLendingAdded } from "../../../generated/AavegotchiDiamond/AavegotchiDiamond";
 import { Nft, RentalOffer } from "../../../generated/schema";
-import { generateNftId } from "../../utils/misc";
+import { generateNftId, updateLastOfferExpirationAt } from "../../utils/misc";
 import { GHST_TOKEN_ADDRESS } from "../../utils/addresses";
 import { MAX_EXPIRATION_DATE, ONE_ETHER } from "../../utils/constants";
 
@@ -60,6 +60,8 @@ export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
   // link rental offer to nft
   nft.currentRentalOffer = rentalOfferId;
   nft.save();
+
+  updateLastOfferExpirationAt(nft, rentalOffer.expirationDate);
 
   log.warning("[GotchiLendingAdded]: Gotchi {} added to rental offer {}", [
     nftId,
