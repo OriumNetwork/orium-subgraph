@@ -1,5 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Nft, RentalOffer } from '../../../generated/schema'
+import { RentalOffer } from '../../../generated/schema'
 import { RentalOfferCancelled } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
 import { removeLastOfferExpirationAt } from '../../utils/misc'
 
@@ -28,7 +28,7 @@ export function handleRentalOfferCancelled(event: RentalOfferCancelled): void {
   // Remove nfts lastOfferExpirationAt
   // To be used exclusively for the orium scholarships protocol
   for(let i = 0; i < rentalOffer.nfts.length; i++) {
-    removeLastOfferExpirationAt(rentalOffer.nfts[i])
+    removeLastOfferExpirationAt(rentalOffer.nfts[i], rentalOffer.expirationDate)
   }
 
   log.warning('[handleRentalOfferCancelled] RentalOffer {} cancelled, tx: {}', [

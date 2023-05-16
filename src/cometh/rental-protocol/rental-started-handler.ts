@@ -71,7 +71,7 @@ export function handleRentalStarted(event: RentalStarted): void {
   nft.currentRental = currentRental.id
   nft.save()
 
-  removeLastOfferExpirationAt(nftId)
+  removeLastOfferExpirationAt(nftId, rentalOffer.expirationDate)
 
   log.warning('[handleRentalStarted] NFT {} has been rented, rentalId: {}, rentalOfferId: {}, tx: {}', [
     nftId,

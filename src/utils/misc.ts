@@ -52,17 +52,17 @@ export function loadRentalOffer(rentalOfferId: string): RentalOffer {
 }
 
 export function updateLastOfferExpirationAt(nft: Nft, expirationDate: BigInt): void {
-  if (nft.lastOfferExpirationAt && nft.lastOfferExpirationAt!.gt(expirationDate)) return
+  if (nft.lastOfferExpirationAt.gt(expirationDate)) return
   nft.lastOfferExpirationAt = expirationDate
   nft.save()
 }
 
-export function removeLastOfferExpirationAt(nftId: string): void {
+export function removeLastOfferExpirationAt(nftId: string, expirationDate: BigInt): void {
     const nft = Nft.load(nftId)
 
     if (!nft) return
-    if(!nft.lastOfferExpirationAt) return
-
-    nft.lastOfferExpirationAt = null
+    if(nft.lastOfferExpirationAt.gt(expirationDate)) return
+    
+    nft.lastOfferExpirationAt = BigInt.zero()
     nft.save()
 }
