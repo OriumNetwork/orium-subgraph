@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
 import { GotchiLendingEnded } from '../../../generated/AavegotchiDiamond/AavegotchiDiamond'
 import { Nft, Rental } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
@@ -55,8 +55,6 @@ export function handleGotchiLendingEnded(event: GotchiLendingEnded): void {
 
   // remove current rental from nft, because it ended
   nft.currentRental = null
-  // Since aavegotchi only allows one offer at a time, we can set the expiration date to zero
-  nft.lastOfferExpirationAt = BigInt.zero();
   nft.save()
 
   log.warning('[handleGotchiLendingEnded] NFT {} rental {} ended', [nftId, currentRentalId!])
