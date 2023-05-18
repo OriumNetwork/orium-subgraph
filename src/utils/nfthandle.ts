@@ -27,7 +27,6 @@ export class NftHandle {
       entity.platform = this.platform;
       entity.tokenId = tokenId;
       entity.address = event.address.toHexString().toLowerCase();
-      entity.lastOfferExpirationAt = BigInt.zero();
     }
 
     let toAccount = Account.load(to);
@@ -45,6 +44,7 @@ export class NftHandle {
     entity.currentOwner = toAccount.id;
     entity.previousOwner = fromAccount.id;
     entity.originalOwner = toAccount.id;
+    entity.lastOfferExpirationAt = BigInt.zero();
     entity.save();
   }
 }
