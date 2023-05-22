@@ -77,7 +77,8 @@ export function handleGotchiLendingExecuted(event: GotchiLendingExecuted): void 
   currentRental.startedAt = event.block.timestamp
   currentRental.startedTxHash = event.transaction.hash.toHex()
   currentRental.rentalOffer = currentRentalOfferId
-  currentRental.expirationDate = event.block.timestamp.plus(event.params.timeAgreed);
+  currentRental.expirationDate = event.block.timestamp.plus(event.params.timeAgreed)
+  currentRental.beneficiaries = [currentRental.lender, currentRental.borrower, event.params.thirdParty.toHexString().toLowerCase()]
   currentRental.save()
 
   // remove current rental offer from nft, because it has been executed, and link rental to nft

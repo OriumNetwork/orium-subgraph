@@ -80,6 +80,7 @@ type Rental @entity(immutable: false) {
   expirationDate: BigInt
   rentalOffer: RentalOffer
   rentalEarnings: [RentalEarning!] @derivedFrom(field: "rental")
+  beneficiaries: [String!]
 }
 
 type RentalOffer @entity(immutable: false) {
