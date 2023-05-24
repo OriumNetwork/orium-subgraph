@@ -1,5 +1,5 @@
 import { log } from '@graphprotocol/graph-ts'
-import { Nft, Rental, RentalOffer } from '../../../generated/schema'
+import { Account, Nft, Rental, RentalOffer } from '../../../generated/schema'
 import { generateNftId, removeLastOfferExpirationAt } from '../../utils/misc'
 import { COMETHSPACESHIP } from '../../utils/constants'
 import { RentalStarted } from '../../../generated/ComethRentalProtocol/ComethRentalProtocol'
@@ -57,10 +57,16 @@ export function handleRentalStarted(event: RentalStarted): void {
     )
   }
 
+  let borrower = Account.load(event.params.tenant.toHexString());
+  if (!borrower) {
+    borrower = new Account(event.params.tenant.toHexString());
+    borrower.save();
+  }
+
   const currentRental = new Rental(`${event.transaction.hash.toHex()}-${event.logIndex.toString()}`)
   currentRental.nft = nftId
   currentRental.lender = event.params.lender.toHexString()
-  currentRental.borrower = event.params.tenant.toHexString()
+  currentRental.borrower = borrower.id
   currentRental.startedAt = event.block.timestamp
   currentRental.startedTxHash = txHash
   currentRental.rentalOffer = rentalOffer.id
