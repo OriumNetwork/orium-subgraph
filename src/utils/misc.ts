@@ -1,5 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Nft, Rental, RentalOffer } from "../../generated/schema";
+import { ONE_HUNDRED_ETHER } from "./constants";
 
 export function generateNftId(type: string, tokenId: BigInt): string {
   return type + "-" + tokenId.toString();
@@ -65,4 +66,14 @@ export function removeLastOfferExpirationAt(nftId: string, expirationDate: BigIn
     
     nft.lastOfferExpirationAt = BigInt.zero()
     nft.save()
+}
+
+export function basisPointToWeiPercentage(basisPoint: BigInt): BigInt {
+  return basisPoint.times(BigInt.fromI32(10).pow(16))
+}
+
+export function getComethProfitShareSplit(basisPoints: BigInt): BigInt[] {
+  const lenderShare = basisPointToWeiPercentage(basisPoints)
+  const borrowerShare = ONE_HUNDRED_ETHER.minus(lenderShare)
+  return [lenderShare, borrowerShare]
 }

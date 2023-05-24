@@ -1,10 +1,11 @@
 import { assert, describe, test, clearStore, beforeEach, afterEach } from 'matchstick-as'
-import { COMETHSPACESHIP, ZERO_ADDRESS } from '../../../src/utils/constants'
+import { COMETHSPACESHIP, ONE_HUNDRED_ETHER, ZERO_ADDRESS } from '../../../src/utils/constants'
 import { createMockSpaceship } from '../../fixture'
 import { createRentalOfferCreatedEvent } from '../../fixtures/cometh-fixture'
 import { handleRentalOfferCreated } from '../../../src/cometh'
 import { ComethNFT } from '../../../src/utils/types'
 import { SPACESHIP_ADDRESS } from '../../../src/utils/addresses'
+import { BigInt } from '@graphprotocol/graph-ts'
 
 const tokenId = '123'
 const nonce = '1675888946'
@@ -38,6 +39,8 @@ describe('Cometh - Rental Offer Created Event', () => {
 
     const rentalOfferId = `${maker}-${nonce}`
     const nftId = `${COMETHSPACESHIP}-${tokenId}`
+    const lenderShare = BigInt.fromString(nfts[0].basisPoints).times(BigInt.fromI32(10).pow(16))
+    const borrowerShare = ONE_HUNDRED_ETHER.minus(lenderShare).toString()
 
     assert.fieldEquals('RentalOffer', rentalOfferId, 'nfts', `[${nftId}]`)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'lender', maker)
@@ -46,6 +49,7 @@ describe('Cometh - Rental Offer Created Event', () => {
     assert.fieldEquals('RentalOffer', rentalOfferId, 'duration', `[${nfts[0].duration}]`)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'feeToken', feeToken)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'feeAmount', feeAmount)
+    assert.fieldEquals('RentalOffer', rentalOfferId, 'profitShareSplit', `[${lenderShare}, ${borrowerShare}]`)
   })
   test('Should skip create rental offer if token id is invalid', () => {
     const invalidTokenId = '0'
