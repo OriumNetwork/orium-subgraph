@@ -4,3 +4,7 @@ export const FUD_TOKEN_ADDRESS = "0x403e967b044d4be25170310157cb1a4bf10bdd0f";
 export const FOMO_TOKEN_ADDRESS = "0x44a6e0be76e1d9620a7f76588e4509fe4fa8e8c8";
 export const ALPHA_TOKEN_ADDRESS = "0x6a3e7c3c6ef65ee26975b12293ca1aad7e1daed2";
 export const KEK_TOKEN_ADDRESS = "0x42e5e06ef5b90fe15f853f59299fc96259209c5c";
+export const AL = '0x041b4394f2a1a2eaf7e21460ef59370789cb1f42';
+export const MG = '0x2b70b0ddb96e2581a311deb25a1424c7167e4a53';
+export const W = '0x52fc543bd23d1948f11eb265eabdefbbb0131572';
+export const CU = '0xf6351c1163314e95d025575c5cea314b055b7ed3';
