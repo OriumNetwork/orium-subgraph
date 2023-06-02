@@ -1,5 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { ALPHA_TOKEN_ADDRESS, FOMO_TOKEN_ADDRESS, FUD_TOKEN_ADDRESS, KEK_TOKEN_ADDRESS } from "./addresses";
+import { AL, ALPHA_TOKEN_ADDRESS, CU, FOMO_TOKEN_ADDRESS, FUD_TOKEN_ADDRESS, KEK_TOKEN_ADDRESS, MG, W } from "./addresses";
 
 export const Aavegotchi = "Aavegotchi";
 export const AAVEGOTCHI = "AAVEGOTCHI";
@@ -13,6 +13,7 @@ export const COMETHSPACESHIP = "COMETHSPACESHIP";
 export const MAX_EXPIRATION_DATE = BigInt.fromString("9999999999");
 
 export const ALCHEMICA_TYPE_TO_ADDRESS = [FUD_TOKEN_ADDRESS, FOMO_TOKEN_ADDRESS, ALPHA_TOKEN_ADDRESS, KEK_TOKEN_ADDRESS];
+export const COMETH_RESOURCES = [AL, MG, W, CU]
 
 export const REWARDS_DISTRIBUTED_EVENT = "Player Rewards";
 export const ALCHEMICA_CLAIMED_EVENT = "Farming";
