@@ -33,7 +33,7 @@ const shouldFail = true;
 
 describe("End a Aavenft Rental", () => {
   describe("When entities does not exist", () => {
-    test("Should fail if Nft does not exist", () => {
+    test("Should not fail if Nft does not exist", () => {
       const event = createRentalEndedEvent(
         maker,
         taker,
@@ -42,7 +42,7 @@ describe("End a Aavenft Rental", () => {
       );
 
       handleRentalEnded(event);
-    }, shouldFail);
+    });
     test(
       "Should skip if Rental does not exist",
       () => {
@@ -58,8 +58,7 @@ describe("End a Aavenft Rental", () => {
         );
 
         handleRentalEnded(event);
-      },
-      shouldFail
+      }
     );
   });
   describe("When entities exists", () => {
@@ -94,7 +93,7 @@ describe("End a Aavenft Rental", () => {
 
       assert.fieldEquals("Nft", nftId, "currentRental", "null");
     });
-    test("Should fail if currentRental is null", () => {
+    test("Should not fail if currentRental is null", () => {
       const event = createRentalEndedEvent(
         maker,
         taker,
@@ -109,7 +108,7 @@ describe("End a Aavenft Rental", () => {
       assert.fieldEquals("Nft", nftId, "currentRental", "null");
       handleRentalEnded(event);
       assert.fieldEquals("Nft", nftId, "currentRental", "null");
-    }, shouldFail);
+    });
   });
   afterEach(() => {
     clearStore();
