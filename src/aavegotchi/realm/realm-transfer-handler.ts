@@ -17,15 +17,16 @@ export function handleRealmTransfer(event: Transfer): void {
   const nftId = generateNftId(TYPE, tokenId)
 
   let land = AavegotchiLand.load(nftId);
-  if (land) return;
-  
-  land = new AavegotchiLand(nftId);
-  land.nft = nftId;
-  land.channelingAccessRight = BigInt.fromI32(AccessRight.ONLY_OWNER);
-  land.emptyReservoirAccessRight = BigInt.fromI32(AccessRight.ONLY_OWNER);
-  land.channelingWhitelist = BigInt.zero();
-  land.emptyReservoirWhitelist = BigInt.zero();
-  land.save();
+
+  if (!land) {
+    land = new AavegotchiLand(nftId);
+    land.nft = nftId;
+    land.channelingAccessRight = BigInt.fromI32(AccessRight.ONLY_OWNER);
+    land.emptyReservoirAccessRight = BigInt.fromI32(AccessRight.ONLY_OWNER);
+    land.channelingWhitelist = BigInt.zero();
+    land.emptyReservoirWhitelist = BigInt.zero();
+    land.save();
+  }
 
   new NftHandle(TYPE, STATE, PLATFORM).handle(
     event,
