@@ -32,6 +32,7 @@
     "gluegun": "^5.1.2"
   },
   "devDependencies": {
+    "@oriumnetwork/orium-commons": "^1.0.10",
     "@graphprotocol/graph-ts": "^0.27.0",
     "matchstick-as": "^0.5.0"
   }

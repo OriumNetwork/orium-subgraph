@@ -6,6 +6,7 @@ import { handleRentalOfferCreated } from '../../../src/cometh'
 import { ComethNFT } from '../../../src/utils/types'
 import { SPACESHIP_ADDRESS } from '../../../src/utils/addresses'
 import { BigInt } from '@graphprotocol/graph-ts'
+import { loadNft } from '../../../src/utils/misc'
 
 const tokenId = '123'
 const nonce = '1675888946'
@@ -50,6 +51,21 @@ describe('Cometh - Rental Offer Created Event', () => {
     assert.fieldEquals('RentalOffer', rentalOfferId, 'feeToken', feeToken)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'feeAmount', feeAmount)
     assert.fieldEquals('RentalOffer', rentalOfferId, 'profitShareSplit', `[${lenderShare}, ${borrowerShare}]`)
+  })
+  test('Should replace currentRentalOffer in nft case it is not null', () => {
+    const nft = loadNft(COMETHSPACESHIP, BigInt.fromString(tokenId))
+    const customRentalOfferId = 'customRentalOfferId'
+    nft.currentRentalOffer = customRentalOfferId
+    nft.save()
+
+    const event = createRentalOfferCreatedEvent(nonce, maker, taker, nfts, feeToken, feeAmount, expirationDate)
+
+    const nftId = `${COMETHSPACESHIP}-${tokenId}`
+    assert.fieldEquals('Nft', nftId, 'currentRentalOffer', customRentalOfferId)
+
+    handleRentalOfferCreated(event)
+
+    assert.fieldEquals('Nft', nftId, 'currentRentalOffer', `${maker}-${nonce}`)
   })
   test('Should skip create rental offer if token id is invalid', () => {
     const invalidTokenId = '0'

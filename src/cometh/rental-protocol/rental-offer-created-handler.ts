@@ -19,8 +19,8 @@ import { SPACESHIP_ADDRESS } from '../../utils/addresses'
 export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // filter out nfts that are not spaceships
   const spaceshipsIds = event.params.nfts
-    .filter((nft) => nft.token.toHexString() == SPACESHIP_ADDRESS)
-    .map<BigInt>((nft) => nft.tokenId)
+    .filter(nft => nft.token.toHexString() == SPACESHIP_ADDRESS)
+    .map<BigInt>(nft => nft.tokenId)
 
   if (!spaceshipsIds.length) {
     log.debug('[handleRentalOfferCreated] No spaceship nfts with valid address found in rental offer, tx: {}', [
@@ -47,11 +47,11 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   // create rental offer
   const rentalOfferId = `${event.params.maker.toHexString()}-${event.params.nonce}`
   const rentalOffer = new RentalOffer(rentalOfferId)
-  rentalOffer.nfts = foundNfts.map<string>((foundNfts) => foundNfts.id)
+  rentalOffer.nfts = foundNfts.map<string>(foundNfts => foundNfts.id)
   rentalOffer.lender = event.params.maker.toHexString()
   rentalOffer.createdAt = event.block.timestamp
   rentalOffer.creationTxHash = event.transaction.hash.toHex()
-  rentalOffer.duration = event.params.nfts.map<BigInt>((nft) => nft.duration)
+  rentalOffer.duration = event.params.nfts.map<BigInt>(nft => nft.duration)
   rentalOffer.feeAmount = event.params.feeAmount
   rentalOffer.feeToken = event.params.feeToken.toHexString()
   rentalOffer.profitShareSplit = getComethProfitShareSplit(BigInt.fromI32(event.params.nfts[0].basisPoints))
@@ -63,6 +63,12 @@ export function handleRentalOfferCreated(event: RentalOfferCreated): void {
   }
 
   rentalOffer.save()
+
+  // Update currentRentalOffer on NFTs with the last rental offer created
+  for (let i = 0; i < foundNfts.length; i++) {
+    foundNfts[i].currentRentalOffer = rentalOfferId
+    foundNfts[i].save()
+  }
 
   log.warning('[handleRentalOfferCreated] RentalOffer {} created for NFTs {}, tx: {}', [
     rentalOfferId,
