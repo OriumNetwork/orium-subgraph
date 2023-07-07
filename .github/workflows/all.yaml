@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: ["*", "!master", "!dev", "!qa"]
+    branches: ['*', '!master', '!dev', '!qa']
 
 jobs:
   build_test_deploy:
@@ -15,16 +15,20 @@ jobs:
         with:
           cache: npm
           node-version: 16
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@oriumnetwork'
       - name: Install Dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
         # Goerli
       - name: Goerli Code Generator
         run: npm run codegen-goerli
       - name: Goerli Build
         run: npm run build-goerli
-#      - name: Goerli Test
-#        run: npm run test-goerli
-        # Mumbai
+      #      - name: Goerli Test
+      #        run: npm run test-goerli
+      # Mumbai
       - name: Mumbai Code Generator
         run: npm run codegen-mumbai
       - name: Mumbai Build

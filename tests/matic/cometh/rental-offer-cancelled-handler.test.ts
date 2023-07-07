@@ -59,7 +59,7 @@ describe('Cometh - Rental Offer Cancelled Event', () => {
         nfts[0].duration,
         [nfts[0].basisPoints],
         [feeToken],
-        expirationDate
+        expirationDate,
       )
 
       rentalOffer.id = rentalOfferId
@@ -77,6 +77,29 @@ describe('Cometh - Rental Offer Cancelled Event', () => {
       const event = createRentalOfferCancelledEvent(nonce, maker)
 
       handleRentalOfferCancelled(event)
+    })
+    test('Should only remove offer from the nft if the id matches', () => {
+      const event = createRentalOfferCancelledEvent(nonce, maker)
+
+      assert.fieldEquals('Nft', nftId, 'currentRentalOffer', rentalOfferId)
+
+      handleRentalOfferCancelled(event)
+
+      assert.fieldEquals('Nft', nftId, 'currentRentalOffer', 'null')
+    })
+    test('Should NOT remove offer from the nft if the id matches', () => {
+      const customRentalOfferId = `${maker}-123`
+      const nft = loadNft(COMETHSPACESHIP, BigInt.fromString(tokenId))
+      nft.currentRentalOffer = customRentalOfferId
+      nft.save()
+
+      const event = createRentalOfferCancelledEvent(nonce, maker)
+
+      assert.fieldEquals('Nft', nftId, 'currentRentalOffer', customRentalOfferId)
+
+      handleRentalOfferCancelled(event)
+
+      assert.fieldEquals('Nft', nftId, 'currentRentalOffer', customRentalOfferId)
     })
   })
   afterEach(() => {

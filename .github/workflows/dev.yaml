@@ -15,8 +15,12 @@ jobs:
         with:
           cache: npm
           node-version: 16
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@oriumnetwork'
       - name: Install Dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
       - name: Subgraph Auth
         run: yarn graph-auth -- ${{ secrets.THEGRAPH_API_KEY }}
         # Goerli
@@ -24,8 +28,8 @@ jobs:
         run: npm run codegen-goerli
       - name: Build Goerli
         run: npm run build-goerli
-#      - name: Goerli Test
-#        run: npm run test-goerli
+      #      - name: Goerli Test
+      #        run: npm run test-goerli
       - name: Subgraph Deploy Goerli
         run: npm run deploy-goerli
         # Mumbai

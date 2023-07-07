@@ -42,7 +42,7 @@ describe('Cometh - Rental Started', () => {
         nfts[0].duration,
         nfts[0].basisPoints,
         start,
-        end
+        end,
       )
       assert.entityCount('Rental', 0)
       handleRentalStarted(event)
@@ -60,7 +60,7 @@ describe('Cometh - Rental Started', () => {
         nfts[0].duration,
         [nfts[0].basisPoints],
         [feeToken],
-        expirationDate
+        expirationDate,
       )
 
       rentalOffer.id = `${maker}-${nonce}`
@@ -79,7 +79,7 @@ describe('Cometh - Rental Started', () => {
         nfts[0].duration,
         nfts[0].basisPoints,
         start,
-        end
+        end,
       )
 
       const gotchi = loadNft(COMETHSPACESHIP, BigInt.fromString(tokenId))
@@ -95,7 +95,7 @@ describe('Cometh - Rental Started', () => {
       assert.fieldEquals('Rental', rentalId, 'rentalOffer', rentalOfferId!)
 
       assert.fieldEquals('Nft', nftId, 'currentRental', rentalId)
-      // assert.fieldEquals('Nft', nftId, 'currentRentalOffer', 'null')
+      assert.fieldEquals('Nft', nftId, 'currentRentalOffer', 'null')
     })
     test('Should skip to create rental if currentRentalOffer is null in NFT', () => {
       const nft = loadNft(COMETHSPACESHIP, BigInt.fromString(tokenId))
@@ -111,7 +111,7 @@ describe('Cometh - Rental Started', () => {
         nfts[0].duration,
         nfts[0].basisPoints,
         start,
-        end
+        end,
       )
 
       handleRentalStarted(event)
@@ -132,12 +132,12 @@ describe('Cometh - Rental Started', () => {
           nfts[0].duration,
           nfts[0].basisPoints,
           start,
-          end
+          end,
         )
 
         handleRentalStarted(event)
       },
-      shouldFail
+      shouldFail,
     )
   })
   afterEach(() => {

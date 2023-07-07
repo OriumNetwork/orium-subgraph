@@ -15,16 +15,20 @@ jobs:
         with:
           cache: npm
           node-version: 16
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@oriumnetwork'
       - name: Install Dependencies
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GHB_TOKEN }}
         # Goerli
       - name: Code Generator Goerli
         run: npm run codegen-goerli
       - name: Build Goerli
         run: npm run build-goerli
-#      - name: Goerli Test
-#        run: npm run test-goerli
-        # Mumbai
+      #      - name: Goerli Test
+      #        run: npm run test-goerli
+      # Mumbai
       - name: Code Generator Mumbai
         run: npm run codegen-mumbai
       - name: Build Mumbai
@@ -40,6 +44,6 @@ jobs:
         run: npm run test-matic
       - name: Delete Old QA Subgraph
         run: |
-              curl -X DELETE https://app.satsuma.xyz/api/subgraphs/8c268d3e8b83112a7d0c732a9b88ba1c732da600bffaf68790171b9a0b5d5394/orium-subgraph/qa/delete -H 'x-api-key: ${{ secrets.SATSUMA_DEPLOY_KEY }}'
+          curl -X DELETE https://app.satsuma.xyz/api/subgraphs/8c268d3e8b83112a7d0c732a9b88ba1c732da600bffaf68790171b9a0b5d5394/orium-subgraph/qa/delete -H 'x-api-key: ${{ secrets.SATSUMA_DEPLOY_KEY }}'
       - name: Subraph Deploy Satsuma QA
         run: npx graph deploy orium-subgraph --version-label qa --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key ${{ secrets.SATSUMA_DEPLOY_KEY }}

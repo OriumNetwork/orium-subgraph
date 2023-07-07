@@ -34,7 +34,7 @@ export function handleRentalStarted(event: RentalStarted): void {
   if (!rentalOffer) {
     log.warning(
       '[handleRentalStarted] No rental offer with nonce {} was found for token id: {}, lender: {}, tx: {}, skipping...',
-      [nonce.toString(), tokenId.toString(), event.params.lender.toHexString(), txHash]
+      [nonce.toString(), tokenId.toString(), event.params.lender.toHexString(), txHash],
     )
     return
   }
@@ -53,14 +53,14 @@ export function handleRentalStarted(event: RentalStarted): void {
   const previousRental = nft.currentRental
   if (previousRental) {
     throw new Error(
-      '[handleRentalStarted] NFT ' + nftId + ' already has a rental ' + previousRental + ', tx: ' + txHash
+      '[handleRentalStarted] NFT ' + nftId + ' already has a rental ' + previousRental + ', tx: ' + txHash,
     )
   }
 
-  let borrower = Account.load(event.params.tenant.toHexString());
+  let borrower = Account.load(event.params.tenant.toHexString())
   if (!borrower) {
-    borrower = new Account(event.params.tenant.toHexString());
-    borrower.save();
+    borrower = new Account(event.params.tenant.toHexString())
+    borrower.save()
   }
 
   const currentRental = new Rental(`${event.transaction.hash.toHex()}-${event.logIndex.toString()}`)
@@ -74,8 +74,10 @@ export function handleRentalStarted(event: RentalStarted): void {
   currentRental.beneficiaries = [currentRental.lender, currentRental.borrower]
   currentRental.save()
 
-  // no need to remove current rental offer from nft, because currentRentalOffer will only track the last one created.
   nft.currentRental = currentRental.id
+  // we remove the currentRentalOffer from the nft because we gonna prioritize the rental, even if there is other offers
+  // in case others offers are still valid, they will be handled by the rental-offer-cancelled handler
+  nft.currentRentalOffer = null
   nft.save()
 
   removeLastOfferExpirationAt(nftId, rentalOffer.expirationDate)
