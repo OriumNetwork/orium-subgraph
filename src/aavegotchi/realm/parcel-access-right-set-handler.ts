@@ -3,7 +3,14 @@ import { ParcelAccessRightSet } from '../../../generated/Realm/RealmDiamond'
 import { AavegotchiLand, Nft } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
 import { AccessRight, ActionRight } from '../../utils/types'
-import { endPreviousRental, createDirectRental, updateLandRights, isLandRightChanged } from '../../utils/land-rentals'
+import {
+  endPreviousRental,
+  createDirectRental,
+  updateLandRights,
+  isLandRightChanged,
+  isNewDirectRental,
+  updateLandDirectRentalTaker,
+} from '../../utils/land-rentals'
 import { AAVEGOTCHI_LAND } from '../../utils/constants'
 
 /**
@@ -60,6 +67,27 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
       nft.id,
       event.transaction.hash.toHex(),
     ])
+    return
+  }
+
+  // If the land is changing rights in the same transaction, we update the actual direct rental
+  if (!isNewDirectRental(nft, event.transaction.hash.toHex())) {
+    log.warning(
+      '[handleParcelWhitelistSet] Updating Land {} Direct Rental {} with Action Right {} and Acess Right {}, tx: {}',
+      [
+        nft.id,
+        nft.currentDirectRental!,
+        event.params._actionRight.toString(),
+        event.params._accessRight.toString(),
+        event.transaction.hash.toHex(),
+      ],
+    )
+
+    // We update the land rights with the new access right
+    const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight, BigInt.zero())
+
+    updateLandDirectRentalTaker(nft, updatedLand)
+
     return
   }
 
