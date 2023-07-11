@@ -45,6 +45,7 @@ export function handleUpdateUser(event: UpdateUser): void {
   rental.borrower = userAccount.id
   rental.lender = nft.currentOwner
   rental.startedAt = event.block.timestamp
+  rental.startedTxHash = event.transaction.hash.toHex()
   rental.expirationDate = expires
   rental.save()
 
