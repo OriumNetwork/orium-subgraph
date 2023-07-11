@@ -1,18 +1,18 @@
-import { log, BigInt } from "@graphprotocol/graph-ts";
-import { ParcelAccessRightSet } from "../../../generated/Realm/RealmDiamond";
-import { AavegotchiLand, Nft } from "../../../generated/schema";
-import { generateNftId } from "../../utils/misc";
-import { AccessRight, ActionRight } from "../../utils/types";
-import { endPreviousRental, createDirectRental, updateLandRights, isLandRightChanged } from "../../utils/land-rentals";
-import { AAVEGOTCHI_LAND } from "../../utils/constants";
+import { log, BigInt } from '@graphprotocol/graph-ts'
+import { ParcelAccessRightSet } from '../../../generated/Realm/RealmDiamond'
+import { AavegotchiLand, Nft } from '../../../generated/schema'
+import { generateNftId } from '../../utils/misc'
+import { AccessRight, ActionRight } from '../../utils/types'
+import { endPreviousRental, createDirectRental, updateLandRights, isLandRightChanged } from '../../utils/land-rentals'
+import { AAVEGOTCHI_LAND } from '../../utils/constants'
 
 /**
  *  event ParcelAccessRightSet(
- *        uint256 _realmId, 
- *        uint256 _actionRight, 
+ *        uint256 _realmId,
+ *        uint256 _actionRight,
  *        uint256 _accessRight
  *  );
- * 
+ *
  *  Action Rights:
  *     0: Channeling - only owner
  *     1: Empty Reservoir - only owner
@@ -32,48 +32,67 @@ import { AAVEGOTCHI_LAND } from "../../utils/constants";
 export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
   // To start or end a rental, the action right must be Channeling or Empty Reservoir
   if (event.params._actionRight.gt(BigInt.fromI32(ActionRight.EMPTY_RESERVOIR))) {
-    log.debug("[handleParcelAccessRightSet] Action right {} is not Channeling or Empty Reservoir, tx: {}", [event.params._actionRight.toString(), event.transaction.hash.toHex()]);
-    return;
+    log.debug('[handleParcelAccessRightSet] Action right {} is not Channeling or Empty Reservoir, tx: {}', [
+      event.params._actionRight.toString(),
+      event.transaction.hash.toHex(),
+    ])
+    return
   }
 
-  const nftId = generateNftId(AAVEGOTCHI_LAND, event.params._realmId);
-  const nft = Nft.load(nftId);
+  const nftId = generateNftId(AAVEGOTCHI_LAND, event.params._realmId)
+  const nft = Nft.load(nftId)
 
   if (!nft) {
-    log.debug("[handleParcelAccessRightSet] NFT {} not found, tx: {}", [nftId, event.transaction.hash.toHex()]);
-    return;
+    log.debug('[handleParcelAccessRightSet] NFT {} not found, tx: {}', [nftId, event.transaction.hash.toHex()])
+    return
   }
 
-  const land = AavegotchiLand.load(nft.id);
+  const land = AavegotchiLand.load(nft.id)
 
   if (!land) {
-    log.debug("[handleParcelAccessRightSet] Land {} not found, tx: {}", [nft.id, event.transaction.hash.toHex()]);
-    return;
+    log.debug('[handleParcelAccessRightSet] Land {} not found, tx: {}', [nft.id, event.transaction.hash.toHex()])
+    return
   }
 
   // If the land rights are not changed, we don't do anything
   if (!isLandRightChanged(land, event.params._actionRight, event.params._accessRight, BigInt.zero())) {
-    log.warning("[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}", [nft.id, event.transaction.hash.toHex()]);
-    return;
+    log.warning('[handleParcelAccessRightSet] Land {} rights are not changed, tx: {}', [
+      nft.id,
+      event.transaction.hash.toHex(),
+    ])
+    return
   }
 
   // We will always end the previous rental, if it exists
-  endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp);
+  endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp)
 
   // We update the land rights with the new access right and return the updated land
-  const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight, BigInt.zero());
+  const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight, BigInt.zero())
 
   // If the access right is ONLY_OWNER for both Channeling and Empty Reservoir, we don't create a rental and return
-  if (land.channelingAccessRight.equals(BigInt.fromI32(AccessRight.ONLY_OWNER)) && land.emptyReservoirAccessRight.equals(BigInt.fromI32(AccessRight.ONLY_OWNER))) return;
+  if (
+    land.channelingAccessRight.equals(BigInt.fromI32(AccessRight.ONLY_OWNER)) &&
+    land.emptyReservoirAccessRight.equals(BigInt.fromI32(AccessRight.ONLY_OWNER))
+  )
+    return
 
-  const directRental = createDirectRental(nft, updatedLand, event.transaction.hash.toHex(), event.block.timestamp, event.logIndex);
+  const directRental = createDirectRental(
+    nft,
+    updatedLand,
+    event.transaction.hash.toHex(),
+    event.block.timestamp,
+    event.logIndex,
+  )
 
-  log.warning("[handleParcelAccessRightSet] nftId {}, directRentalId {}, lender {}, taker {}, startedAt {}, startedTxHash {}", [
-    directRental.nft,
-    directRental.id,
-    directRental.lender,
-    directRental.taker!,
-    directRental.startedAt.toString(),
-    directRental.startedTxHash,
-  ]);
+  log.warning(
+    '[handleParcelAccessRightSet] nftId {}, directRentalId {}, lender {}, taker {}, startedAt {}, startedTxHash {}',
+    [
+      directRental.nft,
+      directRental.id,
+      directRental.lender,
+      directRental.taker!,
+      directRental.startedAt.toString(),
+      directRental.startedTxHash,
+    ],
+  )
 }
