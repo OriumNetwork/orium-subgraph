@@ -81,3 +81,26 @@ export function isLandRightChanged(
     return land.emptyReservoirAccessRight.notEqual(accessRight) || land.emptyReservoirWhitelist.notEqual(whitelistId)
   }
 }
+
+export function isNewDirectRental(nft: Nft, txHash: string): boolean {
+  const previousRentalId = nft.currentDirectRental
+  if (!previousRentalId) return true
+
+  const previousRental = DirectRental.load(previousRentalId!)
+  if (!previousRental) return true
+
+  return previousRental.startedTxHash != txHash
+}
+
+export function updateLandDirectRentalTaker(nft: Nft, land: AavegotchiLand): DirectRental | null {
+  const directRentalId = nft.currentDirectRental
+  if (!directRentalId) return null
+
+  const directRental = DirectRental.load(directRentalId!)
+  if (!directRental) return null
+
+  directRental.taker = `${land.channelingWhitelist},${land.emptyReservoirWhitelist}`
+  directRental.save()
+
+  return directRental
+}

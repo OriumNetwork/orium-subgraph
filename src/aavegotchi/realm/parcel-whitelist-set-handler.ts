@@ -1,9 +1,16 @@
 import { BigInt, log } from '@graphprotocol/graph-ts'
 import { ParcelWhitelistSet } from '../../../generated/Realm/RealmDiamond'
-import { AavegotchiLand, Nft } from '../../../generated/schema'
+import { AavegotchiLand, DirectRental, Nft } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
 import { AccessRight, ActionRight } from '../../utils/types'
-import { createDirectRental, endPreviousRental, isLandRightChanged, updateLandRights } from '../../utils/land-rentals'
+import {
+  createDirectRental,
+  endPreviousRental,
+  isLandRightChanged,
+  isNewDirectRental,
+  updateLandDirectRentalTaker,
+  updateLandRights,
+} from '../../utils/land-rentals'
 import { AAVEGOTCHI_LAND } from '../../utils/constants'
 
 /**
@@ -69,6 +76,31 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
       nft.id,
       event.transaction.hash.toHex(),
     ])
+    return
+  }
+
+  if (!isNewDirectRental(nft, event.transaction.hash.toHex())) {
+    log.warning(
+      '[handleParcelWhitelistSet] Updating Land {} Direct Rental {} with Action Right {} and Acess Right {}, tx: {}',
+      [
+        nft.id,
+        nft.currentDirectRental!,
+        event.params._actionRight.toString(),
+        BigInt.fromI32(AccessRight.WHITELISTED_ONLY).toString(),
+        event.transaction.hash.toHex(),
+      ],
+    )
+
+    // We update the land rights with the new access right
+    const updatedLand = updateLandRights(
+      land,
+      event.params._actionRight,
+      BigInt.fromI32(AccessRight.WHITELISTED_ONLY),
+      event.params._whitelistId,
+    )
+
+    updateLandDirectRentalTaker(nft, updatedLand)
+
     return
   }
 
