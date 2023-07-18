@@ -84,7 +84,7 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
     )
 
     // We update the land rights with the new access right
-    const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight, BigInt.zero())
+    const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight)
 
     updateLandDirectRentalTaker(nft, updatedLand)
 
@@ -95,7 +95,7 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
   endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp)
 
   // We update the land rights with the new access right and return the updated land
-  const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight, BigInt.zero())
+  const updatedLand = updateLandRights(land, event.params._actionRight, event.params._accessRight)
 
   // If the access right is ONLY_OWNER for both Channeling and Empty Reservoir, we don't create a rental and return
   if (

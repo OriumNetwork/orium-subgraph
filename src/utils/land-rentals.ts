@@ -53,14 +53,29 @@ export function updateLandRights(
   land: AavegotchiLand,
   actionRight: BigInt,
   accessRight: BigInt,
-  whitelistId: BigInt,
 ): AavegotchiLand {
+
   // We skip the other action rights, so it MUST be Channeling or Empty Reservoir here
   if (actionRight.equals(BigInt.fromI32(ActionRight.CHANNELING))) {
     land.channelingAccessRight = accessRight
-    land.channelingWhitelist = whitelistId
   } else {
     land.emptyReservoirAccessRight = accessRight
+  }
+  land.save()
+
+  return land
+}
+
+export function updateLandWhitelist(
+  land: AavegotchiLand,
+  actionRight: BigInt,
+  whitelistId: BigInt,
+): AavegotchiLand {
+
+  // We skip the other action rights, so it MUST be Channeling or Empty Reservoir here
+  if (actionRight.equals(BigInt.fromI32(ActionRight.CHANNELING))) {
+    land.channelingWhitelist = whitelistId
+  } else {
     land.emptyReservoirWhitelist = whitelistId
   }
   land.save()
