@@ -10,6 +10,7 @@ import {
   isNewDirectRental,
   updateLandDirectRentalTaker,
   updateLandRights,
+  updateLandWhitelist,
 } from '../../utils/land-rentals'
 import { AAVEGOTCHI_LAND } from '../../utils/constants'
 
@@ -92,12 +93,11 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
     )
 
     // We update the land rights with the new access right
-    const updatedLand = updateLandRights(
-      land,
-      event.params._actionRight,
-      BigInt.fromI32(AccessRight.WHITELISTED_ONLY),
-      event.params._whitelistId,
-    )
+    const rightsUpdatedLand = updateLandRights(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY))
+
+    // We update the land whitelist for the given action right
+    const updatedLand = updateLandWhitelist(rightsUpdatedLand, event.params._actionRight, event.params._whitelistId)
+
 
     updateLandDirectRentalTaker(nft, updatedLand)
 
@@ -108,12 +108,10 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
   endPreviousRental(nft, event.transaction.hash.toHex(), event.block.timestamp)
 
   // We update the land rights with the new access right and return the updated land
-  const updatedLand = updateLandRights(
-    land,
-    event.params._actionRight,
-    BigInt.fromI32(AccessRight.WHITELISTED_ONLY),
-    event.params._whitelistId,
-  )
+  const rightsUpdatedLand = updateLandRights(land, event.params._actionRight, BigInt.fromI32(AccessRight.WHITELISTED_ONLY))
+
+  // We update the land whitelist for the given action right
+  const updatedLand = updateLandWhitelist(rightsUpdatedLand, event.params._actionRight, event.params._whitelistId)
 
   // If the access right is not ONLY_OWNER for both Channeling and Empty Reservoir, we create a new direct rental
   const directRental = createDirectRental(
