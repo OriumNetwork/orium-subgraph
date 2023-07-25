@@ -5,11 +5,11 @@ import { generateNftId } from '../../utils/misc'
 import { AccessRight, ActionRight } from '../../utils/types'
 import {
   endPreviousRental,
-  createDirectRental,
   updateLandRights,
   isLandRightChanged,
   isNewDirectRental,
   updateLandDirectRentalTaker,
+  createLandDirectRental,
 } from '../../utils/land-rentals'
 import { AAVEGOTCHI_LAND } from '../../utils/constants'
 
@@ -104,7 +104,7 @@ export function handleParcelAccessRightSet(event: ParcelAccessRightSet): void {
   )
     return
 
-  const directRental = createDirectRental(
+  const directRental = createLandDirectRental(
     nft,
     updatedLand,
     event.transaction.hash.toHex(),
