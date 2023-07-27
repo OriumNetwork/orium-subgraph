@@ -1,10 +1,10 @@
 import { BigInt, log } from '@graphprotocol/graph-ts'
 import { ParcelWhitelistSet } from '../../../generated/Realm/RealmDiamond'
-import { AavegotchiLand, DirectRental, Nft } from '../../../generated/schema'
+import { AavegotchiLand, Nft } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
 import { AccessRight, ActionRight } from '../../utils/types'
 import {
-  createDirectRental,
+  createLandDirectRental,
   endPreviousRental,
   isLandRightChanged,
   isNewDirectRental,
@@ -114,7 +114,7 @@ export function handleParcelWhitelistSet(event: ParcelWhitelistSet): void {
   const updatedLand = updateLandWhitelist(rightsUpdatedLand, event.params._actionRight, event.params._whitelistId)
 
   // If the access right is not ONLY_OWNER for both Channeling and Empty Reservoir, we create a new direct rental
-  const directRental = createDirectRental(
+  const directRental = createLandDirectRental(
     nft,
     updatedLand,
     event.transaction.hash.toHex(),

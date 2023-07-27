@@ -1,6 +1,7 @@
 import { AavegotchiLand, DirectRental, Nft } from '../../generated/schema'
 import { log, BigInt } from '@graphprotocol/graph-ts'
 import { ActionRight } from './types'
+import { AAVEGOTCHI_ALCHEMICA, ONE_ETHER } from './constants'
 
 export function endPreviousRental(nft: Nft, txHash: string, timestamp: BigInt): void {
   const previousRentalId = nft.currentDirectRental
@@ -27,7 +28,7 @@ export function endPreviousRental(nft: Nft, txHash: string, timestamp: BigInt): 
   nft.save()
 }
 
-export function createDirectRental(
+export function createLandDirectRental(
   nft: Nft,
   land: AavegotchiLand,
   txHash: string,
@@ -41,6 +42,8 @@ export function createDirectRental(
   directRental.lender = nft.currentOwner
   directRental.startedAt = timestamp
   directRental.startedTxHash = txHash
+  directRental.profitShareTokens = AAVEGOTCHI_ALCHEMICA
+  directRental.profitShareSplit = [BigInt.zero(), BigInt.fromI32(100).times(ONE_ETHER)]
   directRental.save()
 
   nft.currentDirectRental = directRental.id
