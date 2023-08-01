@@ -24,7 +24,7 @@ import { MAX_EXPIRATION_DATE, ONE_ETHER } from "../../utils/constants";
  *
  * event GotchiLendingAdded(GotchiLendingAdd);
  */
-export function handleGotchiLendingAdded(event: GotchiLendingAdded): void {
+export function handleGotchiLendingAdded2(event: GotchiLendingAdded): void {
   const nftId = generateNftId("AAVEGOTCHI", event.params.param0.tokenId);
   const nft = Nft.load(nftId);
 

@@ -19,7 +19,7 @@ import { AAVEGOTCHI } from "../../utils/constants";
  *        uint256 timeAgreed
  *  );
  */
-export function handleGotchiLendingCancelled(
+export function handleGotchiLendingCancelled2(
   event: GotchiLendingCancelled
 ): void {
   const nftId = generateNftId(AAVEGOTCHI, event.params.param0.tokenId);
