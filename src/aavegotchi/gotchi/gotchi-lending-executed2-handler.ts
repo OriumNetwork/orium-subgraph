@@ -1,5 +1,5 @@
 import { BigInt, log } from '@graphprotocol/graph-ts'
-import { GotchiLendingExecuted } from '../../../generated/AavegotchiDiamondUpdate/AavegotchiDiamondUpdate'
+import { GotchiLendingExecuted1 } from '../../../generated/AavegotchiDiamond/AavegotchiDiamond'
 import { Nft, Rental, RentalOffer } from '../../../generated/schema'
 import { generateNftId } from '../../utils/misc'
 import { AAVEGOTCHI } from '../../utils/constants'
@@ -20,7 +20,7 @@ import { AAVEGOTCHI } from '../../utils/constants'
  *        uint256 timeAgreed
  *  );
  */
-export function handleGotchiLendingExecuted2(event: GotchiLendingExecuted): void {
+export function handleGotchiLendingExecuted2(event: GotchiLendingExecuted1): void {
   const nftId = generateNftId(AAVEGOTCHI, event.params.param0.tokenId)
 
   const nft = Nft.load(nftId)
