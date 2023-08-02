@@ -33,6 +33,14 @@ dataSources:
           handler: handleGotchiLendingExecuted
         - event: GotchiLendingEnded(indexed uint32,indexed address,indexed address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256)
           handler: handleGotchiLendingEnded
+        - event: GotchiLendingAdded((uint32,address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256,uint256))
+          handler: handleGotchiLendingAdded2
+        - event: GotchiLendingCancelled((uint32,address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256,uint256))
+          handler: handleGotchiLendingCancelled2
+        - event: GotchiLendingExecuted((uint32,address,address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256,uint256))
+          handler: handleGotchiLendingExecuted2
+        - event: GotchiLendingEnded((uint32,address,address,uint32,uint96,uint32,uint8[3],address,address,uint32,address[],uint256,uint256))
+          handler: handleGotchiLendingEnded2
       file: ./src/aavegotchi/index.ts
 
   # (Aavegotchi) Realm
