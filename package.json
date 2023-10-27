@@ -28,12 +28,12 @@
     "url": "git+https://github.com/OriumNetwork/orium-subgraph.git"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.33.0",
+    "@graphprotocol/graph-cli": "^0.55.0",
     "gluegun": "^5.1.2"
   },
   "devDependencies": {
     "@oriumnetwork/orium-commons": "^1.0.10",
-    "@graphprotocol/graph-ts": "^0.27.0",
-    "matchstick-as": "^0.5.0"
+    "@graphprotocol/graph-ts": "^0.31.0",
+    "matchstick-as": "^0.5.2"
   }
 }

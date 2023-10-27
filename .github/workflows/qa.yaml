@@ -44,6 +44,6 @@ jobs:
         run: npm run test-matic
       - name: Delete Old QA Subgraph
         run: |
-          curl -X DELETE https://app.satsuma.xyz/api/subgraphs/8c268d3e8b83112a7d0c732a9b88ba1c732da600bffaf68790171b9a0b5d5394/orium-subgraph/qa/delete -H 'x-api-key: ${{ secrets.SATSUMA_DEPLOY_KEY }}'
+          curl -X DELETE https://subgraphs.alchemy.com/api/subgraphs/8c268d3e8b83112a7d0c732a9b88ba1c732da600bffaf68790171b9a0b5d5394/orium-subgraph/qa/delete -H 'x-api-key: ${{ secrets.SATSUMA_DEPLOY_KEY }}'
       - name: Subraph Deploy Satsuma QA
-        run: npx graph deploy orium-subgraph --version-label qa --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key ${{ secrets.SATSUMA_DEPLOY_KEY }}
+        run: npx graph deploy orium-subgraph --version-label qa --node https://subgraphs.alchemy.com/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key ${{ secrets.SATSUMA_DEPLOY_KEY }}
